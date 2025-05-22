@@ -13,15 +13,14 @@ export default function AuthLogin() {
 
   const navigate = useNavigate();
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     navigate("/signup");
   };
 
   const handleForgotPsw = () => {
     navigate("/forgot-password");
   };
-
- 
 
   return (
     <div className="login">
@@ -52,7 +51,7 @@ export default function AuthLogin() {
           />
         </div>
 
-        <button onClick={() => handleSubmit()} type="submit">
+        <button onClick={(e) => handleSubmit(e)} type="submit">
           Login
         </button>
 
