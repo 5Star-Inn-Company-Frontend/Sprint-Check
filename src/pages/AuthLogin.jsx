@@ -51,9 +51,7 @@ export default function AuthLogin() {
           />
         </div>
 
-        <button onClick={(e) => handleSubmit(e)} type="submit">
-          Login
-        </button>
+        <button type="submit">Login</button>
 
         <p
           onClick={() => handleForgotPsw()}
