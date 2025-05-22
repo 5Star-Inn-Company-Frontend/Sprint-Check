@@ -29,7 +29,7 @@ export default function AuthForgotPsw() {
           />
         </div>
 
-        <button onClick={()=>handleVerify()} ``>Reset Password</button>
+        <button onClick={()=>handleVerify()} >Reset Password</button>
 
         {/* <p className="login-forgotPsw" style={{ cursor: "pointer" }}>
           {" "}
