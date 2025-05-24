@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-
+import logo from "../assets/dashboardAssets/WhatsApp Image 2025-05-15 at 11.15.05_db0fe0fa 1.png";
+import dashboardIcon from "../assets/dashboardAssets/element-4.png";
+import historyIcon from "../assets/dashboardAssets/Calendar.png";
+import billingIcon from "../assets/dashboardAssets/stash_billing-info.png";
+import nav_icon from "../assets/dashboardAssets/Chart.png";
+import profileIcon from "../assets/dashboardAssets/user.png";
+import BusinessIcon from "../assets/dashboardAssets/icon-park-outline_user-business.png";
+import logOutIcon from "../assets/dashboardAssets/login.png";
 const Dashboard = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -74,30 +81,14 @@ const Dashboard = () => {
 
         .sidebar-header {
           padding: 20px;
-          border-bottom: 1px solid #e9ecef;
           display: flex;
           align-items: center;
           gap: 10px;
         }
 
-        .logo {
-          width: 32px;
-          height: 32px;
-          background: linear-gradient(135deg, #6c5ce7, #a29bfe);
-          border-radius: 8px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: white;
-          font-weight: bold;
-          font-size: 14px;
-        }
+       
 
-        .logo-text {
-          font-size: 18px;
-          font-weight: 600;
-          color: #2d3436;
-        }
+       
 
         .nav-menu {
           flex: 1;
@@ -731,26 +722,36 @@ const Dashboard = () => {
         }`}
       >
         <div className="sidebar-header">
-          <div className="logo">SC</div>
-          <span className="logo-text">SprintCheck</span>
+          <div className="logo">
+            <img src={logo} alt="logo" />
+          </div>
         </div>
 
         <nav className="nav-menu">
           <div className="nav-section">
             <div className="nav-item active">
-              <div className="nav-icon">🟨</div>
+              <div className="nav-icon">
+                {" "}
+                <img src={dashboardIcon} alt="icon" />
+              </div>
               Dashboard
             </div>
             <div className="nav-item">
-              <div className="nav-icon">⏱️</div>
+              <div className="nav-icon">
+                <img src={historyIcon} alt="icon" />
+              </div>
               History
             </div>
             <div className="nav-item">
-              <div className="nav-icon">📄</div>
+              <div className="nav-icon">
+                <img src={billingIcon} alt="icon" />
+              </div>
               Billing
             </div>
             <div className="nav-item">
-              <div className="nav-icon">🔗</div>
+              <div className="nav-icon">
+                <img src={nav_icon} alt="icon" />
+              </div>
               Developers
             </div>
           </div>
@@ -759,18 +760,27 @@ const Dashboard = () => {
 
           <div className="nav-section">
             <div className="nav-item">
-              <div className="nav-icon">👤</div>
+              <div className="nav-icon">
+                {" "}
+                <img src={profileIcon} alt="icon" />
+              </div>
               Profile
             </div>
             <div className="nav-item">
-              <div className="nav-icon">👥</div>
+              <div className="nav-icon">
+                {" "}
+                <img src={BusinessIcon} alt="icon" />
+              </div>
               Business info
             </div>
           </div>
 
           <div className="nav-bottom">
             <div className="nav-item">
-              <div className="nav-icon">🚪</div>
+              <div className="nav-icon">
+                {" "}
+                <img src={logOutIcon} alt="icon" />
+              </div>
               Logout
             </div>
           </div>
