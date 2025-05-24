@@ -7,10 +7,12 @@ import nav_icon from "../assets/dashboardAssets/Chart.png";
 import profileIcon from "../assets/dashboardAssets/user.png";
 import BusinessIcon from "../assets/dashboardAssets/icon-park-outline_user-business.png";
 import logOutIcon from "../assets/dashboardAssets/login.png";
+import searchIcon from "../assets/dashboardAssets/search-normal.png";
 const Dashboard = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  // const [active, setActive] = useState(true);
   useEffect(() => {
     const checkScreenSize = () => {
       setIsMobile(window.innerWidth < 1024);
@@ -53,7 +55,7 @@ const Dashboard = () => {
         .dashboard {
           display: flex;
           min-height: 100vh;
-          background-color: #f8f9fa;
+          background-color:rgb(234, 237, 239);
         }
 
         .sidebar {
@@ -160,9 +162,8 @@ const Dashboard = () => {
         }
 
         .top-bar {
-          background: white;
+          background:transparent;
           padding: 16px 24px;
-          border-bottom: 1px solid #e9ecef;
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -179,16 +180,17 @@ const Dashboard = () => {
 
         .search-bar {
           flex: 1;
-          max-width: 400px;
+          max-width: 600px;
           position: relative;
         }
 
         .search-input {
           width: 100%;
-          padding: 10px 16px 10px 40px;
-          border: 1px solid #ddd;
-          border-radius: 8px;
+          padding: 15px 16px 15px 40px;
+          border: none;
+          border-radius: 2rem;
           font-size: 14px;
+          outline:none
         }
 
         .search-input::placeholder {
@@ -625,7 +627,7 @@ const Dashboard = () => {
           }
 
           .search-bar {
-            display: none;
+            max-width:200px;
           }
 
           .user-name {
@@ -796,7 +798,9 @@ const Dashboard = () => {
           </button>
 
           <div className="search-bar">
-            <div className="search-icon">🔍</div>
+            <div className="search-icon">
+              <img src={searchIcon} alt="icon" />
+            </div>
             <input
               type="text"
               className="search-input"
