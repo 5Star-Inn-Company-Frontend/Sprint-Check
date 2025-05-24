@@ -686,15 +686,6 @@ const Dashboard = () => {
             padding: 20px;
           }
 
-          .main-content {
-            max-width: 390px;
-          }
-
-          .chart {
-            max-width: 390px;
-            over-flow: hide;
-          }
-
           .balance-amount {
             font-size: 24px;
           }
@@ -705,6 +696,12 @@ const Dashboard = () => {
 
           .chart-container {
             padding: 16px;
+            overflow-x: scroll;
+            overflow-y: scroll;
+          }
+
+          .main-content {
+            max-width: 379px;
           }
         }
       `}</style>
