@@ -13,43 +13,47 @@ export default function AuthSetPsw() {
      navigate("/");
    };
   return (
-    <div className="login">
-      <form className="login-form">
-        <div className="login-header">
-          <h2>Verify Code</h2>
-          <p>An authentication code has been sent to your email</p>
-        </div>
+    <div className="main">
+      <div className="login">
+        <form className="login-form">
+          <div className="login-header">
+            <h2>Verify Code</h2>
+            <p>An authentication code has been sent to your email</p>
+          </div>
 
-        <div className="input-wrapper">
-          <input
-            type="password"
-            placeholder="Enter new Password"
-            value={newPsw}
-            onChange={(e) => setnewPsw(e.target.value)}
-          />
-        </div>
+          <div className="input-wrapper">
+            <input
+              type="password"
+              placeholder="Enter new Password"
+              value={newPsw}
+              onChange={(e) => setnewPsw(e.target.value)}
+            />
+          </div>
 
-        <div className="input-wrapper">
-          <input
-            type="number"
-            placeholder="Confirm Password"
-            value={confPsw}
-            onChange={(e) => setconfPsw(e.target.value)}
-          />
-        </div>
+          <div className="input-wrapper">
+            <input
+              type="number"
+              placeholder="Confirm Password"
+              value={confPsw}
+              onChange={(e) => setconfPsw(e.target.value)}
+            />
+          </div>
 
-        <p className="login-signup">
-          Didn't recieve a code?{" "}
-          <strong style={{ cursor: "pointer", color: "blue" }}>Resend</strong>
-        </p>
+          <p className="login-signup">
+            Didn't recieve a code?{" "}
+            <strong style={{ cursor: "pointer", color: "blue" }}>Resend</strong>
+          </p>
 
-        <button type="submit">Set Password</button>
+          <button type="submit">Set Password</button>
 
-        <p className="login-signup">
-          Remember login details?{" "}
-          <strong onClick={()=>handleLogin()} style={{ cursor: "pointer" }}>Login</strong>
-        </p>
-      </form>
+          <p className="login-signup">
+            Remember login details?{" "}
+            <strong onClick={() => handleLogin()} style={{ cursor: "pointer" }}>
+              Login
+            </strong>
+          </p>
+        </form>
+      </div>
     </div>
   );
 }

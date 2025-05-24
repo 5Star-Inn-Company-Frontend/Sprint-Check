@@ -14,7 +14,7 @@ export default function AuthLogin() {
   const navigate = useNavigate();
 
   const handleSubmit = () => {
-    navigate("/signup");
+    navigate("/dashboard");
   };
 
   const handleForgotPsw = () => {
@@ -22,51 +22,56 @@ export default function AuthLogin() {
   };
 
   return (
-    <div className="login">
-      <form className="login-form">
-        <div className="login-header">
-          <h2>Welcome Back</h2>
-          <p>Login to your account</p>
-        </div>
+    <div className="main">
+      <div className="login">
+        <form className="login-form">
+          <div className="login-header">
+            <h2>Welcome Back</h2>
+            <p>Login to your account</p>
+          </div>
 
-        <div className="input-wrapper">
-          <img className="input-icon" alt="icon" src={mailIcon} />
-          <input
-            type="email"
-            placeholder="Email Address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            ref={emailRef}
-          />
-        </div>
+          <div className="input-wrapper">
+            <img className="input-icon" alt="icon" src={mailIcon} />
+            <input
+              type="email"
+              placeholder="Email Address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              ref={emailRef}
+            />
+          </div>
 
-        <div className="input-wrapper">
-          <img className="input-icon" alt="icon" src={passwordIcon} />
-          <input
-            type="mail"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
+          <div className="input-wrapper">
+            <img className="input-icon" alt="icon" src={passwordIcon} />
+            <input
+              type="mail"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
 
-        <button type="submit">Login</button>
+          <button type="submit">Login</button>
 
-        <p
-          onClick={() => handleForgotPsw()}
-          className="login-forgotPsw"
-          style={{ cursor: "pointer" }}
-        >
-          {" "}
-          Forgot Password
-        </p>
-        <p className="login-signup">
-          Do not have an account?{" "}
-          <strong onClick={() => handleSubmit()} style={{ cursor: "pointer" }}>
-            Signup
-          </strong>
-        </p>
-      </form>
+          <p
+            onClick={() => handleForgotPsw()}
+            className="login-forgotPsw"
+            style={{ cursor: "pointer" }}
+          >
+            {" "}
+            Forgot Password
+          </p>
+          <p className="login-signup">
+            Do not have an account?{" "}
+            <strong
+              onClick={() => handleSubmit()}
+              style={{ cursor: "pointer" }}
+            >
+              Signup
+            </strong>
+          </p>
+        </form>
+      </div>
     </div>
   );
 }

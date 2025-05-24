@@ -12,36 +12,38 @@ export default function AuthForgotPsw() {
      navigate("/reset-password");
    };
   return (
-    <div className="login">
-      <form className="login-form">
-        <div className="login-header">
-          <h2>Forgot Passsword</h2>
-          <p>Forgot Password</p>
-        </div>
+    <div className="main">
+      <div className="login">
+        <form className="login-form">
+          <div className="login-header">
+            <h2>Forgot Passsword</h2>
+            <p>Forgot Password</p>
+          </div>
 
-        <div className="input-wrapper">
-          <img className="input-icon" alt="icon" src={mailIcon} />
-          <input
-            type="email"
-            placeholder="Email Address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
+          <div className="input-wrapper">
+            <img className="input-icon" alt="icon" src={mailIcon} />
+            <input
+              type="email"
+              placeholder="Email Address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
 
-        <button onClick={()=>handleVerify()} >Reset Password</button>
+          <button onClick={() => handleVerify()}>Reset Password</button>
 
-        {/* <p className="login-forgotPsw" style={{ cursor: "pointer" }}>
+          {/* <p className="login-forgotPsw" style={{ cursor: "pointer" }}>
           {" "}
           Forgot Password
         </p> */}
-        <p className="login-signup">
-          Remember login details?{" "}
-          <strong onClick={() => handleLogin()} style={{ cursor: "pointer" }}>
-            Login
-          </strong>
-        </p>
-      </form>
+          <p className="login-signup">
+            Remember login details?{" "}
+            <strong onClick={() => handleLogin()} style={{ cursor: "pointer" }}>
+              Login
+            </strong>
+          </p>
+        </form>
+      </div>
     </div>
   );
 }
