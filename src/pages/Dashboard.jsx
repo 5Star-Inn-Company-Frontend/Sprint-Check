@@ -394,15 +394,56 @@ const Dashboard = () => {
           border-radius: 12px;
           padding: 24px;
           border: 1px solid #e9ecef;
+          position: relative;
+        }
+
+        .chart-wrapper {
+          position: relative;
+          background: white;
+        }
+
+        .chart-y-axis {
+          position: absolute;
+          left: 0;
+          top: 0;
+          height: 280px;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          width: 30px;
+        }
+
+        .y-axis-label {
+          font-size: 12px;
+          color: #9ca3af;
+          text-align: right;
+          padding-right: 8px;
+        }
+
+        .chart-grid {
+          position: absolute;
+          left: 40px;
+          right: 0;
+          top: 0;
+          height: 280px;
+        }
+
+        .grid-line {
+          position: absolute;
+          left: 0;
+          right: 0;
+          border-top: 1px solid #f3f4f6;
         }
 
         .chart {
+          margin-left: 40px;
           display: flex;
           align-items: end;
           justify-content: space-between;
-          height: 200px;
+          height: 280px;
           gap: 8px;
           margin-bottom: 16px;
+          position: relative;
         }
 
         .chart-bar-group {
@@ -410,42 +451,93 @@ const Dashboard = () => {
           flex-direction: column;
           align-items: center;
           flex: 1;
-          max-width: 60px;
+          max-width: 80px;
         }
 
         .chart-bars {
           display: flex;
-          gap: 4px;
+          gap: 6px;
           align-items: end;
-          height: 160px;
-          margin-bottom: 8px;
+          height: 240px;
+          margin-bottom: 12px;
         }
 
         .chart-bar {
-          width: 16px;
-          border-radius: 4px 4px 0 0;
-          transition: all 0.3s ease;
-          animation: barGrow 0.8s ease forwards;
+          width: 24px;
+          border-radius: 0;
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          animation: barGrowUp 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
           transform-origin: bottom;
+          cursor: pointer;
+          position: relative;
+          transform: scaleY(0);
         }
 
         .chart-bar:hover {
-          opacity: 0.8;
+          transform: scaleX(1.1) scaleY(var(--bar-scale-y, 1));
+          filter: brightness(1.1);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .chart-bar.verified {
-          background: #00b894;
+          background: linear-gradient(180deg, #4ade80 0%, #22c55e 100%);
         }
 
         .chart-bar.fail {
-          background: #e17055;
+          background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
+        }
+
+        .tooltip {
+          position: absolute;
+          bottom: 105%;
+          left: 50%;
+          transform: translateX(-50%);
+          background: rgba(0, 0, 0, 0.9);
+          color: white;
+          padding: 8px 12px;
+          border-radius: 6px;
+          font-size: 12px;
+          font-weight: 500;
+          white-space: nowrap;
+          opacity: 0;
+          visibility: hidden;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          pointer-events: none;
+          z-index: 1000;
+        }
+
+        .tooltip::after {
+          content: "";
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          transform: translateX(-50%);
+          border: 5px solid transparent;
+          border-top-color: rgba(0, 0, 0, 0.9);
+        }
+
+        .chart-bar:hover .tooltip {
+          opacity: 1;
+          visibility: visible;
+          transform: translateX(-50%) translateY(-5px);
+        }
+
+        .chart-bar-group {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          flex: 1;
+          max-width: 80px;
+          animation: slideUp 0.8s ease-out forwards;
+          animation-delay: var(--stagger-delay, 0s);
+          opacity: 0;
+          transform: translateY(20px);
         }
 
         .chart-date {
           font-size: 11px;
-          color: #636e72;
+          color: #6b7280;
           text-align: center;
-          transform: rotate(-45deg);
           white-space: nowrap;
         }
 
@@ -453,6 +545,7 @@ const Dashboard = () => {
           display: flex;
           justify-content: center;
           gap: 24px;
+          margin-top: 16px;
         }
 
         .legend-item {
@@ -460,7 +553,7 @@ const Dashboard = () => {
           align-items: center;
           gap: 8px;
           font-size: 12px;
-          color: #636e72;
+          color: #6b7280;
         }
 
         .legend-color {
@@ -470,11 +563,11 @@ const Dashboard = () => {
         }
 
         .legend-color.verified {
-          background: #00b894;
+          background: #4ade80;
         }
 
         .legend-color.fail {
-          background: #e17055;
+          background: #ef4444;
         }
 
         .overlay {
@@ -492,12 +585,33 @@ const Dashboard = () => {
           display: block;
         }
 
-        @keyframes barGrow {
-          from {
+        @keyframes barGrowUp {
+          0% {
             transform: scaleY(0);
           }
-          to {
+          100% {
             transform: scaleY(1);
+          }
+        }
+
+        @keyframes slideUp {
+          0% {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes pulseGlow {
+          0%,
+          100% {
+            box-shadow: 0 0 5px rgba(74, 222, 128, 0.3);
+          }
+          50% {
+            box-shadow: 0 0 20px rgba(74, 222, 128, 0.6);
           }
         }
 
@@ -570,6 +684,15 @@ const Dashboard = () => {
 
           .balance-card {
             padding: 20px;
+          }
+
+          .main-content {
+            max-width: 390px;
+          }
+
+          .chart {
+            max-width: 390px;
+            over-flow: hide;
           }
 
           .balance-amount {
@@ -742,28 +865,65 @@ const Dashboard = () => {
 
           {/* Chart */}
           <div className="chart-container">
-            <div className="chart">
-              {chartData.map((data, index) => (
-                <div key={index} className="chart-bar-group">
-                  <div className="chart-bars">
-                    <div
-                      className="chart-bar verified"
-                      style={{
-                        height: `${(data.verified / maxValue) * 100}%`,
-                        animationDelay: `${index * 0.1}s`,
-                      }}
-                    />
-                    <div
-                      className="chart-bar fail"
-                      style={{
-                        height: `${(data.fail / maxValue) * 100}%`,
-                        animationDelay: `${index * 0.1 + 0.05}s`,
-                      }}
-                    />
+            <div className="chart-wrapper">
+              {/* Y-axis labels */}
+              <div className="chart-y-axis">
+                <div className="y-axis-label">100</div>
+                <div className="y-axis-label">80</div>
+                <div className="y-axis-label">60</div>
+                <div className="y-axis-label">40</div>
+                <div className="y-axis-label">20</div>
+                <div className="y-axis-label">0</div>
+              </div>
+
+              {/* Grid lines */}
+              <div className="chart-grid">
+                <div className="grid-line" style={{ top: "0%" }}></div>
+                <div className="grid-line" style={{ top: "20%" }}></div>
+                <div className="grid-line" style={{ top: "40%" }}></div>
+                <div className="grid-line" style={{ top: "60%" }}></div>
+                <div className="grid-line" style={{ top: "80%" }}></div>
+                <div className="grid-line" style={{ top: "100%" }}></div>
+              </div>
+
+              {/* Chart bars */}
+              <div className="chart">
+                {chartData.map((data, index) => (
+                  <div
+                    key={index}
+                    className="chart-bar-group"
+                    style={{
+                      "--stagger-delay": `${index * 0.15}s`,
+                    }}
+                  >
+                    <div className="chart-bars">
+                      <div
+                        className="chart-bar verified"
+                        style={{
+                          height: `${(data.verified / 100) * 240}px`,
+                          animationDelay: `${index * 0.15}s`,
+                          "--bar-scale-y": `${
+                            ((data.verified / 100) * 240) / 24
+                          }`,
+                        }}
+                      >
+                        <div className="tooltip">Verified: {data.verified}</div>
+                      </div>
+                      <div
+                        className="chart-bar fail"
+                        style={{
+                          height: `${(data.fail / 100) * 240}px`,
+                          animationDelay: `${index * 0.15 + 0.1}s`,
+                          "--bar-scale-y": `${((data.fail / 100) * 240) / 24}`,
+                        }}
+                      >
+                        <div className="tooltip">Failed: {data.fail}</div>
+                      </div>
+                    </div>
+                    <div className="chart-date">{data.date}</div>
                   </div>
-                  <div className="chart-date">{data.date}</div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
 
             <div className="chart-legend">
@@ -773,7 +933,7 @@ const Dashboard = () => {
               </div>
               <div className="legend-item">
                 <div className="legend-color fail"></div>
-                Fail
+                fail
               </div>
             </div>
           </div>
