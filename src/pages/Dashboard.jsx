@@ -405,7 +405,7 @@ const Dashboard = () => {
         .chart-y-axis {
           position: absolute;
           left: 0;
-          top: 0;
+          top: 0%;
           height: 280px;
           display: flex;
           flex-direction: column;
@@ -443,6 +443,7 @@ const Dashboard = () => {
           height: 280px;
           gap: 8px;
           margin-bottom: 16px;
+          top:1.8rem;
           position: relative;
         }
 
@@ -545,7 +546,7 @@ const Dashboard = () => {
           display: flex;
           justify-content: center;
           gap: 24px;
-          margin-top: 16px;
+          margin-top: 40px;
         }
 
         .legend-item {
@@ -666,8 +667,7 @@ const Dashboard = () => {
 
           .chart-bars {
             height: 120px;
-          }
-
+      
           .chart-bar {
             width: 12px;
           }
@@ -699,6 +699,18 @@ const Dashboard = () => {
             overflow-x: scroll;
             overflow-y: scroll;
           }
+
+          .chart {
+          margin-left: 40px;
+          display: flex;
+          align-items: end;
+          justify-content: space-between;
+          height: 270px;
+          gap: 8px;
+          margin-bottom: 16px;
+          top:1.8rem;
+          position: relative;
+        }
 
           .main-content {
             max-width: 379px;
@@ -836,7 +848,7 @@ const Dashboard = () => {
                 <div className="stat-info">
                   <div className="stat-icon">💙</div>
                   <span className="stat-title">
-                    Total Successful Verificatio
+                    Total Successful Verificatioms
                   </span>
                 </div>
                 <div className="stat-change">📈 Up by 100%</div>
