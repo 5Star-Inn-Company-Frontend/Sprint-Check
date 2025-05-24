@@ -14,6 +14,10 @@ export default function AuthLogin() {
   const navigate = useNavigate();
 
   const handleSubmit = () => {
+    navigate("/signup");
+  };
+
+  const gotodashboard = () => {
     navigate("/dashboard");
   };
 
@@ -51,7 +55,9 @@ export default function AuthLogin() {
             />
           </div>
 
-          <button type="submit">Login</button>
+          <button onClick={() => gotodashboard()} type="submit">
+            Login
+          </button>
 
           <p
             onClick={() => handleForgotPsw()}
