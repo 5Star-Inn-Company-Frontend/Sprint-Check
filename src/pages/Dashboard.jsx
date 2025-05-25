@@ -8,6 +8,9 @@ import profileIcon from "../assets/dashboardAssets/user.png";
 import BusinessIcon from "../assets/dashboardAssets/icon-park-outline_user-business.png";
 import logOutIcon from "../assets/dashboardAssets/login.png";
 import searchIcon from "../assets/dashboardAssets/search-normal.png";
+import notificationIcon from "../assets/dashboardAssets/notification-bing.png";
+import arrowIcon from "../assets/dashboardAssets/arrow-down.png";
+import balanceIcon from "../assets/dashboardAssets/balance.png";
 const Dashboard = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -206,17 +209,29 @@ const Dashboard = () => {
         }
 
         .user-section {
+        background-color:white;
+        padding:.4rem .8rem;
+        border-radius:2rem;
           display: flex;
           align-items: center;
           gap: 16px;
         }
 
         .notification-icon {
-          width: 24px;
-          height: 24px;
+          padding:.5rem 1.5rem;
+          border:1px solid rgba(119, 133, 138, 0.24);;
+         display:flex;
+         align-items:center;
           color: #636e72;
           cursor: pointer;
+          border-radius:2rem;
         }
+          .notification-icon{
+          }
+          .user-avatar{
+          }
+          .arrow-down{
+          }
 
         .user-avatar {
           width: 40px;
@@ -236,7 +251,10 @@ const Dashboard = () => {
         }
 
         .content {
-          padding: 24px;
+          padding:20px 25px 2px 20px;
+          margin:26px;
+          background-color:white;
+          border-radius:1rem;
         }
 
         .page-title {
@@ -247,13 +265,17 @@ const Dashboard = () => {
         }
 
         .balance-card {
-          background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+          background:#4745A4;
           border-radius: 16px;
-          padding: 32px;
+          padding: 20px 32px;
           color: white;
           margin-bottom: 32px;
           position: relative;
           overflow: hidden;
+          display:flex;
+          gap:1rem;
+          flex-direction:column;
+          
         }
 
         .balance-card::before {
@@ -269,13 +291,16 @@ const Dashboard = () => {
             transparent 50%
           );
           pointer-events: none;
+        
+          
         }
 
         .balance-header {
           display: flex;
           align-items: center;
           gap: 12px;
-          margin-bottom: 16px;
+          border-bottom:1px solid white;
+          padding-bottom:1.7rem;
         }
 
         .balance-icon {
@@ -292,28 +317,35 @@ const Dashboard = () => {
           font-size: 18px;
           font-weight: 500;
           opacity: 0.9;
+          color:white;
         }
+
+          .balance-fund{
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+          }
 
         .balance-amount {
           font-size: 36px;
           font-weight: 700;
-          margin-bottom: 24px;
+         
         }
 
         .fund-wallet-btn {
-          background: rgba(255, 255, 255, 0.2);
-          border: 1px solid rgba(255, 255, 255, 0.3);
-          color: white;
-          padding: 12px 24px;
+          background: white;
+          border:none;
+          color: #4745A4;
+          padding:.5rem;
           border-radius: 8px;
           font-weight: 500;
           cursor: pointer;
           transition: all 0.2s ease;
-          float: right;
         }
 
         .fund-wallet-btn:hover {
-          background: rgba(255, 255, 255, 0.3);
+          transform:scale(1.1);
+          transition:.2s;
         }
 
         .stats-grid {
@@ -388,6 +420,7 @@ const Dashboard = () => {
           padding: 24px;
           border: 1px solid #e9ecef;
           position: relative;
+          margin:1.7rem;
         }
 
         .chart-wrapper {
@@ -668,12 +701,22 @@ const Dashboard = () => {
           .chart-date {
             font-size: 10px;
           }
+
+           
         }
 
         @media (max-width: 480px) {
           .top-bar {
-            padding: 12px 16px;
-          }
+            padding: 13px 5px 12px 16px;
+            display:flex;
+            justify-content:space-between;
+
+      }
+            .hamSearch{
+            display:flex;
+            justify-content:space-between;
+            gap:1rem;
+            }
 
           .balance-card {
             padding: 20px;
@@ -685,6 +728,16 @@ const Dashboard = () => {
 
           .stat-card {
             padding: 16px;
+          }
+
+          .notification-icon{
+           display:none;
+          }
+         .user-section{
+         background-color:transparent;
+         }
+          .arrow-down{
+          display:none;
           }
 
           .chart-container {
@@ -706,7 +759,7 @@ const Dashboard = () => {
         }
 
           .main-content {
-            max-width: 379px;
+            max-width: 385px;
           }
         }
       `}</style>
@@ -793,25 +846,33 @@ const Dashboard = () => {
       <div className={`main-content ${isMobile ? "mobile" : ""}`}>
         {/* Top Bar */}
         <div className="top-bar">
-          <button className="hamburger" onClick={() => setSidebarOpen(true)}>
-            ☰
-          </button>
+          <div className="hamSearch">
+            <button className="hamburger" onClick={() => setSidebarOpen(true)}>
+              ☰
+            </button>
 
-          <div className="search-bar">
-            <div className="search-icon">
-              <img src={searchIcon} alt="icon" />
+            <div className="search-bar">
+              <div className="search-icon">
+                <img src={searchIcon} alt="icon" />
+              </div>
+              <input
+                type="text"
+                className="search-input"
+                placeholder="Search here ..."
+              />
             </div>
-            <input
-              type="text"
-              className="search-input"
-              placeholder="Search here ..."
-            />
           </div>
 
           <div className="user-section">
-            <div className="notification-icon">🔔</div>
+            <div className="notification-icon">
+              {" "}
+              <img src={notificationIcon} alt="icon" />
+            </div>
             <div className="user-avatar">E</div>
             <span className="user-name">emmy</span>
+            <span className="arrow-down">
+              <img src={arrowIcon} alt="icon" />
+            </span>
           </div>
         </div>
 
@@ -822,11 +883,15 @@ const Dashboard = () => {
           {/* Balance Card */}
           <div className="balance-card">
             <div className="balance-header">
-              <div className="balance-icon">💰</div>
+              <div className="balance-icon">
+                <img src={balanceIcon} alt="icon" />
+              </div>
               <span className="balance-title">Your Balance</span>
             </div>
-            <div className="balance-amount">$28,891.138</div>
-            <button className="fund-wallet-btn">Fund Wallet</button>
+            <div className="balance-fund">
+              <div className="balance-amount">$28,891.138</div>
+              <button className="fund-wallet-btn">Fund Wallet</button>
+            </div>
           </div>
 
           {/* Stats Grid */}
@@ -885,79 +950,79 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Chart */}
-          <div className="chart-container">
-            <div className="chart-wrapper">
-              {/* Y-axis labels */}
-              <div className="chart-y-axis">
-                <div className="y-axis-label">100</div>
-                <div className="y-axis-label">80</div>
-                <div className="y-axis-label">60</div>
-                <div className="y-axis-label">40</div>
-                <div className="y-axis-label">20</div>
-                <div className="y-axis-label">0</div>
-              </div>
-
-              {/* Grid lines */}
-              <div className="chart-grid">
-                <div className="grid-line" style={{ top: "0%" }}></div>
-                <div className="grid-line" style={{ top: "20%" }}></div>
-                <div className="grid-line" style={{ top: "40%" }}></div>
-                <div className="grid-line" style={{ top: "60%" }}></div>
-                <div className="grid-line" style={{ top: "80%" }}></div>
-                <div className="grid-line" style={{ top: "100%" }}></div>
-              </div>
-
-              {/* Chart bars */}
-              <div className="chart">
-                {chartData.map((data, index) => (
-                  <div
-                    key={index}
-                    className="chart-bar-group"
-                    style={{
-                      "--stagger-delay": `${index * 0.15}s`,
-                    }}
-                  >
-                    <div className="chart-bars">
-                      <div
-                        className="chart-bar verified"
-                        style={{
-                          height: `${(data.verified / 100) * 240}px`,
-                          animationDelay: `${index * 0.15}s`,
-                          "--bar-scale-y": `${
-                            ((data.verified / 100) * 240) / 24
-                          }`,
-                        }}
-                      >
-                        <div className="tooltip">Verified: {data.verified}</div>
-                      </div>
-                      <div
-                        className="chart-bar fail"
-                        style={{
-                          height: `${(data.fail / 100) * 240}px`,
-                          animationDelay: `${index * 0.15 + 0.1}s`,
-                          "--bar-scale-y": `${((data.fail / 100) * 240) / 24}`,
-                        }}
-                      >
-                        <div className="tooltip">Failed: {data.fail}</div>
-                      </div>
-                    </div>
-                    <div className="chart-date">{data.date}</div>
-                  </div>
-                ))}
-              </div>
+        {/* Chart */}
+        <div className="chart-container">
+          <div className="chart-wrapper">
+            {/* Y-axis labels */}
+            <div className="chart-y-axis">
+              <div className="y-axis-label">100</div>
+              <div className="y-axis-label">80</div>
+              <div className="y-axis-label">60</div>
+              <div className="y-axis-label">40</div>
+              <div className="y-axis-label">20</div>
+              <div className="y-axis-label">0</div>
             </div>
 
-            <div className="chart-legend">
-              <div className="legend-item">
-                <div className="legend-color verified"></div>
-                Verified
-              </div>
-              <div className="legend-item">
-                <div className="legend-color fail"></div>
-                fail
-              </div>
+            {/* Grid lines */}
+            <div className="chart-grid">
+              <div className="grid-line" style={{ top: "0%" }}></div>
+              <div className="grid-line" style={{ top: "20%" }}></div>
+              <div className="grid-line" style={{ top: "40%" }}></div>
+              <div className="grid-line" style={{ top: "60%" }}></div>
+              <div className="grid-line" style={{ top: "80%" }}></div>
+              <div className="grid-line" style={{ top: "100%" }}></div>
+            </div>
+
+            {/* Chart bars */}
+            <div className="chart">
+              {chartData.map((data, index) => (
+                <div
+                  key={index}
+                  className="chart-bar-group"
+                  style={{
+                    "--stagger-delay": `${index * 0.15}s`,
+                  }}
+                >
+                  <div className="chart-bars">
+                    <div
+                      className="chart-bar verified"
+                      style={{
+                        height: `${(data.verified / 100) * 240}px`,
+                        animationDelay: `${index * 0.15}s`,
+                        "--bar-scale-y": `${
+                          ((data.verified / 100) * 240) / 24
+                        }`,
+                      }}
+                    >
+                      <div className="tooltip">Verified: {data.verified}</div>
+                    </div>
+                    <div
+                      className="chart-bar fail"
+                      style={{
+                        height: `${(data.fail / 100) * 240}px`,
+                        animationDelay: `${index * 0.15 + 0.1}s`,
+                        "--bar-scale-y": `${((data.fail / 100) * 240) / 24}`,
+                      }}
+                    >
+                      <div className="tooltip">Failed: {data.fail}</div>
+                    </div>
+                  </div>
+                  <div className="chart-date">{data.date}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="chart-legend">
+            <div className="legend-item">
+              <div className="legend-color verified"></div>
+              Verified
+            </div>
+            <div className="legend-item">
+              <div className="legend-color fail"></div>
+              fail
             </div>
           </div>
         </div>
