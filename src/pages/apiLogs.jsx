@@ -573,6 +573,9 @@ const Dashboard = () => {
             padding: 16px;
             margin: 16px;
           }
+          .main-content {
+            max-width: 390px;
+          }
 
           .page-header {
             flex-direction: column;

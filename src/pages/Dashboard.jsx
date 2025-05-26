@@ -716,6 +716,9 @@ const Dashboard = () => {
           .chart-bar {
             width: 12px;
           }
+               .main-content {
+            max-width: 390px;
+          }
 
           .chart-date {
             font-size: 10px;
