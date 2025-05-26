@@ -20,6 +20,10 @@ const Dashboard = () => {
     navigate("/dashboard");
   }
 
+  function handleLogout() {
+    navigate("/");
+  }
+
   useEffect(() => {
     const checkScreenSize = () => {
       setIsMobile(window.innerWidth < 1024);
@@ -680,7 +684,7 @@ const Dashboard = () => {
           </div>
 
           <div className="nav-bottom">
-            <div className="nav-item">
+            <div onClick={() => handleLogout()} className="nav-item">
               <div className="nav-icon">
                 {" "}
                 <img src={logOutIcon} alt="icon" />

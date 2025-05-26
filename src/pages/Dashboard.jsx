@@ -27,6 +27,10 @@ const Dashboard = () => {
     navigate("/apilogs");
   }
 
+  function handleLogout() {
+    navigate("/");
+  }
+
   // const [active, setActive] = useState(true);
   useEffect(() => {
     const checkScreenSize = () => {
@@ -846,7 +850,7 @@ const Dashboard = () => {
           </div>
 
           <div className="nav-bottom">
-            <div className="nav-item">
+            <div onClick={() => handleLogout()} className="nav-item">
               <div className="nav-icon">
                 {" "}
                 <img src={logOutIcon} alt="icon" />
