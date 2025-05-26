@@ -3,11 +3,14 @@ import logo from "../assets/dashboardAssets/WhatsApp Image 2025-05-15 at 11.15.0
 import { Eye, RotateCcw, Filter, FileDown, ChevronDown } from "lucide-react";
 import dashboardIcon from "../assets/dashboardAssets/element-4.png";
 import historyIcon from "../assets/dashboardAssets/Calendar.png";
+import notificationIcon from "../assets/dashboardAssets/notification-bing.png";
 import billingIcon from "../assets/dashboardAssets/stash_billing-info.png";
 import nav_icon from "../assets/dashboardAssets/Chart.png";
 import profileIcon from "../assets/dashboardAssets/user.png";
 import BusinessIcon from "../assets/dashboardAssets/icon-park-outline_user-business.png";
 import logOutIcon from "../assets/dashboardAssets/login.png";
+import eyeIcon from "../assets/dashboardAssets/hugeicons_view.png";
+import returnIcon from "../assets/dashboardAssets/icon-park_return.png";
 import { useNavigate } from "react-router-dom";
 const Dashboard = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -418,6 +421,10 @@ const Dashboard = () => {
           vertical-align: middle;
         }
 
+        tbody .date {
+          font-size: 12px;
+        }
+
         .status-badge {
           display: inline-flex;
           align-items: center;
@@ -441,24 +448,26 @@ const Dashboard = () => {
         .action-buttons {
           display: flex;
           gap: 8px;
+          flex-direction: column;
         }
 
         .action-btn {
           display: flex;
           align-items: center;
-          gap: 4px;
-          padding: 6px 12px;
-          border: 1px solid #e5e7eb;
+          gap: 10px;
+
+          border: none;
           background: white;
-          border-radius: 6px;
-          color: #374151;
+          color: black;
           font-size: 12px;
           cursor: pointer;
           transition: all 0.2s ease;
         }
 
         .action-btn:hover {
-          background: #f3f4f6;
+          color: blue;
+          outline: none;
+          background: transparent;
         }
 
         .pagination {
@@ -702,7 +711,9 @@ const Dashboard = () => {
           </div>
 
           <div className="user-section">
-            <div className="notification-icon">🔔</div>
+            <div className="notification-icon">
+              <img src={notificationIcon} alt="icon" />
+            </div>
             <div className="user-avatar">E</div>
             <span className="user-name">emmmy</span>
             <span className="arrow-down">
@@ -760,7 +771,7 @@ const Dashboard = () => {
                     <td className="table-cell">{log.amount}</td>
                     <td className="table-cell">{log.source}</td>
                     <td className="table-cell">{log.performedBy}</td>
-                    <td className="table-cell">{log.date}</td>
+                    <td className="table-cell date">{log.date}</td>
                     <td className="table-cell">
                       <span
                         className={`status-badge ${
@@ -774,14 +785,14 @@ const Dashboard = () => {
                     </td>
                     <td className="table-cell">
                       <div className="action-buttons">
-                        <button className="action-btn">
-                          <Eye size={12} />
-                          View
-                        </button>
-                        <button className="action-btn">
-                          <RotateCcw size={12} />
-                          Resend to webhook
-                        </button>
+                        <span className="action-btn">
+                          <img src={eyeIcon} alt="icon" />
+                          <span>View</span>
+                        </span>
+                        <span className="action-btn">
+                          <img src={returnIcon} alt="icon" />
+                          <span>Resend to webhook</span>
+                        </span>
                       </div>
                     </td>
                   </tr>
