@@ -17,9 +17,15 @@ import blueIcon from "../assets/dashboardAssets/blue.png";
 import yellowIcon from "../assets/dashboardAssets/yellow.png";
 import export1Icon from "../assets/dashboardAssets/export1.png";
 import exportIcon from "../assets/dashboardAssets/export.png";
+import { useNavigate } from "react-router-dom";
+
 const Dashboard = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const navigate = useNavigate();
+  function handleHistory() {
+    navigate("/apilogs");
+  }
 
   // const [active, setActive] = useState(true);
   useEffect(() => {
@@ -800,7 +806,7 @@ const Dashboard = () => {
               </div>
               Dashboard
             </div>
-            <div className="nav-item">
+            <div onClick={() => handleHistory()} className="nav-item">
               <div className="nav-icon">
                 <img src={historyIcon} alt="icon" />
               </div>
