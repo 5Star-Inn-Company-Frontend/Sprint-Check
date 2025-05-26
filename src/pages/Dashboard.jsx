@@ -11,6 +11,12 @@ import searchIcon from "../assets/dashboardAssets/search-normal.png";
 import notificationIcon from "../assets/dashboardAssets/notification-bing.png";
 import arrowIcon from "../assets/dashboardAssets/arrow-down.png";
 import balanceIcon from "../assets/dashboardAssets/balance.png";
+import arrowRight from "../assets/dashboardAssets/arrow-right.png";
+import redIcon from "../assets/dashboardAssets/red.png";
+import blueIcon from "../assets/dashboardAssets/blue.png";
+import yellowIcon from "../assets/dashboardAssets/yellow.png";
+import export1Icon from "../assets/dashboardAssets/export1.png";
+import exportIcon from "../assets/dashboardAssets/export.png";
 const Dashboard = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -370,15 +376,17 @@ const Dashboard = () => {
 
         .stat-header {
           display: flex;
-          align-items: center;
-          justify-content: space-between;
+          gap:3rem;
           margin-bottom: 16px;
+          padding-bottom:1.3rem;
+          border-bottom:1px solid #e9ecef;
         }
 
         .stat-info {
           display: flex;
-          align-items: center;
+        
           gap: 8px;
+          
         }
 
         .stat-icon {
@@ -388,15 +396,16 @@ const Dashboard = () => {
 
         .stat-title {
           font-size: 14px;
-          color: #636e72;
+          color: black;
           font-weight: 500;
+          // white-space:nowrap;
         }
 
         .stat-change {
           font-size: 12px;
-          color: #00b894;
+          color: grey;
           display: flex;
-          align-items: center;
+          flex-direction:column;
           gap: 4px;
         }
 
@@ -899,54 +908,93 @@ const Dashboard = () => {
             <div className="stat-card">
               <div className="stat-header">
                 <div className="stat-info">
-                  <div className="stat-icon">📞</div>
+                  <div className="stat-icon">
+                    <img src={yellowIcon} alt="icon" />
+                  </div>
+                </div>
+                <div className="stat-change">
                   <span className="stat-title">Total API Calls</span>
+                  <div>
+                    <img src={export1Icon} alt="icon" /> <span>Up by 0%</span>
+                  </div>
                 </div>
-                <div className="stat-change">📈 Up by 0%</div>
               </div>
               <div className="stat-value">
-                5<span className="stat-arrow">→</span>
+                5
+                <span className="stat-arrow">
+                  <img src={arrowRight} alt="icon" />
+                </span>
               </div>
             </div>
 
             <div className="stat-card">
               <div className="stat-header">
                 <div className="stat-info">
-                  <div className="stat-icon">💙</div>
+                  <div className="stat-icon">
+                    <img src={blueIcon} alt="icon" />
+                  </div>
+                </div>
+                <div className="stat-change">
                   <span className="stat-title">Total verified document</span>
+                  <div>
+                    <img src={exportIcon} alt="icon" /> <span>Up by 0%</span>
+                  </div>
                 </div>
-                <div className="stat-change">📈 Up by 0%</div>
               </div>
               <div className="stat-value">
-                0<span className="stat-arrow">→</span>
+                0
+                <span className="stat-arrow">
+                  <img src={arrowRight} alt="icon" />
+                </span>
               </div>
             </div>
 
             <div className="stat-card">
               <div className="stat-header">
                 <div className="stat-info">
-                  <div className="stat-icon">💙</div>
+                  <div className="stat-icon">
+                    <img src={blueIcon} alt="icon" />
+                  </div>
+                </div>
+                <div className="stat-change">
                   <span className="stat-title">
-                    Total Successful Verificatioms
+                    Total Successful Verifications
                   </span>
+                  <div>
+                    <img src={exportIcon} alt="icon" /> <span>Up by 100%</span>
+                  </div>
                 </div>
-                <div className="stat-change">📈 Up by 100%</div>
               </div>
               <div className="stat-value">
-                5<span className="stat-arrow">→</span>
+                5
+                <span className="stat-arrow">
+                  <img src={arrowRight} alt="icon" />
+                </span>
               </div>
             </div>
 
             <div className="stat-card">
               <div className="stat-header">
                 <div className="stat-info">
-                  <div className="stat-icon">❤️</div>
-                  <span className="stat-title">Total Failed Verifications</span>
+                  <div className="stat-icon">
+                    <img src={redIcon} alt="icon" />
+                  </div>
                 </div>
-                <div className="stat-change">📈 Up by 0%</div>
+                <div className="stat-change">
+                  <span style={{ color: "red" }} className="stat-title">
+                    Total Failed Verifications
+                  </span>
+                  <div>
+                    <img src={exportIcon} alt="icon" />
+                    <span> Up by 0%</span>
+                  </div>
+                </div>
               </div>
               <div className="stat-value">
-                0<span className="stat-arrow">→</span>
+                0
+                <span className="stat-arrow">
+                  <img src={arrowRight} alt="icon" />
+                </span>
               </div>
             </div>
           </div>
