@@ -718,7 +718,9 @@ const Dashboard = () => {
             </button>
 
             <div className="search-bar">
-              <div className="search-icon">🔍</div>
+              <div className="search-icon">
+                <img src={searchIcon} alt="icon" />
+              </div>
               <input
                 type="text"
                 className="search-input"
