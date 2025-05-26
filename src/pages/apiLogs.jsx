@@ -11,6 +11,7 @@ import BusinessIcon from "../assets/dashboardAssets/icon-park-outline_user-busin
 import logOutIcon from "../assets/dashboardAssets/login.png";
 import eyeIcon from "../assets/dashboardAssets/hugeicons_view.png";
 import returnIcon from "../assets/dashboardAssets/icon-park_return.png";
+import searchIcon from "../assets/dashboardAssets/search-normal.png";
 import { useNavigate } from "react-router-dom";
 const Dashboard = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -756,7 +757,9 @@ const Dashboard = () => {
 
           <div className="search-section">
             <div className="logs-search">
-              <div className="logs-search-icon">🔍</div>
+              <div className="logs-search-icon">
+                <img src={searchIcon} alt="icon" />
+              </div>
               <input
                 type="text"
                 className="logs-search-input"
