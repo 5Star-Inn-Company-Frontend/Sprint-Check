@@ -603,7 +603,7 @@ const Dashboard = () => {
           }
 
           .main-content {
-            max-width: 385px;
+            max-width: 390px;
           }
 
           .table-cell {
