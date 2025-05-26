@@ -108,6 +108,8 @@ const Dashboard = () => {
           display: flex;
           min-height: 100vh;
           background-color: rgb(234, 237, 239);
+          align-items: center;
+          justify-content: center;
         }
 
         .sidebar {
@@ -566,6 +568,9 @@ const Dashboard = () => {
           .table {
             min-width: 800px;
           }
+          .main-content {
+            max-width: 790px;
+          }
         }
 
         @media (max-width: 768px) {
@@ -590,6 +595,10 @@ const Dashboard = () => {
           .user-section {
             background-color: transparent;
           }
+
+          .main-content {
+            max-width: 390px;
+          }
         }
 
         @media (max-width: 480px) {
@@ -606,7 +615,7 @@ const Dashboard = () => {
           }
 
           .main-content {
-            max-width: 390px;
+            width: 100%;
           }
 
           .table-cell {
