@@ -75,6 +75,8 @@ const Dashboard = () => {
           display: flex;
           min-height: 100vh;
           background-color:rgb(234, 237, 239);
+          align-items:center;
+          justify-content:center;
         }
 
         .sidebar {
@@ -685,6 +687,11 @@ const Dashboard = () => {
           .user-name {
             display: none;
           }
+
+            .main-content {
+            max-width: 790px;
+          }
+
         }
 
         @media (max-width: 768px) {
@@ -716,13 +723,16 @@ const Dashboard = () => {
           .chart-bar {
             width: 12px;
           }
-               .main-content {
-            max-width: 390px;
-          }
+         
 
           .chart-date {
             font-size: 10px;
           }
+
+            .main-content {
+            max-width: 390px;
+          }
+
 
            
         }
@@ -781,8 +791,11 @@ const Dashboard = () => {
         }
 
           .main-content {
-            max-width: 390px;
+          width:100%;
+           
           }
+
+          
         }
       `}</style>
 
