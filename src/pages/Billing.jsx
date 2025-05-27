@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
+import {
+  ChevronDown,
+  Filter,
+  Calendar,
+  ArrowUp,
+  ArrowDown,
+} from "lucide-react";
 import logo from "../assets/dashboardAssets/WhatsApp Image 2025-05-15 at 11.15.05_db0fe0fa 1.png";
-import { Eye, RotateCcw, Filter, FileDown, ChevronDown } from "lucide-react";
+import { Eye, RotateCcw, FileDown } from "lucide-react";
 import dashboardIcon from "../assets/dashboardAssets/element-4.png";
 import historyIcon from "../assets/dashboardAssets/Calendar.png";
 import notificationIcon from "../assets/dashboardAssets/notification-bing.png";
@@ -13,9 +20,12 @@ import eyeIcon from "../assets/dashboardAssets/hugeicons_view.png";
 import returnIcon from "../assets/dashboardAssets/icon-park_return.png";
 import searchIcon from "../assets/dashboardAssets/search-normal.png";
 import { useNavigate } from "react-router-dom";
+
 const Dashboard = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [selectedPeriod, setSelectedPeriod] = useState("Day");
+
   const navigate = useNavigate();
   function handleDashboard() {
     navigate("/dashboard");
@@ -24,10 +34,107 @@ const Dashboard = () => {
   function handleLogout() {
     navigate("/");
   }
-
-  function handleBilling() {
-    navigate("/billing");
+  function handleHistory() {
+    navigate("/apilogs");
   }
+
+  // function handleBilling() {
+  //   navigate("/billing");
+  // }
+
+  // Mock billing data
+  const billingData = [
+    {
+      id: 1,
+      description: "Fund",
+      transactionId: "#12548796",
+      type: "Transfer",
+      date: "28 Jan, 12.30 AM",
+      amount: 750,
+      direction: "credit",
+      icon: "up",
+    },
+    {
+      id: 2,
+      description: "BVN",
+      transactionId: "#12548796",
+      type: "API",
+      date: "25 Jan, 10.40 PM",
+      amount: 450,
+      direction: "credit",
+      icon: "down",
+    },
+    {
+      id: 3,
+      description: "BVN",
+      transactionId: "#12548796",
+      type: "API",
+      date: "20 Jan, 10.40 PM",
+      amount: 150,
+      direction: "debit",
+      icon: "down",
+    },
+    {
+      id: 4,
+      description: "BVN",
+      transactionId: "#12548796",
+      type: "API",
+      date: "15 Jan, 03.29 PM",
+      amount: 1050,
+      direction: "debit",
+      icon: "down",
+    },
+    {
+      id: 5,
+      description: "BVN",
+      transactionId: "#12548796",
+      type: "API",
+      date: "25 Jan, 10.40 PM",
+      amount: 450,
+      direction: "credit",
+      icon: "down",
+    },
+    {
+      id: 6,
+      description: "Fund",
+      transactionId: "#12548796",
+      type: "Transfer",
+      date: "28 Jan, 12.30 AM",
+      amount: 750,
+      direction: "credit",
+      icon: "up",
+    },
+    {
+      id: 7,
+      description: "BVN",
+      transactionId: "#12548796",
+      type: "API",
+      date: "20 Jan, 10.40 PM",
+      amount: 150,
+      direction: "debit",
+      icon: "down",
+    },
+    {
+      id: 8,
+      description: "BVN",
+      transactionId: "#12548796",
+      type: "API",
+      date: "15 Jan, 03.29 PM",
+      amount: 1050,
+      direction: "debit",
+      icon: "down",
+    },
+    {
+      id: 9,
+      description: "BVN",
+      transactionId: "#12548796",
+      type: "API",
+      date: "14 Jan, 10.40 PM",
+      amount: 850,
+      direction: "debit",
+      icon: "down",
+    },
+  ];
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -39,60 +146,6 @@ const Dashboard = () => {
 
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
-
-  // Sample API logs data
-  const apiLogs = [
-    {
-      id: 1,
-      endpoint: "Bank Verification Number (Advance)",
-      name: "NUNGAMIYA BOKUNGA",
-      amount: 40.0,
-      source: "API",
-      performedBy: "Samuel Odejirmi",
-      date: "Apr 21, 2025 6:12 AM",
-      status: "SUCCESSFUL",
-    },
-    {
-      id: 2,
-      endpoint: "Bank Verification Number (Advance)",
-      name: "Null",
-      amount: 40.0,
-      source: "API",
-      performedBy: "Samuel Odejirmi",
-      date: "Apr 21, 2025 6:12 AM",
-      status: "Failed",
-    },
-    {
-      id: 3,
-      endpoint: "Bank Verification Number (Advance)",
-      name: "NUNGAMIYA BOKUNGA",
-      amount: 40.0,
-      source: "API",
-      performedBy: "Samuel Odejirmi",
-      date: "Apr 21, 2025 6:12 AM",
-      status: "SUCCESSFUL",
-    },
-    {
-      id: 4,
-      endpoint: "Bank Verification Number (Advance)",
-      name: "NUNGAMIYA BOKUNGA",
-      amount: 40.0,
-      source: "API",
-      performedBy: "Samuel Odejirmi",
-      date: "Apr 21, 2025 6:12 AM",
-      status: "SUCCESSFUL",
-    },
-    {
-      id: 5,
-      endpoint: "Bank Verification Number (Advance)",
-      name: "NUNGAMIYA BOKUNGA",
-      amount: 40.0,
-      source: "API",
-      performedBy: "Samuel Odejirmi",
-      date: "Apr 21, 2025 6:12 AM",
-      status: "SUCCESSFUL",
-    },
-  ];
 
   return (
     <div className="dashboard">
@@ -145,6 +198,12 @@ const Dashboard = () => {
           display: flex;
           align-items: center;
           gap: 10px;
+        }
+
+        .logo {
+          font-size: 20px;
+          font-weight: bold;
+          color: #2d3436;
         }
 
         .nav-menu {
@@ -308,7 +367,7 @@ const Dashboard = () => {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 24px;
+          margin-bottom: 32px;
         }
 
         .page-title {
@@ -317,78 +376,74 @@ const Dashboard = () => {
           color: #2d3436;
         }
 
-        .header-actions {
+        .header-controls {
           display: flex;
+          align-items: center;
           gap: 16px;
         }
 
-        .filter-btn,
-        .export-btn {
+        .period-selector {
+          display: flex;
+          background: #f8f9fa;
+          border-radius: 8px;
+          padding: 4px;
+        }
+
+        .period-btn {
+          padding: 8px 16px;
+          border: none;
+          background: transparent;
+          color: #6b7280;
+          font-size: 14px;
+          font-weight: 500;
+          cursor: pointer;
+          border-radius: 6px;
+          transition: all 0.2s ease;
+        }
+
+        .period-btn.active {
+          background: white;
+          color: #374151;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .select-period-btn {
           display: flex;
           align-items: center;
           gap: 8px;
-          padding: 12px 20px;
+          padding: 10px 16px;
+          border: 1px solid #e5e7eb;
+          background: white;
           border-radius: 8px;
-          font-weight: 500;
+          color: #6b7280;
+          font-size: 14px;
           cursor: pointer;
           transition: all 0.2s ease;
         }
 
+        .select-period-btn:hover {
+          border-color: #d1d5db;
+        }
+
         .filter-btn {
-          background: white;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 10px 16px;
           border: 1px solid #e5e7eb;
-          color: #374151;
+          background: white;
+          border-radius: 8px;
+          color: #6b7280;
+          font-size: 14px;
+          cursor: pointer;
+          transition: all 0.2s ease;
         }
 
         .filter-btn:hover {
-          background: #f9fafb;
-        }
-
-        .export-btn {
-          background: #4f46e5;
-          border: 1px solid #4f46e5;
-          color: white;
-        }
-
-        .export-btn:hover {
-          background: #4338ca;
-        }
-
-        .search-section {
-          margin-bottom: 24px;
-        }
-
-        .logs-search {
-          position: relative;
-          max-width: 500px;
-        }
-
-        .logs-search-input {
-          width: 100%;
-          padding: 12px 16px 12px 40px;
-          border: 1px solid #e5e7eb;
-          border-radius: 8px;
-          font-size: 14px;
-          outline: none;
-        }
-
-        .logs-search-input:focus {
-          border-color: #4f46e5;
-          box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-        }
-
-        .logs-search-icon {
-          position: absolute;
-          left: 12px;
-          top: 50%;
-          transform: translateY(-50%);
-          color: #9ca3af;
-          width: 16px;
-          height: 16px;
+          border-color: #d1d5db;
         }
 
         .table-container {
-          border: 1px solid #e5e7eb;
           border-radius: 12px;
           overflow: hidden;
           background: white;
@@ -404,12 +459,13 @@ const Dashboard = () => {
         }
 
         .table-header th {
-          padding: 16px;
+          padding: 16px 20px;
           text-align: left;
-          font-weight: 600;
-          color: #374151;
-          border-bottom: 1px solid #e5e7eb;
-          font-size: 14px;
+          font-weight: 500;
+          color: #9ca3af;
+          font-size: 13px;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
         }
 
         .table-row {
@@ -426,94 +482,56 @@ const Dashboard = () => {
         }
 
         .table-cell {
-          padding: 16px;
+          padding: 20px;
           font-size: 14px;
           color: #374151;
           vertical-align: middle;
         }
 
-        tbody .date {
-          font-size: 12px;
-        }
-
-        .status-badge {
-          display: inline-flex;
-          align-items: center;
-          padding: 4px 12px;
-          border-radius: 20px;
-          font-size: 12px;
-          font-weight: 500;
-          text-transform: uppercase;
-        }
-
-        .status-success {
-          background: #dcfce7;
-          color: #166534;
-        }
-
-        .status-failed {
-          background: #fee2e2;
-          color: #dc2626;
-        }
-
-        .action-buttons {
-          display: flex;
-          gap: 8px;
-          flex-direction: column;
-        }
-
-        .action-btn {
+        .description-cell {
           display: flex;
           align-items: center;
-          gap: 10px;
-
-          border: none;
-          background: white;
-          color: black;
-          font-size: 12px;
-          cursor: pointer;
-          transition: all 0.2s ease;
+          gap: 12px;
         }
 
-        .action-btn:hover {
-          color: blue;
-          outline: none;
-          background: transparent;
-        }
-
-        .pagination {
+        .transaction-icon {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
           display: flex;
+          align-items: center;
           justify-content: center;
-          align-items: center;
-          gap: 8px;
-          margin-top: 24px;
-          padding: 20px;
-        }
-
-        .pagination-btn {
-          padding: 8px 12px;
-          border: 1px solid #e5e7eb;
-          background: white;
-          border-radius: 6px;
-          color: #374151;
-          cursor: pointer;
-          transition: all 0.2s ease;
           font-size: 14px;
         }
 
-        .pagination-btn:hover {
-          background: #f3f4f6;
+        .icon-up {
+          background: #dcfce7;
+          color: #16a34a;
         }
 
-        .pagination-btn.active {
-          background: #4f46e5;
-          color: white;
-          border-color: #4f46e5;
+        .icon-down {
+          background: #dbeafe;
+          color: #2563eb;
         }
 
-        .pagination-btn:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
+        .transaction-id {
+          color: #6b7280;
+          font-size: 13px;
+        }
+
+        .amount-credit {
+          color: #16a34a;
+          font-weight: 600;
+        }
+
+        .amount-debit {
+          color: #dc2626;
+          font-weight: 600;
+        }
+
+        .date-text {
+          color: #6b7280;
+          font-size: 13px;
         }
 
         .overlay {
@@ -556,14 +574,12 @@ const Dashboard = () => {
             display: none;
           }
 
-          .header-actions {
+          .header-controls {
             gap: 8px;
           }
 
-          .filter-btn,
-          .export-btn {
-            padding: 8px 12px;
-            font-size: 12px;
+          .period-selector {
+            display: none;
           }
 
           .table-container {
@@ -571,10 +587,7 @@ const Dashboard = () => {
           }
 
           .table {
-            min-width: 800px;
-          }
-          .main-content {
-            max-width: 790px;
+            min-width: 700px;
           }
         }
 
@@ -582,9 +595,6 @@ const Dashboard = () => {
           .content {
             padding: 16px;
             margin: 16px;
-          }
-          .main-content {
-            max-width: 390px;
           }
 
           .page-header {
@@ -602,15 +612,13 @@ const Dashboard = () => {
           }
 
           .main-content {
-            max-width: 390px;
+            max-width: 420px;
           }
         }
 
         @media (max-width: 480px) {
           .top-bar {
             padding: 13px 5px 12px 16px;
-            display: flex;
-            justify-content: space-between;
           }
 
           .hamSearch {
@@ -619,17 +627,18 @@ const Dashboard = () => {
             gap: 1rem;
           }
 
-          .main-content {
-            width: 100%;
-          }
-
           .table-cell {
             padding: 12px 8px;
             font-size: 12px;
           }
 
-          .action-buttons {
+          .description-cell {
             flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+          }
+          .main-content {
+            width: 100%;
           }
         }
       `}</style>
@@ -661,13 +670,13 @@ const Dashboard = () => {
               </div>
               Dashboard
             </div>
-            <div className="nav-item">
+            <div onClick={() => handleHistory()} className="nav-item">
               <div className="nav-icon">
                 <img src={historyIcon} alt="icon" />
               </div>
               History
             </div>
-            <div onClick={() => handleBilling()} className="nav-item">
+            <div className="nav-item">
               <div className="nav-icon">
                 <img src={billingIcon} alt="icon" />
               </div>
@@ -715,62 +724,76 @@ const Dashboard = () => {
       {/* Main Content */}
       <div className={`main-content ${isMobile ? "mobile" : ""}`}>
         {/* Top Bar */}
-        <div className="top-bar">
-          <div className="hamSearch">
-            <button className="hamburger" onClick={() => setSidebarOpen(true)}>
-              ☰
-            </button>
-
-            <div className="search-bar">
-              <div className="search-icon">
-                <img src={searchIcon} alt="icon" />
-              </div>
-              <input
-                type="text"
-                className="search-input"
-                placeholder="Search here ..."
-              />
-            </div>
-          </div>
-
-          <div className="user-section">
-            <div className="notification-icon">
-              <img src={notificationIcon} alt="icon" />
-            </div>
-            <div className="user-avatar">E</div>
-            <span className="user-name">emmy</span>
-            <span className="arrow-down">
-              <ChevronDown size={16} />
-            </span>
-          </div>
-        </div>
+         <div className="top-bar">
+               <div className="hamSearch">
+                 <button className="hamburger" onClick={() => setSidebarOpen(true)}>
+                   ☰
+                 </button>
+     
+                 <div className="search-bar">
+                   <div className="search-icon">
+                     <img src={searchIcon} alt="icon" />
+                   </div>
+                   <input
+                     type="text"
+                     className="search-input"
+                     placeholder="Search here ..."
+                   />
+                 </div>
+               </div>
+     
+               <div className="user-section">
+                 <div className="notification-icon">
+                   <img src={notificationIcon} alt="icon" />
+                 </div>
+                 <div className="user-avatar">E</div>
+                 <span className="user-name">emmy</span>
+                 <span className="arrow-down">
+                   <ChevronDown size={16} />
+                 </span>
+               </div>
+             </div>
+     
 
         {/* Content */}
         <div className="content">
           <div className="page-header">
-            <h1 className="page-title">API Logs</h1>
-            <div className="header-actions">
+            <h1 className="page-title">Billing</h1>
+            <div className="header-controls">
+              <div className="period-selector">
+                <button
+                  className={`period-btn ${
+                    selectedPeriod === "Day" ? "active" : ""
+                  }`}
+                  onClick={() => setSelectedPeriod("Day")}
+                >
+                  Day
+                </button>
+                <button
+                  className={`period-btn ${
+                    selectedPeriod === "Week" ? "active" : ""
+                  }`}
+                  onClick={() => setSelectedPeriod("Week")}
+                >
+                  Week
+                </button>
+                <button
+                  className={`period-btn ${
+                    selectedPeriod === "Month" ? "active" : ""
+                  }`}
+                  onClick={() => setSelectedPeriod("Month")}
+                >
+                  Month
+                </button>
+              </div>
+              <button className="select-period-btn">
+                <Calendar size={16} />
+                Select period
+              </button>
               <button className="filter-btn">
                 <Filter size={16} />
                 Filter
               </button>
-              <button className="export-btn">
-                <FileDown size={16} />
-                Export
-              </button>
-            </div>
-          </div>
-
-          <div className="search-section">
-            <div className="logs-search">
-              <div className="logs-search-icon">
-                <img src={searchIcon} alt="icon" />
-              </div>
-              <input
-                type="text"
-                className="logs-search-input"
-                placeholder="Search by reference number, press enter to search"
-              />
             </div>
           </div>
 
@@ -778,64 +801,57 @@ const Dashboard = () => {
             <table className="table">
               <thead className="table-header">
                 <tr>
-                  <th>Endpoint</th>
-                  <th>Name</th>
-                  <th>Amount</th>
-                  <th>Source</th>
-                  <th>Performed By</th>
+                  <th>Description</th>
+                  <th>Transaction ID</th>
+                  <th>Type</th>
                   <th>Date</th>
-                  <th>Status</th>
-                  <th>Action</th>
+                  <th>Amount</th>
                 </tr>
               </thead>
               <tbody>
-                {apiLogs.map((log) => (
-                  <tr key={log.id} className="table-row">
-                    <td className="table-cell">{log.endpoint}</td>
-                    <td className="table-cell">{log.name}</td>
-                    <td className="table-cell">{log.amount}</td>
-                    <td className="table-cell">{log.source}</td>
-                    <td className="table-cell">{log.performedBy}</td>
-                    <td className="table-cell date">{log.date}</td>
+                {billingData.map((transaction) => (
+                  <tr key={transaction.id} className="table-row">
                     <td className="table-cell">
-                      <span
-                        className={`status-badge ${
-                          log.status === "SUCCESSFUL"
-                            ? "status-success"
-                            : "status-failed"
-                        }`}
-                      >
-                        {log.status}
-                      </span>
+                      <div className="description-cell">
+                        <div
+                          className={`transaction-icon ${
+                            transaction.icon === "up" ? "icon-up" : "icon-down"
+                          }`}
+                        >
+                          {transaction.icon === "up" ? (
+                            <ArrowUp size={16} />
+                          ) : (
+                            <ArrowDown size={16} />
+                          )}
+                        </div>
+                        <span>{transaction.description}</span>
+                      </div>
                     </td>
                     <td className="table-cell">
-                      <div className="action-buttons">
-                        <span className="action-btn">
-                          <img src={eyeIcon} alt="icon" />
-                          <span>View</span>
-                        </span>
-                        <span className="action-btn">
-                          <img src={returnIcon} alt="icon" />
-                          <span>Resend to webhook</span>
-                        </span>
-                      </div>
+                      <span className="transaction-id">
+                        {transaction.transactionId}
+                      </span>
+                    </td>
+                    <td className="table-cell">{transaction.type}</td>
+                    <td className="table-cell">
+                      <span className="date-text">{transaction.date}</span>
+                    </td>
+                    <td className="table-cell">
+                      <span
+                        className={
+                          transaction.direction === "credit"
+                            ? "amount-credit"
+                            : "amount-debit"
+                        }
+                      >
+                        {transaction.direction === "credit" ? "+" : "-"}₦
+                        {transaction.amount}
+                      </span>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-          </div>
-
-          <div className="pagination">
-            <button className="pagination-btn" disabled>
-              Prev
-            </button>
-            <button className="pagination-btn active">1</button>
-            <button className="pagination-btn">2</button>
-            <button className="pagination-btn">3</button>
-            <span style={{ margin: "0 8px", color: "#9ca3af" }}>...</span>
-            <button className="pagination-btn">10</button>
-            <button className="pagination-btn">Next</button>
           </div>
         </div>
       </div>

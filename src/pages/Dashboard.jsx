@@ -31,6 +31,10 @@ const Dashboard = () => {
     navigate("/");
   }
 
+  function handleBilling() {
+    navigate("/billing");
+  }
+
   // const [active, setActive] = useState(true);
   useEffect(() => {
     const checkScreenSize = () => {
@@ -832,7 +836,7 @@ const Dashboard = () => {
               </div>
               History
             </div>
-            <div className="nav-item">
+            <div onClick={() => handleBilling()} className="nav-item">
               <div className="nav-icon">
                 <img src={billingIcon} alt="icon" />
               </div>
