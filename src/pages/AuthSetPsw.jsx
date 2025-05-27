@@ -39,10 +39,7 @@ export default function AuthSetPsw() {
             />
           </div>
 
-          <p className="login-signup">
-            Didn't recieve a code?{" "}
-            <strong style={{ cursor: "pointer", color: "blue" }}>Resend</strong>
-          </p>
+         
 
           <button type="submit">Set Password</button>
 

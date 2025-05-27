@@ -5,7 +5,7 @@ import historyIcon from "../assets/dashboardAssets/Calendar.png";
 import billingIcon from "../assets/dashboardAssets/stash_billing-info.png";
 import nav_icon from "../assets/dashboardAssets/Chart.png";
 import profileIcon from "../assets/dashboardAssets/user.png";
-import BusinessIcon from "../assets/dashboardAssets/icon-park-outline_user-business.png";
+
 import logOutIcon from "../assets/dashboardAssets/login.png";
 import searchIcon from "../assets/dashboardAssets/search-normal.png";
 import notificationIcon from "../assets/dashboardAssets/notification-bing.png";
@@ -860,13 +860,7 @@ const Dashboard = () => {
               </div>
               Profile
             </div>
-            <div className="nav-item">
-              <div className="nav-icon">
-                {" "}
-                <img src={BusinessIcon} alt="icon" />
-              </div>
-              Business info
-            </div>
+           
           </div>
 
           <div className="nav-bottom">

@@ -73,7 +73,7 @@ export default function AuthSignUp() {
             />
           </div>
 
-          <button type="submit">Login</button>
+          <button type="submit">Sign Up</button>
 
           <p className="login-signup">
             Already have an account?{" "}

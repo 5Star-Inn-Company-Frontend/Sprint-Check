@@ -14,14 +14,13 @@ import notificationIcon from "../assets/dashboardAssets/notification-bing.png";
 import billingIcon from "../assets/dashboardAssets/stash_billing-info.png";
 import nav_icon from "../assets/dashboardAssets/Chart.png";
 import profileIcon from "../assets/dashboardAssets/user.png";
-import BusinessIcon from "../assets/dashboardAssets/icon-park-outline_user-business.png";
+
 import logOutIcon from "../assets/dashboardAssets/login.png";
-import eyeIcon from "../assets/dashboardAssets/hugeicons_view.png";
-import returnIcon from "../assets/dashboardAssets/icon-park_return.png";
+
 import searchIcon from "../assets/dashboardAssets/search-normal.png";
 import { useNavigate } from "react-router-dom";
 
-const Dashboard = () => {
+const Billing = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedPeriod, setSelectedPeriod] = useState("Day");
@@ -700,13 +699,6 @@ const Dashboard = () => {
               </div>
               Profile
             </div>
-            <div className="nav-item">
-              <div className="nav-icon">
-                {" "}
-                <img src={BusinessIcon} alt="icon" />
-              </div>
-              Business info
-            </div>
           </div>
 
           <div className="nav-bottom">
@@ -724,36 +716,35 @@ const Dashboard = () => {
       {/* Main Content */}
       <div className={`main-content ${isMobile ? "mobile" : ""}`}>
         {/* Top Bar */}
-         <div className="top-bar">
-               <div className="hamSearch">
-                 <button className="hamburger" onClick={() => setSidebarOpen(true)}>
-                   ☰
-                 </button>
-     
-                 <div className="search-bar">
-                   <div className="search-icon">
-                     <img src={searchIcon} alt="icon" />
-                   </div>
-                   <input
-                     type="text"
-                     className="search-input"
-                     placeholder="Search here ..."
-                   />
-                 </div>
-               </div>
-     
-               <div className="user-section">
-                 <div className="notification-icon">
-                   <img src={notificationIcon} alt="icon" />
-                 </div>
-                 <div className="user-avatar">E</div>
-                 <span className="user-name">emmy</span>
-                 <span className="arrow-down">
-                   <ChevronDown size={16} />
-                 </span>
-               </div>
-             </div>
-     
+        <div className="top-bar">
+          <div className="hamSearch">
+            <button className="hamburger" onClick={() => setSidebarOpen(true)}>
+              ☰
+            </button>
+
+            <div className="search-bar">
+              <div className="search-icon">
+                <img src={searchIcon} alt="icon" />
+              </div>
+              <input
+                type="text"
+                className="search-input"
+                placeholder="Search here ..."
+              />
+            </div>
+          </div>
+
+          <div className="user-section">
+            <div className="notification-icon">
+              <img src={notificationIcon} alt="icon" />
+            </div>
+            <div className="user-avatar">E</div>
+            <span className="user-name">emmy</span>
+            <span className="arrow-down">
+              <ChevronDown size={16} />
+            </span>
+          </div>
+        </div>
 
         {/* Content */}
         <div className="content">
@@ -859,4 +850,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Billing;

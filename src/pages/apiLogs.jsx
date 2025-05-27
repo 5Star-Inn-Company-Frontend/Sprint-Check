@@ -7,7 +7,7 @@ import notificationIcon from "../assets/dashboardAssets/notification-bing.png";
 import billingIcon from "../assets/dashboardAssets/stash_billing-info.png";
 import nav_icon from "../assets/dashboardAssets/Chart.png";
 import profileIcon from "../assets/dashboardAssets/user.png";
-import BusinessIcon from "../assets/dashboardAssets/icon-park-outline_user-business.png";
+
 import logOutIcon from "../assets/dashboardAssets/login.png";
 import eyeIcon from "../assets/dashboardAssets/hugeicons_view.png";
 import returnIcon from "../assets/dashboardAssets/icon-park_return.png";
@@ -16,6 +16,8 @@ import { useNavigate } from "react-router-dom";
 const Dashboard = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedLog, setSelectedLog] = useState(null);
   const navigate = useNavigate();
   function handleDashboard() {
     navigate("/dashboard");
@@ -24,6 +26,18 @@ const Dashboard = () => {
   function handleLogout() {
     navigate("/");
   }
+
+  const handleViewClick = (log) => {
+    if (log.userDetails) {
+      setSelectedLog(log);
+      setModalOpen(true);
+    }
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setSelectedLog(null);
+  };
 
   function handleBilling() {
     navigate("/billing");
@@ -51,6 +65,31 @@ const Dashboard = () => {
       performedBy: "Samuel Odejirmi",
       date: "Apr 21, 2025 6:12 AM",
       status: "SUCCESSFUL",
+      userDetails: {
+        avatar:
+          "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+        bvn: "22167783258",
+        firstName: "Emmy",
+        lastName: "PAM",
+        middleName: "Adewole",
+        dateOfBirth: "22-Feb-1834",
+        gender: "Male",
+        phoneNumber: "08167783258",
+        lgaOfOrigin: "Barkin Ladi",
+        lgaOfResidence: "Jos South",
+        maritalStatus: "Married",
+        nationality: "Nigeria",
+        residentialAddress: "TCNN BUKURU",
+        stateOfOrigin: "Plateau State",
+        stateOfResidence: "Plateau State",
+        enrollmentBank: "035",
+        enrollmentBranch: "BUKURU,OLD JOS RD.",
+        nameOnCard: "PAM EMMY ADEWOLE",
+        nin: "22167783258",
+        levelOfAccount: "Level 2 - Medium level Accounts",
+        watchlisted: "No",
+        number: "22152629818",
+      },
     },
     {
       id: 2,
@@ -71,6 +110,31 @@ const Dashboard = () => {
       performedBy: "Samuel Odejirmi",
       date: "Apr 21, 2025 6:12 AM",
       status: "SUCCESSFUL",
+      userDetails: {
+        avatar:
+          "https://images.unsplash.com/photo-1494790108755-2616b612b47c?w=150&h=150&fit=crop&crop=face",
+        bvn: "22167783258",
+        firstName: "Sarah",
+        lastName: "Johnson",
+        middleName: "Grace",
+        dateOfBirth: "15-Mar-1990",
+        gender: "Female",
+        phoneNumber: "08123456789",
+        lgaOfOrigin: "Ikeja",
+        lgaOfResidence: "Victoria Island",
+        maritalStatus: "Single",
+        nationality: "Nigeria",
+        residentialAddress: "12 Victoria Island Lagos",
+        stateOfOrigin: "Lagos State",
+        stateOfResidence: "Lagos State",
+        enrollmentBank: "058",
+        enrollmentBranch: "VICTORIA ISLAND BRANCH",
+        nameOnCard: "SARAH GRACE JOHNSON",
+        nin: "12345678901",
+        levelOfAccount: "Level 3 - High level Accounts",
+        watchlisted: "No",
+        number: "11122334455",
+      },
     },
     {
       id: 4,
@@ -81,6 +145,31 @@ const Dashboard = () => {
       performedBy: "Samuel Odejirmi",
       date: "Apr 21, 2025 6:12 AM",
       status: "SUCCESSFUL",
+      userDetails: {
+        avatar:
+          "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
+        bvn: "33445566778",
+        firstName: "Michael",
+        lastName: "Brown",
+        middleName: "David",
+        dateOfBirth: "08-Jul-1985",
+        gender: "Male",
+        phoneNumber: "08198765432",
+        lgaOfOrigin: "Abuja Municipal",
+        lgaOfResidence: "Garki",
+        maritalStatus: "Married",
+        nationality: "Nigeria",
+        residentialAddress: "45 Garki District Abuja",
+        stateOfOrigin: "FCT",
+        stateOfResidence: "FCT",
+        enrollmentBank: "011",
+        enrollmentBranch: "GARKI BRANCH",
+        nameOnCard: "MICHAEL DAVID BROWN",
+        nin: "98765432109",
+        levelOfAccount: "Level 2 - Medium level Accounts",
+        watchlisted: "No",
+        number: "99887766554",
+      },
     },
     {
       id: 5,
@@ -91,6 +180,31 @@ const Dashboard = () => {
       performedBy: "Samuel Odejirmi",
       date: "Apr 21, 2025 6:12 AM",
       status: "SUCCESSFUL",
+      userDetails: {
+        avatar:
+          "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+        bvn: "55667788990",
+        firstName: "Blessing",
+        lastName: "Okoro",
+        middleName: "Chioma",
+        dateOfBirth: "20-Dec-1992",
+        gender: "Female",
+        phoneNumber: "08167890123",
+        lgaOfOrigin: "Owerri North",
+        lgaOfResidence: "Owerri West",
+        maritalStatus: "Single",
+        nationality: "Nigeria",
+        residentialAddress: "23 New Owerri Road",
+        stateOfOrigin: "Imo State",
+        stateOfResidence: "Imo State",
+        enrollmentBank: "214",
+        enrollmentBranch: "OWERRI MAIN BRANCH",
+        nameOnCard: "BLESSING CHIOMA OKORO",
+        nin: "11223344556",
+        levelOfAccount: "Level 1 - Basic Accounts",
+        watchlisted: "No",
+        number: "77889900112",
+      },
     },
   ];
 
@@ -468,7 +582,7 @@ const Dashboard = () => {
           gap: 10px;
 
           border: none;
-          background: white;
+          background:transparent;
           color: black;
           font-size: 12px;
           cursor: pointer;
@@ -531,6 +645,130 @@ const Dashboard = () => {
           display: block;
         }
 
+        /* Modal Styles */
+        .modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.7);
+          backdrop-filter: blur(4px);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 2000;
+          padding: 20px;
+        }
+
+        .modal {
+          background: #d5d5d5;
+          border-radius: 16px;
+          width: 100%;
+          max-width: 800px;
+          max-height: 90vh;
+          overflow-y: auto;
+          scrollbar-width: none; /* Firefox */
+          -ms-overflow-style: none; /* IE 10+ */
+          position: relative;
+          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .modal-header {
+          padding: 24px 24px 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+        }
+
+        .modal-close {
+          position: absolute;
+          top: 16px;
+          right: 16px;
+          background: #f3f4f6;
+          border: none;
+          border-radius: 50%;
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+          background: #e5e7eb;
+        }
+
+        .modal-avatar {
+          width: 80px;
+          height: 80px;
+          border-radius: 50%;
+          object-fit: cover;
+          margin-bottom: 16px;
+        }
+
+        .modal-content {
+          padding: 3rem;
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+        }
+
+        .modal-grid {
+          display: flex;
+          gap: 20rem;
+          margin-bottom: 32px;
+        }
+        .modalFlex {
+          display: flex;
+          flex-direction: column;
+          gap: 2rem;
+        }
+        .flex2 {
+          display: flex;
+          flex-direction: column;
+          gap: 2rem;
+        }
+
+        .modal-field {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+        }
+
+        .modal-label {
+          font-size: 14px;
+          color: #6b7280;
+          font-weight: 500;
+        }
+
+        .modal-value {
+          font-size: 16px;
+          color: #1f2937;
+          font-weight: 600;
+        }
+
+        .close-button {
+          width: 100%;
+          padding: 12px 24px;
+          background: #4f46e5;
+          color: white;
+          border: none;
+          border-radius: 8px;
+          font-size: 16px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        .close-button:hover {
+          background: #4338ca;
+        }
+
         @media (max-width: 1023px) {
           .sidebar {
             transform: translateX(-100%);
@@ -576,6 +814,9 @@ const Dashboard = () => {
           .main-content {
             max-width: 790px;
           }
+          .modal-grid {
+            grid-template-columns: 1fr;
+          }
         }
 
         @media (max-width: 768px) {
@@ -604,6 +845,14 @@ const Dashboard = () => {
           .main-content {
             max-width: 390px;
           }
+          .modal {
+            margin: 10px;
+            max-height: 80vh;
+          }
+
+          .modal-content {
+            padding: 20px;
+          }
         }
 
         @media (max-width: 480px) {
@@ -631,6 +880,28 @@ const Dashboard = () => {
           .action-buttons {
             flex-direction: column;
           }
+
+          .modal {
+            margin: 5px;
+            border-radius: 12px;
+          }
+
+          .modal-header {
+            padding: 20px 20px 0;
+          }
+
+          .modal-avatar {
+            width: 60px;
+            height: 60px;
+          }
+
+          .modal-grid {
+            display: flex;
+            gap: 1rem;
+
+            margin-bottom: 32px;
+            flex-direction: column;
+          }
         }
       `}</style>
 
@@ -639,6 +910,163 @@ const Dashboard = () => {
         className={`overlay ${isMobile && sidebarOpen ? "show" : ""}`}
         onClick={() => setSidebarOpen(false)}
       />
+
+      {/* Modal */}
+      {modalOpen && selectedLog && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              {/* <button className="modal-close" onClick={() => closeModal()}>
+                X
+              </button> */}
+              <img
+                src={selectedLog.userDetails.avatar}
+                alt="User Avatar"
+                className="modal-avatar"
+              />
+            </div>
+            <div className="modal-content">
+              <div className="modal-grid">
+                <div className="modalFlex">
+                  {" "}
+                  <div className="modal-field">
+                    <span className="modal-label">BVN</span>
+                    <div className="modal-value">
+                      {selectedLog.userDetails.bvn}
+                    </div>
+                  </div>
+                  <div className="modal-field">
+                    <span className="modal-label">First Name</span>
+                    <div className="modal-value">
+                      {selectedLog.userDetails.firstName}
+                    </div>
+                  </div>
+                  <div className="modal-field">
+                    <span className="modal-label">Last Name</span>
+                    <div className="modal-value">
+                      {selectedLog.userDetails.lastName}
+                    </div>
+                  </div>
+                  <div className="modal-field">
+                    <span className="modal-label">Middle Name</span>
+                    <div className="modal-value">
+                      {selectedLog.userDetails.middleName}
+                    </div>
+                  </div>
+                  <div className="modal-field">
+                    <span className="modal-label">Date Of Birth</span>
+                    <div className="modal-value">
+                      {selectedLog.userDetails.dateOfBirth}
+                    </div>
+                  </div>
+                  <div className="modal-field">
+                    <span className="modal-label">Gender</span>
+                    <div className="modal-value">
+                      {selectedLog.userDetails.gender}
+                    </div>
+                  </div>
+                  <div className="modal-field">
+                    <span className="modal-label">Phone number</span>
+                    <div className="modal-value">
+                      {selectedLog.userDetails.phoneNumber}
+                    </div>
+                  </div>
+                  <div className="modal-field">
+                    <span className="modal-label">Lga Of Origin</span>
+                    <div className="modal-value">
+                      {selectedLog.userDetails.lgaOfOrigin}
+                    </div>
+                  </div>
+                  <div className="modal-field">
+                    <span className="modal-label">Lga Of Residence</span>
+                    <div className="modal-value">
+                      {selectedLog.userDetails.lgaOfResidence}
+                    </div>
+                  </div>
+                  <div className="modal-field">
+                    <span className="modal-label">Marital Status</span>
+                    <div className="modal-value">
+                      {selectedLog.userDetails.maritalStatus}
+                    </div>
+                  </div>
+                  <div className="modal-field">
+                    <span className="modal-label">Nationality</span>
+                    <div className="modal-value">
+                      {selectedLog.userDetails.nationality}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex2">
+                  <div className="modal-field">
+                    <span className="modal-label">Residential Address</span>
+                    <div className="modal-value">
+                      {selectedLog.userDetails.residentialAddress}
+                    </div>
+                  </div>
+                  <div className="modal-field">
+                    <span className="modal-label">State Of Origin</span>
+                    <div className="modal-value">
+                      {selectedLog.userDetails.stateOfOrigin}
+                    </div>
+                  </div>
+                  <div className="modal-field">
+                    <span className="modal-label">State Of Residence</span>
+                    <div className="modal-value">
+                      {selectedLog.userDetails.stateOfResidence}
+                    </div>
+                  </div>
+                  <div className="modal-field">
+                    <span className="modal-label">Enrollment Bank</span>
+                    <div className="modal-value">
+                      {selectedLog.userDetails.enrollmentBank}
+                    </div>
+                  </div>
+                  <div className="modal-field">
+                    <span className="modal-label">Enrollment Branch</span>
+                    <div className="modal-value">
+                      {selectedLog.userDetails.enrollmentBranch}
+                    </div>
+                  </div>
+                  <div className="modal-field">
+                    <span className="modal-label">Name On Card</span>
+                    <div className="modal-value">
+                      {selectedLog.userDetails.nameOnCard}
+                    </div>
+                  </div>
+                  <div className="modal-field">
+                    <span className="modal-label">NIN</span>
+                    <div className="modal-value">
+                      {selectedLog.userDetails.nin}
+                    </div>
+                  </div>
+                  <div className="modal-field">
+                    <span className="modal-label">Level Of Account</span>
+                    <div className="modal-value">
+                      {selectedLog.userDetails.levelOfAccount}
+                    </div>
+                  </div>
+                  <div className="modal-field">
+                    <span className="modal-label">Watchlisted</span>
+                    <div className="modal-value">
+                      {selectedLog.userDetails.watchlisted}
+                    </div>
+                  </div>
+                  <div className="modal-field">
+                    <span className="modal-label">Number</span>
+                    <div className="modal-value">
+                      {selectedLog.userDetails.number}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button className="close-button" onClick={closeModal}>
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Sidebar */}
       <div
@@ -691,13 +1119,7 @@ const Dashboard = () => {
               </div>
               Profile
             </div>
-            <div className="nav-item">
-              <div className="nav-icon">
-                {" "}
-                <img src={BusinessIcon} alt="icon" />
-              </div>
-              Business info
-            </div>
+           
           </div>
 
           <div className="nav-bottom">
@@ -810,7 +1232,10 @@ const Dashboard = () => {
                     </td>
                     <td className="table-cell">
                       <div className="action-buttons">
-                        <span className="action-btn">
+                        <span
+                          onClick={() => handleViewClick(log)}
+                          className="action-btn"
+                        >
                           <img src={eyeIcon} alt="icon" />
                           <span>View</span>
                         </span>
