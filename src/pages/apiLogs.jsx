@@ -43,6 +43,10 @@ const Dashboard = () => {
     navigate("/billing");
   }
 
+   function handleDeveloper() {
+     navigate("/developer");
+   }
+
   useEffect(() => {
     const checkScreenSize = () => {
       setIsMobile(window.innerWidth < 1024);
@@ -1101,7 +1105,7 @@ const Dashboard = () => {
               </div>
               Billing
             </div>
-            <div className="nav-item">
+            <div onClick={()=>handleDeveloper()} className="nav-item">
               <div className="nav-icon">
                 <img src={nav_icon} alt="icon" />
               </div>

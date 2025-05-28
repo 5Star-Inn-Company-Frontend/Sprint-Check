@@ -6,6 +6,7 @@ import billingIcon from "../assets/dashboardAssets/stash_billing-info.png";
 import nav_icon from "../assets/dashboardAssets/Chart.png";
 import profileIcon from "../assets/dashboardAssets/user.png";
 
+
 import logOutIcon from "../assets/dashboardAssets/login.png";
 import searchIcon from "../assets/dashboardAssets/search-normal.png";
 import notificationIcon from "../assets/dashboardAssets/notification-bing.png";
@@ -33,6 +34,10 @@ const Dashboard = () => {
 
   function handleBilling() {
     navigate("/billing");
+  }
+
+  function handleDeveloper() {
+    navigate("/developer");
   }
 
   // const [active, setActive] = useState(true);
@@ -842,7 +847,7 @@ const Dashboard = () => {
               </div>
               Billing
             </div>
-            <div className="nav-item">
+            <div onClick={() => handleDeveloper()} className="nav-item">
               <div className="nav-icon">
                 <img src={nav_icon} alt="icon" />
               </div>
@@ -860,7 +865,6 @@ const Dashboard = () => {
               </div>
               Profile
             </div>
-           
           </div>
 
           <div className="nav-bottom">

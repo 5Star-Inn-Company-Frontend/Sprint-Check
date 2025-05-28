@@ -20,7 +20,7 @@ import logOutIcon from "../assets/dashboardAssets/login.png";
 import searchIcon from "../assets/dashboardAssets/search-normal.png";
 import { useNavigate } from "react-router-dom";
 
-const Billing = () => {
+export default function Billing(){
   const [isMobile, setIsMobile] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedPeriod, setSelectedPeriod] = useState("Day");
@@ -35,6 +35,10 @@ const Billing = () => {
   }
   function handleHistory() {
     navigate("/apilogs");
+  }
+
+  function handleDeveloper() {
+    navigate("/developer");
   }
 
   // function handleBilling() {
@@ -681,7 +685,7 @@ const Billing = () => {
               </div>
               Billing
             </div>
-            <div className="nav-item">
+            <div onClick={() => handleDeveloper()} className="nav-item">
               <div className="nav-icon">
                 <img src={nav_icon} alt="icon" />
               </div>
@@ -850,4 +854,4 @@ const Billing = () => {
   );
 };
 
-export default Billing;
+

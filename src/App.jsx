@@ -7,6 +7,8 @@ import VerificationCode from "./pages/AuthVerifyCode";
 import Dashboard from "./pages/Dashboard";
 import ApiLogs from "./pages/apiLogs";
 import Billing from "./pages/Billing";
+import Developer from "./pages/Developer";
+import ApiDoc from "./pages/ApiDoc";
 function App() {
   return (
     <Router>
@@ -14,8 +16,10 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/apilogs" element={<ApiLogs />} />
-        <Route path="/billing" element={<Billing/>}/>
+        <Route path="/billing" element={<Billing />} />
+        <Route path="/developer" element={<Developer />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/apiDoc" element={<ApiDoc />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/verify-code" element={<VerificationCode />} />
