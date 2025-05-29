@@ -326,7 +326,6 @@ export default function Profile() {
           align-items: center;
           justify-content: center;
           position: relative;
-          overflow: hidden;
         }
 
         .profile-avatar img {
@@ -350,7 +349,7 @@ export default function Profile() {
           cursor: pointer;
           color: white;
           font-size: 14px;
-          z-index:1000;
+          z-index: 1000;
           padding: 0rem;
         }
         .EditIcon {
@@ -431,13 +430,13 @@ export default function Profile() {
         }
 
         .btn-primary {
-          background: #3b82f6;
+          background: #4c49a6;
           color: white;
           border: none;
         }
 
         .btn-primary:hover {
-          background: #2563eb;
+          background: #4c49a6;
         }
 
         .btn-secondary {
@@ -552,6 +551,23 @@ export default function Profile() {
           }
 
           .profile-content {
+            flex-direction: column;
+            padding-left: 1.5rem;
+          }
+        }
+
+        @media (max-width: 350px) {
+         
+          .profile-tabs {
+            display: flex;
+            gap: 40px;
+            margin-left: 0;
+            margin-bottom: 40px;
+            // border-bottom: 1px solid #e5e7eb;
+          }
+
+          .profile-content {
+          width:100%;
             flex-direction: column;
             padding-left: 1.5rem;
           }

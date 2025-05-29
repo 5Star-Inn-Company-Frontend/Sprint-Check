@@ -2,6 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import mailIcon from "../assets/codicon_mail.png";
 import passwordIcon from "../assets/bx_bxs-lock-alt.png";
 import userIcon from "../assets/mdi_user-outline.png";
+import Logog from "../assets/dashboardAssets/logof 2.png";
+
 import userPhone from "../assets/line-md_phone.png";
 import { useNavigate } from "react-router-dom";
 export default function AuthSignUp() {
@@ -24,7 +26,7 @@ export default function AuthSignUp() {
 
   return (
     <div className="main">
-      {" "}
+      <img src={Logog} alt="logo"/>
       <div className="login">
         <form className="login-form">
           <div className="login-header">

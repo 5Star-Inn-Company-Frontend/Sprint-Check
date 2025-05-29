@@ -1,9 +1,10 @@
 import { useState } from "react";
+import Logog from "../assets/dashboardAssets/logof 2.png";
 export default function AuthVerifyCode() {
   const [authCode, setAuthCode] = useState("");
   return (
     <div className="main">
-      {" "}
+       <img src={Logog} alt="logo"/>
       <div className="login">
         <form className="login-form">
           <div className="login-header">

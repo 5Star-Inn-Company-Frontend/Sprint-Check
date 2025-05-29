@@ -17,6 +17,8 @@
   align-items: center;
   background-position: center;
   background-repeat: no-repeat;
+  flex-direction: column;
+  gap: 2rem;
 }
 
 .main .login {

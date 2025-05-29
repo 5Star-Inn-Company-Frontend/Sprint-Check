@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Logog from "../assets/dashboardAssets/logof 2.png";
 
 export default function AuthSetPsw() {
   const [newPsw, setnewPsw] = useState("");
@@ -14,6 +15,7 @@ export default function AuthSetPsw() {
    };
   return (
     <div className="main">
+      <img src={Logog} alt="logo"/>
       <div className="login">
         <form className="login-form">
           <div className="login-header">

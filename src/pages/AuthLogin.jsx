@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import mailIcon from "../assets/codicon_mail.png";
 import passwordIcon from "../assets/bx_bxs-lock-alt.png";
 import { useNavigate } from "react-router-dom";
+import Logog from "../assets/dashboardAssets/logof 2.png";
 
 export default function AuthLogin() {
   const [email, setEmail] = useState("");
@@ -27,6 +28,7 @@ export default function AuthLogin() {
 
   return (
     <div className="main">
+      <img src={Logog} alt="logo"/>
       <div className="login">
         <form className="login-form">
           <div className="login-header">
