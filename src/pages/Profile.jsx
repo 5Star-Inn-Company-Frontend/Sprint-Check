@@ -15,7 +15,7 @@ import billingIcon from "../assets/dashboardAssets/stash_billing-info.png";
 import nav_icon from "../assets/dashboardAssets/Chart.png";
 import profileIcon from "../assets/dashboardAssets/user.png";
 import logOutIcon from "../assets/dashboardAssets/login.png";
-import searchIcon from "../assets/dashboardAssets/search-normal.png";
+// import searchIcon from "../assets/dashboardAssets/search-normal.png";
 import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
@@ -249,7 +249,7 @@ export default function Profile() {
         }
 
         .content {
-          padding: 20px 25px 2px 20px;
+          padding: 20px 25px 20px 20px;
           margin: 26px;
           background-color: white;
           border-radius: 1rem;
@@ -277,8 +277,9 @@ export default function Profile() {
         .profile-tabs {
           display: flex;
           gap: 40px;
+          margin-left: 10rem;
           margin-bottom: 40px;
-          border-bottom: 1px solid #e5e7eb;
+          // border-bottom: 1px solid #e5e7eb;
         }
 
         .tab-button {
@@ -294,12 +295,12 @@ export default function Profile() {
         }
 
         .tab-button.active {
-          color: #3b82f6;
-          border-bottom-color: #3b82f6;
+          color: #4745a4;
+          border-bottom-color: #4745a4;
         }
 
         .tab-button:hover {
-          color: #6b7280;
+          color: #4745a4;
         }
 
         .profile-content {
@@ -486,11 +487,6 @@ export default function Profile() {
           .profile-form {
             grid-template-columns: 1fr;
           }
-
-          .profile-content {
-            flex-direction: column;
-            gap: 24px;
-          }
         }
 
         @media (max-width: 768px) {
@@ -539,6 +535,19 @@ export default function Profile() {
 
           .profile-form {
             gap: 16px;
+          }
+
+          .profile-tabs {
+            display: flex;
+            gap: 40px;
+            margin-left: 0;
+            margin-bottom: 40px;
+            // border-bottom: 1px solid #e5e7eb;
+          }
+
+          .profile-content {
+            flex-direction: column;
+            padding-left: 1.5rem;
           }
         }
       `}</style>
@@ -637,9 +646,7 @@ export default function Profile() {
 
         {/* Content */}
         <div className="content">
-          <div className="page-header">
-           
-          </div>
+          {/* <div className="page-header">skhaskas</div> */}
 
           <div className="profile-container">
             {/* Profile Tabs */}
