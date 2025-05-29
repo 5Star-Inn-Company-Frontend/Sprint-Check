@@ -20,7 +20,7 @@ import logOutIcon from "../assets/dashboardAssets/login.png";
 import searchIcon from "../assets/dashboardAssets/search-normal.png";
 import { useNavigate } from "react-router-dom";
 
-export default function Billing(){
+export default function Billing() {
   const [isMobile, setIsMobile] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedPeriod, setSelectedPeriod] = useState("Day");
@@ -40,10 +40,9 @@ export default function Billing(){
   function handleDeveloper() {
     navigate("/developer");
   }
-
-  // function handleBilling() {
-  //   navigate("/billing");
-  // }
+  function handleProfile() {
+    navigate("/profile");
+  }
 
   // Mock billing data
   const billingData = [
@@ -666,7 +665,7 @@ export default function Billing(){
 
         <nav className="nav-menu">
           <div className="nav-section">
-            <div onClick={() => handleDashboard()} className="nav-item active">
+            <div onClick={() => handleDashboard()} className="nav-item ">
               <div className="nav-icon">
                 {" "}
                 <img src={dashboardIcon} alt="icon" />
@@ -679,7 +678,7 @@ export default function Billing(){
               </div>
               History
             </div>
-            <div className="nav-item">
+            <div className="nav-item active">
               <div className="nav-icon">
                 <img src={billingIcon} alt="icon" />
               </div>
@@ -696,7 +695,7 @@ export default function Billing(){
           <div className="nav-divider"></div>
 
           <div className="nav-section">
-            <div className="nav-item">
+            <div onClick={() => handleProfile()} className="nav-item">
               <div className="nav-icon">
                 {" "}
                 <img src={profileIcon} alt="icon" />
@@ -852,6 +851,4 @@ export default function Billing(){
       </div>
     </div>
   );
-};
-
-
+}

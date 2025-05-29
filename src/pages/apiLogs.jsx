@@ -43,9 +43,13 @@ const Dashboard = () => {
     navigate("/billing");
   }
 
-   function handleDeveloper() {
-     navigate("/developer");
-   }
+  function handleDeveloper() {
+    navigate("/developer");
+  }
+
+  function handleProfile() {
+    navigate("/profile");
+  }
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -351,31 +355,15 @@ const Dashboard = () => {
           color: #636e72;
         }
 
-        .search-bar {
-          flex: 1;
-          max-width: 600px;
-          position: relative;
-        }
-
-        .search-input {
+        .page-bar {
           width: 100%;
-          padding: 15px 16px 15px 40px;
-          border: none;
+          padding: 0.5rem 1rem;
+
           border-radius: 2rem;
-          font-size: 14px;
-          outline: none;
-        }
-
-        .search-input::placeholder {
-          color: #636e72;
-        }
-
-        .search-icon {
-          position: absolute;
-          left: 12px;
-          top: 50%;
-          transform: translateY(-50%);
-          color: #636e72;
+          font-size: 1.5rem;
+          font-weight: 600;
+          color: #2d3436;
+          background: white;
         }
 
         .user-section {
@@ -586,7 +574,7 @@ const Dashboard = () => {
           gap: 10px;
 
           border: none;
-          background:transparent;
+          background: transparent;
           color: black;
           font-size: 12px;
           cursor: pointer;
@@ -788,6 +776,11 @@ const Dashboard = () => {
 
           .hamburger {
             display: block;
+          }
+
+          .hamSearch {
+            display: flex;
+            gap: 2rem;
           }
 
           .search-bar {
@@ -1086,14 +1079,14 @@ const Dashboard = () => {
 
         <nav className="nav-menu">
           <div className="nav-section">
-            <div onClick={() => handleDashboard()} className="nav-item active">
+            <div onClick={() => handleDashboard()} className="nav-item">
               <div className="nav-icon">
                 {" "}
                 <img src={dashboardIcon} alt="icon" />
               </div>
               Dashboard
             </div>
-            <div className="nav-item">
+            <div className="nav-item active">
               <div className="nav-icon">
                 <img src={historyIcon} alt="icon" />
               </div>
@@ -1105,7 +1098,7 @@ const Dashboard = () => {
               </div>
               Billing
             </div>
-            <div onClick={()=>handleDeveloper()} className="nav-item">
+            <div onClick={() => handleDeveloper()} className="nav-item">
               <div className="nav-icon">
                 <img src={nav_icon} alt="icon" />
               </div>
@@ -1116,14 +1109,13 @@ const Dashboard = () => {
           <div className="nav-divider"></div>
 
           <div className="nav-section">
-            <div className="nav-item">
+            <div onClick={() => handleProfile()} className="nav-item">
               <div className="nav-icon">
                 {" "}
                 <img src={profileIcon} alt="icon" />
               </div>
               Profile
             </div>
-           
           </div>
 
           <div className="nav-bottom">
@@ -1147,16 +1139,7 @@ const Dashboard = () => {
               ☰
             </button>
 
-            <div className="search-bar">
-              <div className="search-icon">
-                <img src={searchIcon} alt="icon" />
-              </div>
-              <input
-                type="text"
-                className="search-input"
-                placeholder="Search here ..."
-              />
-            </div>
+            <h1 className="page-bar">API Logs</h1>
           </div>
 
           <div className="user-section">
@@ -1174,7 +1157,6 @@ const Dashboard = () => {
         {/* Content */}
         <div className="content">
           <div className="page-header">
-            <h1 className="page-title">API Logs</h1>
             <div className="header-actions">
               <button className="filter-btn">
                 <Filter size={16} />

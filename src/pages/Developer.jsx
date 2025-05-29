@@ -18,7 +18,7 @@ import {
   ArrowUp,
   ArrowDown,
 } from "lucide-react";
-export default function Developer () {
+export default function Developer() {
   const [isMobile, setIsMobile] = useState(false);
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -41,20 +41,23 @@ export default function Developer () {
     navigate("/billing");
   }
 
-    function handleApiDoc() {
-        navigate("/apiDoc");
-    }
+  function handleApiDoc() {
+    navigate("/apiDoc");
+  }
   function handleDashboard() {
     navigate("/dashboard");
   }
 
   function handleLogout() {
-      navigate("/");
-      
+    navigate("/");
   }
-      function handleHistory() {
-        navigate("/apilogs");
-      }
+  function handleHistory() {
+    navigate("/apilogs");
+  }
+
+  function handleProfile() {
+    navigate("/profile");
+  }
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
@@ -567,14 +570,14 @@ export default function Developer () {
 
         <nav className="nav-menu">
           <div className="nav-section">
-            <div onClick={() => handleDashboard()} className="nav-item active">
+            <div onClick={() => handleDashboard()} className="nav-item">
               <div className="nav-icon">
                 {" "}
                 <img src={dashboardIcon} alt="icon" />
               </div>
               Dashboard
             </div>
-            <div onClick={()=>handleHistory()} className="nav-item">
+            <div onClick={() => handleHistory()} className="nav-item">
               <div className="nav-icon">
                 <img src={historyIcon} alt="icon" />
               </div>
@@ -586,7 +589,7 @@ export default function Developer () {
               </div>
               Billing
             </div>
-            <div className="nav-item">
+            <div className="nav-item active">
               <div className="nav-icon">
                 <img src={nav_icon} alt="icon" />
               </div>
@@ -597,7 +600,7 @@ export default function Developer () {
           <div className="nav-divider"></div>
 
           <div className="nav-section">
-            <div className="nav-item">
+            <div onClick={() => handleProfile()} className="nav-item">
               <div className="nav-icon">
                 {" "}
                 <img src={profileIcon} alt="icon" />
@@ -766,7 +769,11 @@ export default function Developer () {
               </button>
             </div>
 
-            <a onClick={()=>handleApiDoc()} href="#" className="documentation-link">
+            <a
+              onClick={() => handleApiDoc()}
+              href="#"
+              className="documentation-link"
+            >
               Visit Documentation Page
             </a>
           </div>
@@ -774,6 +781,4 @@ export default function Developer () {
       </div>
     </div>
   );
-};
-
-
+}

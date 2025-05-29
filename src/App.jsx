@@ -9,6 +9,7 @@ import ApiLogs from "./pages/apiLogs";
 import Billing from "./pages/Billing";
 import Developer from "./pages/Developer";
 import ApiDoc from "./pages/ApiDoc";
+import Profile from "./pages/Profile";
 function App() {
   return (
     <Router>
@@ -18,6 +19,7 @@ function App() {
         <Route path="/apilogs" element={<ApiLogs />} />
         <Route path="/billing" element={<Billing />} />
         <Route path="/developer" element={<Developer />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/apiDoc" element={<ApiDoc />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
