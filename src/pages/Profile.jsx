@@ -6,6 +6,7 @@ import {
   ArrowUp,
   ArrowDown,
 } from "lucide-react";
+import pencilIcon from "../assets/dashboardAssets/Group 194.png";
 import logo from "../assets/dashboardAssets/WhatsApp Image 2025-05-15 at 11.15.05_db0fe0fa 1.png";
 import { Eye, RotateCcw, FileDown } from "lucide-react";
 import dashboardIcon from "../assets/dashboardAssets/element-4.png";
@@ -341,16 +342,21 @@ export default function Profile() {
           width: 32px;
           height: 32px;
           border-radius: 50%;
-          background: #3b82f6;
-          border: 2px solid white;
+          background: transparent;
+
           display: flex;
           align-items: center;
           justify-content: center;
           cursor: pointer;
           color: white;
           font-size: 14px;
+          z-index:1000;
+          padding: 0rem;
         }
-
+        .EditIcon {
+          width: 100%;
+          z-index: 1000000;
+        }
         .profile-form {
           flex: 1;
           display: grid;
@@ -674,7 +680,9 @@ export default function Profile() {
               {/* Avatar Section */}
               <div className="profile-avatar-section">
                 <div className="profile-avatar">
-                  <div className="edit-avatar-btn">✏️</div>
+                  <div className="edit-avatar-btn">
+                    <img className="EditIcon" src={pencilIcon} alt="icon" />
+                  </div>
                 </div>
               </div>
 
