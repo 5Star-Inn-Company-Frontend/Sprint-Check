@@ -6,20 +6,54 @@ import Logog from "../assets/dashboardAssets/logof 2.png";
 
 export default function AuthLogin() {
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState("");
   const emailRef = useRef(null);
+  const navigate = useNavigate();
   useEffect(() => {
     emailRef.current.focus();
   }, []);
+  const ApiKey = "scb1edcd88-64f7485186d9781ca624a903";
 
-  const navigate = useNavigate();
+  async function loginUser(loginData) {
+    const res = await fetch(
+      "https://sprintcheck.megasprintlimited.com.ng/api/auth/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `ApiKey ${ApiKey}`,
+        },
+        body: JSON.stringify(loginData),
+      }
+    );
 
-  const handleSubmit = () => {
-    navigate("/signup");
-  };
+    const data = await res.json();
 
-  const gotodashboard = () => {
-    navigate("/dashboard");
+    if (!res.ok) {
+      throw new Error(data.message || "Failed to login");
+    }
+
+    console.log(data); // usually returns a token
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const loginData = {
+      email,
+      password,
+    };
+
+    setLoading(true);
+    try {
+      await loginUser(loginData);
+      navigate("/dashboard");
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleForgotPsw = () => {
@@ -28,7 +62,7 @@ export default function AuthLogin() {
 
   return (
     <div className="main">
-      <img src={Logog} alt="logo"/>
+      <img src={Logog} alt="logo" />
       <div className="login">
         <form className="login-form">
           <div className="login-header">
@@ -57,8 +91,13 @@ export default function AuthLogin() {
             />
           </div>
 
-          <button onClick={() => gotodashboard()} type="submit">
-            Login
+          <button
+            disabled={loading}
+            onClick={(e) => handleSubmit(e)}
+            style={{ cursor: "pointer" }}
+            type="submit"
+          >
+            {loading ? "Loggin in..." : "Login"}
           </button>
 
           <p

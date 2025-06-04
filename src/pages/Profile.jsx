@@ -293,6 +293,7 @@ export default function Profile() {
           cursor: pointer;
           border-bottom: 2px solid transparent;
           transition: all 0.2s ease;
+          outline: none;
         }
 
         .tab-button.active {
@@ -557,7 +558,6 @@ export default function Profile() {
         }
 
         @media (max-width: 350px) {
-         
           .profile-tabs {
             display: flex;
             gap: 40px;
@@ -567,7 +567,7 @@ export default function Profile() {
           }
 
           .profile-content {
-          width:100%;
+            width: 100%;
             flex-direction: column;
             padding-left: 1.5rem;
           }

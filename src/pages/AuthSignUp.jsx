@@ -3,7 +3,7 @@ import mailIcon from "../assets/codicon_mail.png";
 import passwordIcon from "../assets/bx_bxs-lock-alt.png";
 import userIcon from "../assets/mdi_user-outline.png";
 import Logog from "../assets/dashboardAssets/logof 2.png";
-
+import { Link } from "react-router-dom";
 import userPhone from "../assets/line-md_phone.png";
 import { useNavigate } from "react-router-dom";
 export default function AuthSignUp() {
@@ -11,22 +11,65 @@ export default function AuthSignUp() {
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
   const [phone, setPhone] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const nameRef = useRef(null);
 
+  // src/api/auth.js
+  const ApiKey = "scb1edcd88-64f7485186d9781ca624a903";
+
+  async function registerUser(userData) {
+    const res = await fetch(
+      "https://sprintcheck.megasprintlimited.com.ng/api/auth/signup",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+
+          Authorization: `ApiKey ${ApiKey}`,
+        },
+        body: JSON.stringify(userData),
+      }
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || "Failed to register");
+    }
+
+    console.log(data); // usually returns user info or token
+  }
 
   useEffect(() => {
     nameRef.current.focus();
   }, []);
   const navigate = useNavigate();
 
-  const handleSubmit = () => {
-    navigate("/");
-  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
+    const userData = {
+      email,
+      password,
+      business_name: userName,
+      phone_number: phone,
+    };
+
+    setLoading(true);
+    try {
+      await registerUser(userData);
+      navigate("/");
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="main">
-      <img src={Logog} alt="logo"/>
+      <img src={Logog} alt="logo" />
       <div className="login">
         <form className="login-form">
           <div className="login-header">
@@ -58,7 +101,7 @@ export default function AuthSignUp() {
           <div className="input-wrapper">
             <img className="input-icon" alt="icon" src={userPhone} />
             <input
-              type="number"
+              type="tel"
               placeholder="Phone Number"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
@@ -75,16 +118,19 @@ export default function AuthSignUp() {
             />
           </div>
 
-          <button type="submit">Sign Up</button>
-
+          <button
+            type="submit"
+            onClick={(e) => handleSubmit(e)}
+            style={{ cursor: "pointer" }}
+            disabled={loading}
+          >
+            {loading ? "Signing up..." : "Sign Up"}
+          </button>
           <p className="login-signup">
             Already have an account?{" "}
-            <strong
-              onClick={() => handleSubmit()}
-              style={{ cursor: "pointer" }}
-            >
-              Login
-            </strong>
+            <Link to="/login">
+              <strong style={{ cursor: "pointer" }}>Login</strong>
+            </Link>
           </p>
         </form>
       </div>
