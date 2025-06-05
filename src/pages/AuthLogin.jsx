@@ -3,17 +3,51 @@ import mailIcon from "../assets/codicon_mail.png";
 import passwordIcon from "../assets/bx_bxs-lock-alt.png";
 import { useNavigate } from "react-router-dom";
 import Logog from "../assets/dashboardAssets/logof 2.png";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { EyeClosed, EyeIcon } from "lucide-react";
 
 export default function AuthLogin() {
   const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
+
   const emailRef = useRef(null);
   const navigate = useNavigate();
+
   useEffect(() => {
     emailRef.current.focus();
   }, []);
+
   const ApiKey = "scb1edcd88-64f7485186d9781ca624a903";
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!validateEmail(email)) {
+      newErrors.email = "Invalid email address";
+    }
+
+    if (!password.trim()) {
+      newErrors.password = "Password is required";
+    }
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
+      Object.values(newErrors).forEach((msg) => toast.error(msg));
+    }
+
+    return Object.keys(newErrors).length === 0;
+  };
 
   async function loginUser(loginData) {
     const res = await fetch(
@@ -34,37 +68,32 @@ export default function AuthLogin() {
       throw new Error(data.message || "Failed to login");
     }
 
-    console.log(data); // usually returns a token
+    localStorage.setItem("token", data.token);
+
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const loginData = {
-      email,
-      password,
-    };
+    if (!validateForm()) return;
 
     setLoading(true);
     try {
-      await loginUser(loginData);
+      const response = await loginUser({ email, password });
+      toast.success("Login successful!");
       navigate("/dashboard");
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleForgotPsw = () => {
-    navigate("/forgot-password");
-  };
-
   return (
     <div className="main">
+      <ToastContainer position="bottom-right" autoClose={3000} />
       <img src={Logog} alt="logo" />
       <div className="login">
-        <form className="login-form">
+        <form className="login-form" onSubmit={handleSubmit}>
           <div className="login-header">
             <h2>Welcome Back</h2>
             <p>Login to your account</p>
@@ -84,34 +113,47 @@ export default function AuthLogin() {
           <div className="input-wrapper">
             <img className="input-icon" alt="icon" src={passwordIcon} />
             <input
-              type="mail"
+              type={showPassword ? "text" : "password"}
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+            <span
+              onClick={() => setShowPassword((prev) => !prev)}
+              style={{
+                position: "absolute",
+                right: "20px",
+                top: "55%",
+                transform: "translateY(-50%)",
+                cursor: "pointer",
+                fontSize: "0.9rem",
+                color: "#555",
+              }}
+            >
+              {showPassword ? <EyeIcon /> : <EyeClosed />}
+            </span>
           </div>
 
           <button
             disabled={loading}
-            onClick={(e) => handleSubmit(e)}
             style={{ cursor: "pointer" }}
             type="submit"
           >
-            {loading ? "Loggin in..." : "Login"}
+            {loading ? <div className="loader"></div> : "Login"}
           </button>
 
           <p
-            onClick={() => handleForgotPsw()}
+            onClick={() => navigate("/forgot-password")}
             className="login-forgotPsw"
             style={{ cursor: "pointer" }}
           >
-            {" "}
             Forgot Password
           </p>
+
           <p className="login-signup">
             Do not have an account?{" "}
             <strong
-              onClick={() => handleSubmit()}
+              onClick={() => navigate("/signup")}
               style={{ cursor: "pointer" }}
             >
               Signup
@@ -122,3 +164,5 @@ export default function AuthLogin() {
     </div>
   );
 }
+
+
