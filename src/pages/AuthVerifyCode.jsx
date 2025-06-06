@@ -46,6 +46,7 @@ export default function AuthVerifyCode() {
     try {
       const response = await verifyCode({ code, email });
       toast.success("successful!");
+       localStorage.setItem("resetCode", code);
       navigate("/reset-password");
     } catch (err) {
       toast.error(err.message);
