@@ -4,7 +4,8 @@ import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 export default function AuthVerifyCode() {
-  const [authCode, setAuthCode] = useState("");
+  const [code, setAuthCode] = useState("");
+  const email = localStorage.getItem("resetEmail");
   const [loading, setLoading] = useState(false);
   const codeRef = useRef(null);
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ export default function AuthVerifyCode() {
 
   const ApiKey = "scb1edcd88-64f7485186d9781ca624a903";
 
-  async function verifyCode(code) {
+  async function verifyCode(payLoad) {
     const res = await fetch(
       "https://sprintcheck.megasprintlimited.com.ng/api/auth/verify-reset-code",
       {
@@ -24,7 +25,7 @@ export default function AuthVerifyCode() {
           "Content-Type": "application/json",
           Authorization: `ApiKey ${ApiKey}`,
         },
-        body: JSON.stringify(code),
+        body: JSON.stringify(payLoad),
       }
     );
 
@@ -37,24 +38,25 @@ export default function AuthVerifyCode() {
     console.log(data);
   }
 
-   const handleSubmit = async (e) => {
-     e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     //  if (!validateForm()) return;
 
-     setLoading(true);
-     try {
-       const response = await verifyCode({authCode});
-       toast.success("Login successful!");
-       navigate("/dashboard");
-     } catch (err) {
-       toast.error(err.message);
-     } finally {
-       setLoading(false);
-     }
-   };
+    setLoading(true);
+    try {
+      const response = await verifyCode({ code, email });
+      toast.success("successful!");
+      navigate("/reset-password");
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="main">
+      <ToastContainer position="bottom-right" autoClose={3000} />
       <img src={Logog} alt="logo" />
       <div className="login">
         <form className="login-form" onSubmit={handleSubmit}>
@@ -66,9 +68,8 @@ export default function AuthVerifyCode() {
           <div className="input-wrapper">
             {/* <img className="input-icon" alt="icon" src={mailIcon} /> */}
             <input
-              type=""
-              number
-              value={authCode}
+              type="number"
+              value={code}
               onChange={(e) => setAuthCode(e.target.value)}
               ref={codeRef}
             />

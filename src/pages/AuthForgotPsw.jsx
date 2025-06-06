@@ -48,6 +48,7 @@ export default function AuthForgotPsw() {
     try {
       const response = await sendCode({ email });
       toast.success("Sent Code!");
+      localStorage.setItem("resetEmail", email);
       navigate("/verify-code");
     } catch (err) {
       toast.error(err.message);
