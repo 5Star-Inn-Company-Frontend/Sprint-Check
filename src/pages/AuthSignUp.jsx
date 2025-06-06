@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { EyeClosed, EyeIcon } from "lucide-react";
 import mailIcon from "../assets/codicon_mail.png";
 import passwordIcon from "../assets/bx_bxs-lock-alt.png";
 import userIcon from "../assets/mdi_user-outline.png";
@@ -135,15 +135,15 @@ export default function AuthSignUp() {
               onClick={() => setShowPassword((prev) => !prev)}
               style={{
                 position: "absolute",
-                right: "15px",
-                top: "50%",
+                right: "20px",
+                top: "55%",
                 transform: "translateY(-50%)",
                 cursor: "pointer",
                 fontSize: "0.85rem",
                 color: "#333",
               }}
             >
-              {showPassword ? "Hide" : "Show"}
+              {showPassword ? <EyeIcon /> : <EyeClosed />}
             </span>
           </div>
 
@@ -157,7 +157,7 @@ export default function AuthSignUp() {
 
           <p className="login-signup">
             Already have an account?{" "}
-            <Link to="/login">
+            <Link to="/">
               <strong style={{ cursor: "pointer" }}>Login</strong>
             </Link>
           </p>

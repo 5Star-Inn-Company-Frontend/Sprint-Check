@@ -1,12 +1,63 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Logog from "../assets/dashboardAssets/logof 2.png";
+import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
 export default function AuthVerifyCode() {
   const [authCode, setAuthCode] = useState("");
+  const [loading, setLoading] = useState(false);
+  const codeRef = useRef(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    codeRef.current.focus();
+  }, []);
+
+  const ApiKey = "scb1edcd88-64f7485186d9781ca624a903";
+
+  async function verifyCode(code) {
+    const res = await fetch(
+      "https://sprintcheck.megasprintlimited.com.ng/api/auth/verify-reset-code",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `ApiKey ${ApiKey}`,
+        },
+        body: JSON.stringify(code),
+      }
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || "Error");
+    }
+
+    console.log(data);
+  }
+
+   const handleSubmit = async (e) => {
+     e.preventDefault();
+    //  if (!validateForm()) return;
+
+     setLoading(true);
+     try {
+       const response = await verifyCode({authCode});
+       toast.success("Login successful!");
+       navigate("/dashboard");
+     } catch (err) {
+       toast.error(err.message);
+     } finally {
+       setLoading(false);
+     }
+   };
+
   return (
     <div className="main">
-       <img src={Logog} alt="logo"/>
+      <img src={Logog} alt="logo" />
       <div className="login">
-        <form className="login-form">
+        <form className="login-form" onSubmit={handleSubmit}>
           <div className="login-header">
             <h2>Verify Code</h2>
             <p>An authentication code has been sent to your email</p>
@@ -19,19 +70,33 @@ export default function AuthVerifyCode() {
               number
               value={authCode}
               onChange={(e) => setAuthCode(e.target.value)}
+              ref={codeRef}
             />
           </div>
 
           <p className="login-signup">
             Didn't recieve a code?{" "}
-            <strong style={{ cursor: "pointer", color: "blue" }}>Resend</strong>
+            <strong
+              onClick={() => navigate("/forgot-password")}
+              style={{ cursor: "pointer", color: "blue" }}
+            >
+              Resend
+            </strong>
           </p>
 
-          <button type="submit">Submit</button>
+          <button
+            disabled={loading}
+            style={{ cursor: "pointer" }}
+            type="submit"
+          >
+            {loading ? <div className="loader"></div> : "Submit"}
+          </button>
 
           <p className="login-signup">
             Remember login details?{" "}
-            <strong style={{ cursor: "pointer" }}>Login</strong>
+            <strong onClick={() => navigate("/")} style={{ cursor: "pointer" }}>
+              Login
+            </strong>
           </p>
         </form>
       </div>

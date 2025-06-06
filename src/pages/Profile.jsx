@@ -7,15 +7,16 @@ import {
   ArrowDown,
 } from "lucide-react";
 import pencilIcon from "../assets/dashboardAssets/Group 194.png";
-import logo from "../assets/dashboardAssets/WhatsApp Image 2025-05-15 at 11.15.05_db0fe0fa 1.png";
+// import logo from "../assets/dashboardAssets/WhatsApp Image 2025-05-15 at 11.15.05_db0fe0fa 1.png";
 import { Eye, RotateCcw, FileDown } from "lucide-react";
-import dashboardIcon from "../assets/dashboardAssets/element-4.png";
-import historyIcon from "../assets/dashboardAssets/Calendar.png";
+// import dashboardIcon from "../assets/dashboardAssets/element-4.png";
+// import historyIcon from "../assets/dashboardAssets/Calendar.png";
 import notificationIcon from "../assets/dashboardAssets/notification-bing.png";
-import billingIcon from "../assets/dashboardAssets/stash_billing-info.png";
-import nav_icon from "../assets/dashboardAssets/Chart.png";
-import profileIcon from "../assets/dashboardAssets/user.png";
-import logOutIcon from "../assets/dashboardAssets/login.png";
+import SideBar from "../components/sideBar";
+// import billingIcon from "../assets/dashboardAssets/stash_billing-info.png";
+// import nav_icon from "../assets/dashboardAssets/Chart.png";
+// import profileIcon from "../assets/dashboardAssets/user.png";
+// import logOutIcon from "../assets/dashboardAssets/login.png";
 // import searchIcon from "../assets/dashboardAssets/search-normal.png";
 import { useNavigate } from "react-router-dom";
 
@@ -26,25 +27,25 @@ export default function Profile() {
 
   const navigate = useNavigate();
 
-  function handleDashboard() {
-    navigate("/dashboard");
-  }
+  // function handleDashboard() {
+  //   navigate("/dashboard");
+  // }
 
-  function handleLogout() {
-    navigate("/");
-  }
+  // function handleLogout() {
+  //   navigate("/");
+  // }
 
-  function handleHistory() {
-    navigate("/apilogs");
-  }
+  // function handleHistory() {
+  //   navigate("/apilogs");
+  // }
 
-  function handleDeveloper() {
-    navigate("/developer");
-  }
+  // function handleDeveloper() {
+  //   navigate("/developer");
+  // }
 
-  function handleBilling() {
-    navigate("/billing");
-  }
+  // function handleBilling() {
+  //   navigate("/billing");
+  // }
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -581,66 +582,7 @@ export default function Profile() {
       />
 
       {/* Sidebar */}
-      <div
-        className={`sidebar ${isMobile ? "mobile" : ""} ${
-          isMobile && sidebarOpen ? "open" : ""
-        }`}
-      >
-        <div className="sidebar-header">
-          <div className="logo">
-            <img src={logo} alt="logo" />
-          </div>
-        </div>
-
-        <nav className="nav-menu">
-          <div className="nav-section">
-            <div onClick={() => handleDashboard()} className="nav-item">
-              <div className="nav-icon">
-                <img src={dashboardIcon} alt="icon" />
-              </div>
-              Dashboard
-            </div>
-            <div onClick={() => handleHistory()} className="nav-item">
-              <div className="nav-icon">
-                <img src={historyIcon} alt="icon" />
-              </div>
-              History
-            </div>
-            <div onClick={() => handleBilling()} className="nav-item">
-              <div className="nav-icon">
-                <img src={billingIcon} alt="icon" />
-              </div>
-              Billing
-            </div>
-            <div onClick={() => handleDeveloper()} className="nav-item">
-              <div className="nav-icon">
-                <img src={nav_icon} alt="icon" />
-              </div>
-              Developers
-            </div>
-          </div>
-
-          <div className="nav-divider"></div>
-
-          <div className="nav-section">
-            <div className="nav-item active">
-              <div className="nav-icon">
-                <img src={profileIcon} alt="icon" />
-              </div>
-              Profile
-            </div>
-          </div>
-
-          <div className="nav-bottom">
-            <div onClick={() => handleLogout()} className="nav-item">
-              <div className="nav-icon">
-                <img src={logOutIcon} alt="icon" />
-              </div>
-              Logout
-            </div>
-          </div>
-        </nav>
-      </div>
+    <SideBar sidebarOpen={sidebarOpen} isMobile={isMobile} />
 
       {/* Main Content */}
       <div className={`main-content ${isMobile ? "mobile" : ""}`}>

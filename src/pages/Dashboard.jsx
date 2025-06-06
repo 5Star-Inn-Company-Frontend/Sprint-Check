@@ -11,13 +11,10 @@ import yellowIcon from "../assets/dashboardAssets/yellow.png";
 import export1Icon from "../assets/dashboardAssets/export1.png";
 import exportIcon from "../assets/dashboardAssets/export.png";
 
-
-const Dashboard = () => {
+export default function ApiLogs() {
   const [isMobile, setIsMobile] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-
-  
   useEffect(() => {
     const checkScreenSize = () => {
       setIsMobile(window.innerWidth < 1024);
@@ -50,7 +47,7 @@ const Dashboard = () => {
         onClick={() => setSidebarOpen(false)}
       />
 
-      <SideBar isMobile={isMobile} />
+      <SideBar sidebarOpen={sidebarOpen} isMobile={isMobile} />
 
       {/* Main Content */}
       <div className={`main-content ${isMobile ? "mobile" : ""}`}>
@@ -278,6 +275,4 @@ const Dashboard = () => {
       </div>
     </div>
   );
-};
-
-export default Dashboard;
+}

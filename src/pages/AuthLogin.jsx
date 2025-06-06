@@ -16,7 +16,6 @@ export default function AuthLogin() {
 
   const emailRef = useRef(null);
   const navigate = useNavigate();
-
   useEffect(() => {
     emailRef.current.focus();
   }, []);
@@ -69,7 +68,6 @@ export default function AuthLogin() {
     }
 
     localStorage.setItem("token", data.token);
-
   }
 
   const handleSubmit = async (e) => {
@@ -164,5 +162,3 @@ export default function AuthLogin() {
     </div>
   );
 }
-
-

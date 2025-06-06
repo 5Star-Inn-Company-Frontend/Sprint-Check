@@ -19,6 +19,10 @@ export default function SideBar({ isMobile, sidebarOpen }) {
     navigate("/apilogs");
   }
 
+  function handleDashboard() {
+    navigate("/dashboard");
+  }
+
   function handleLogout() {
     localStorage.removeItem("token");
     navigate("/");
@@ -49,7 +53,7 @@ export default function SideBar({ isMobile, sidebarOpen }) {
 
       <nav className="nav-menu">
         <div className="nav-section">
-          <div className="nav-item active">
+          <div onClick={() => handleDashboard()} className="nav-item active">
             <div className="nav-icon">
               {" "}
               <img src={dashboardIcon} alt="icon" />
