@@ -14,8 +14,14 @@ import exportIcon from "../assets/dashboardAssets/export.png";
 export default function ApiLogs() {
   const [isMobile, setIsMobile] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [dashboardData, setDashboardData] = useState(null);
 
   useEffect(() => {
+    const storedData = localStorage.getItem("dashboardData");
+    if (storedData) {
+      setDashboardData(JSON.parse(storedData));
+    }
+
     const checkScreenSize = () => {
       setIsMobile(window.innerWidth < 1024);
     };
@@ -25,6 +31,60 @@ export default function ApiLogs() {
 
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
+
+  //  if (!dashboardData) {
+  //    return <p>Loading dashboard...</p>;
+  //  }
+
+  function extractDashboardInfo(dashboardData) {
+    if (!dashboardData?.data?.user) return {};
+
+    const {
+      user: {
+        id: userId,
+        name: userName,
+        email,
+        phone_number,
+        reset_code,
+        reset_code_expires_at,
+        business: {
+          id: businessId,
+          name: businessName,
+          wallet,
+          confidence_level,
+          api_key,
+          encryption_key,
+        } = {},
+      },
+      wallet_balance,
+      virtual_accounts,
+      api_calls: { total, successful, failed } = {},
+    } = dashboardData.data;
+
+    return {
+      userId,
+      userName,
+      email,
+      phone_number,
+      reset_code,
+      reset_code_expires_at,
+      businessId,
+      businessName,
+      wallet,
+      confidence_level,
+      api_key,
+      encryption_key,
+      wallet_balance,
+      virtual_accounts,
+      total,
+      successful,
+      failed,
+    };
+  }
+
+  // Usage:
+  const dashboardInfo = extractDashboardInfo(dashboardData);
+  const TotalApiCalls =Number(dashboardInfo.total + dashboardInfo.successful + dashboardInfo.failed);
 
   const chartData = [
     { date: "14/05/2025", verified: 28, fail: 15 },
@@ -38,6 +98,9 @@ export default function ApiLogs() {
   ];
 
   // const maxValue = Math.max(...chartData.flatMap((d) => [d.verified, d.fail]));
+  const avatarChar = dashboardInfo.businessName;
+  const avatar = avatarChar ? avatarChar[0] : "";
+  console.log(avatar);
 
   return (
     <div className="dashboard">
@@ -75,8 +138,8 @@ export default function ApiLogs() {
               {" "}
               <img src={notificationIcon} alt="icon" />
             </div>
-            <div className="user-avatar">E</div>
-            <span className="user-name">emmy</span>
+            <div className="user-avatar">{avatar.toUpperCase()}</div>
+            <span className="user-name">{dashboardInfo.businessName}</span>
             <span className="arrow-down">
               <img src={arrowIcon} alt="icon" />
             </span>
@@ -96,7 +159,7 @@ export default function ApiLogs() {
               <span className="balance-title">Your Balance</span>
             </div>
             <div className="balance-fund">
-              <div className="balance-amount">$28,891.138</div>
+              <div className="balance-amount">${dashboardInfo.wallet}</div>
               <button className="fund-wallet-btn">Fund Wallet</button>
             </div>
           </div>
@@ -118,7 +181,7 @@ export default function ApiLogs() {
                 </div>
               </div>
               <div className="stat-value">
-                5
+                {TotalApiCalls}
                 <span className="stat-arrow">
                   <img src={arrowRight} alt="icon" />
                 </span>
@@ -140,7 +203,7 @@ export default function ApiLogs() {
                 </div>
               </div>
               <div className="stat-value">
-                0
+                {dashboardInfo.total}
                 <span className="stat-arrow">
                   <img src={arrowRight} alt="icon" />
                 </span>
@@ -164,7 +227,7 @@ export default function ApiLogs() {
                 </div>
               </div>
               <div className="stat-value">
-                5
+                {dashboardInfo.successful}
                 <span className="stat-arrow">
                   <img src={arrowRight} alt="icon" />
                 </span>
@@ -189,7 +252,7 @@ export default function ApiLogs() {
                 </div>
               </div>
               <div className="stat-value">
-                0
+                {dashboardInfo.failed}
                 <span className="stat-arrow">
                   <img src={arrowRight} alt="icon" />
                 </span>

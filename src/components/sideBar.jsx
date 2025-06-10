@@ -20,7 +20,30 @@ export default function SideBar({ isMobile, sidebarOpen }) {
   }
 
   function handleDashboard() {
-    navigate("/dashboard");
+      const token = localStorage.getItem("token");
+    async function toDashboard(authCode) {
+      const res = await fetch(
+        "https://sprintcheck.megasprintlimited.com.ng/api/dashboard",
+        {
+          method: "GET",
+          headers: {
+            //  "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${authCode}`,
+          },
+          // body: JSON.stringify(authCode),
+        }
+      );
+
+      const data = await res.json();
+      console.log(data);
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to login");
+      } else {
+        navigate("/dashboard");
+      }
+    }
+    toDashboard(token);
   }
 
   function handleLogout() {

@@ -18,15 +18,15 @@ import SideBar from "../components/sideBar";
 
 // import logOutIcon from "../assets/dashboardAssets/login.png";
 
-import searchIcon from "../assets/dashboardAssets/search-normal.png";
-import { useNavigate } from "react-router-dom";
+// import searchIcon from "../assets/dashboardAssets/search-normal.png";
+// import { useNavigate } from "react-router-dom";
 
 export default function Billing() {
   const [isMobile, setIsMobile] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedPeriod, setSelectedPeriod] = useState("Day");
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   // function handleDashboard() {
   //   navigate("/dashboard");
   // }
@@ -294,33 +294,43 @@ export default function Billing() {
           cursor: pointer;
           color: #636e72;
         }
-
-        .search-bar {
-          flex: 1;
-          max-width: 600px;
-          position: relative;
-        }
-
-        .search-input {
+        .page-bar {
           width: 100%;
-          padding: 15px 16px 15px 40px;
-          border: none;
+          padding: 0.6rem 1.2rem;
+
           border-radius: 2rem;
-          font-size: 14px;
-          outline: none;
+          font-size: 1.5rem;
+          font-weight: 600;
+          color: #2d3436;
+          background: white;
         }
 
-        .search-input::placeholder {
-          color: #636e72;
-        }
+        // .search-bar {
+        //   flex: 1;
+        //   max-width: 600px;
+        //   position: relative;
+        // }
 
-        .search-icon {
-          position: absolute;
-          left: 12px;
-          top: 50%;
-          transform: translateY(-50%);
-          color: #636e72;
-        }
+        // .search-input {
+        //   width: 100%;
+        //   padding: 15px 16px 15px 40px;
+        //   border: none;
+        //   border-radius: 2rem;
+        //   font-size: 14px;
+        //   outline: none;
+        // }
+
+        // .search-input::placeholder {
+        //   color: #636e72;
+        // }
+
+        // .search-icon {
+        //   position: absolute;
+        //   left: 12px;
+        //   top: 50%;
+        //   transform: translateY(-50%);
+        //   color: #636e72;
+        // }
 
         .user-section {
           background-color: white;
@@ -653,7 +663,7 @@ export default function Billing() {
       />
 
       {/* Sidebar */}
-     <SideBar sidebarOpen={sidebarOpen} isMobile={isMobile} />
+      <SideBar sidebarOpen={sidebarOpen} isMobile={isMobile} />
 
       {/* Main Content */}
       <div className={`main-content ${isMobile ? "mobile" : ""}`}>
@@ -664,7 +674,7 @@ export default function Billing() {
               ☰
             </button>
 
-            <div className="search-bar">
+            {/* <div className="search-bar">
               <div className="search-icon">
                 <img src={searchIcon} alt="icon" />
               </div>
@@ -673,7 +683,8 @@ export default function Billing() {
                 className="search-input"
                 placeholder="Search here ..."
               />
-            </div>
+            </div> */}
+            <h1 className="page-bar">Billing</h1>
           </div>
 
           <div className="user-section">
@@ -691,7 +702,7 @@ export default function Billing() {
         {/* Content */}
         <div className="content">
           <div className="page-header">
-            <h1 className="page-title">Billing</h1>
+            {/* <h1 className="page-title">Billing</h1> */}
             <div className="header-controls">
               <div className="period-selector">
                 <button

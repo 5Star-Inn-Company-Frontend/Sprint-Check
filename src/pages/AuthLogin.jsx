@@ -48,6 +48,35 @@ export default function AuthLogin() {
     return Object.keys(newErrors).length === 0;
   };
 
+  function handleDashboard() {
+    const token = localStorage.getItem("token");
+    async function toDashboard(authCode) {
+      const res = await fetch(
+        "https://sprintcheck.megasprintlimited.com.ng/api/dashboard",
+        {
+          method: "GET",
+          headers: {
+            //  "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${authCode}`,
+          },
+          // body: JSON.stringify(authCode),
+        }
+      );
+
+      const data = await res.json();
+      console.log(data);
+      localStorage.setItem("dashboardData", JSON.stringify(data));
+
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to login");
+      } else {
+        navigate("/dashboard");
+      }
+    }
+    toDashboard(token);
+  }
+
   async function loginUser(loginData) {
     const res = await fetch(
       "https://sprintcheck.megasprintlimited.com.ng/api/auth/login",
@@ -78,7 +107,7 @@ export default function AuthLogin() {
     try {
       const response = await loginUser({ email, password });
       toast.success("Login successful!");
-      navigate("/dashboard");
+      handleDashboard();
     } catch (err) {
       toast.error(err.message);
     } finally {

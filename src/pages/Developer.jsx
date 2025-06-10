@@ -115,35 +115,35 @@ export default function Developer() {
           background-color: rgb(234, 237, 239);
         }
 
-        .sidebar {
-          width: 250px;
-          background: white;
-          border-right: 1px solid #e9ecef;
-          position: fixed;
-          left: 0;
-          top: 0;
-          height: 100vh;
-          z-index: 1000;
-          transition: transform 0.3s ease;
-          overflow-y: auto;
-          display: flex;
-          flex-direction: column;
-        }
+        // .sidebar {
+        //   width: 250px;
+        //   background: white;
+        //   border-right: 1px solid #e9ecef;
+        //   position: fixed;
+        //   left: 0;
+        //   top: 0;
+        //   height: 100vh;
+        //   z-index: 1000;
+        //   transition: transform 0.3s ease;
+        //   overflow-y: auto;
+        //   display: flex;
+        //   flex-direction: column;
+        // }
 
-        .sidebar.mobile {
-          transform: translateX(-100%);
-        }
+        // .sidebar.mobile {
+        //   transform: translateX(-100%);
+        // }
 
-        .sidebar.mobile.open {
-          transform: translateX(0);
-        }
+        // .sidebar.mobile.open {
+        //   transform: translateX(0);
+        // }
 
-        .sidebar-header {
-          padding: 20px;
-          display: flex;
-          align-items: center;
-          gap: 10px;
-        }
+        // .sidebar-header {
+        //   padding: 20px;
+        //   display: flex;
+        //   align-items: center;
+        //   gap: 10px;
+        // }
 
         .logo {
           font-size: 20px;
@@ -212,9 +212,9 @@ export default function Developer() {
 
         .main-content {
           flex: 1;
+          width:100%;
           margin-left: 250px;
           transition: margin-left 0.3s ease;
-          background-color: #f8f9fa;
         }
 
         .main-content.mobile {
@@ -229,32 +229,43 @@ export default function Developer() {
           justify-content: space-between;
         }
 
-        .search-bar {
-          flex: 1;
-          max-width: 600px;
-          position: relative;
-        }
-
-        .search-input {
+        .page-bar {
           width: 100%;
-          padding: 15px 16px 15px 40px;
-          border: none;
+          padding: 0.5rem 1rem;
+
           border-radius: 2rem;
-          font-size: 14px;
-          outline: none;
+          font-size: 1.5rem;
+          font-weight: 600;
+          color: #2d3436;
+          background: white;
         }
 
-        .search-input::placeholder {
-          color: #636e72;
-        }
+        // .search-bar {
+        //   flex: 1;
+        //   max-width: 600px;
+        //   position: relative;
+        // }
 
-        .search-icon {
-          position: absolute;
-          left: 12px;
-          top: 50%;
-          transform: translateY(-50%);
-          color: #636e72;
-        }
+        // .search-input {
+        //   width: 100%;
+        //   padding: 15px 16px 15px 40px;
+        //   border: none;
+        //   border-radius: 2rem;
+        //   font-size: 14px;
+        //   outline: none;
+        // }
+
+        // .search-input::placeholder {
+        //   color: #636e72;
+        // }
+
+        // .search-icon {
+        //   position: absolute;
+        //   left: 12px;
+        //   top: 50%;
+        //   transform: translateY(-50%);
+        //   color: #636e72;
+        // }
 
         .user-section {
           background-color: white;
@@ -325,6 +336,8 @@ export default function Developer() {
 
         .content {
           padding: 32px;
+          
+          margin-left:0px;
           width: 100%;
 
           display: flex;
@@ -569,7 +582,7 @@ export default function Developer() {
               ☰
             </button>
 
-            <div className="search-bar">
+            {/* <div className="search-bar">
               <div className="search-icon">
                 <img src={searchIcon} alt="icon" />
               </div>
@@ -578,7 +591,8 @@ export default function Developer() {
                 className="search-input"
                 placeholder="Search here ..."
               />
-            </div>
+            </div> */}
+            <h1 className="page-bar">Billing</h1>
           </div>
 
           <div className="user-section">
