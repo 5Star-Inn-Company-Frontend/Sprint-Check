@@ -15,9 +15,7 @@ import logOutIcon from "../assets/dashboardAssets/login.png";
 import "../dashboard.css";
 export default function SideBar({ isMobile, sidebarOpen }) {
   const navigate = useNavigate();
-  function handleHistory() {
-    navigate("/apilogs");
-  }
+
 
   function handleDashboard() {
       const token = localStorage.getItem("token");
@@ -46,14 +44,69 @@ export default function SideBar({ isMobile, sidebarOpen }) {
     toDashboard(token);
   }
 
+
+    function handleHistory() {
+      const token = localStorage.getItem("token");
+      async function toDashboard(authCode) {
+        const res = await fetch(
+          "https://sprintcheck.megasprintlimited.com.ng/api/history",
+          {
+            method: "GET",
+            headers: {
+              //  "Content-Type": "application/json",
+              Accept: "application/json",
+              Authorization: `Bearer ${authCode}`,
+            },
+            // body: JSON.stringify(authCode),
+          }
+        );
+
+        const data = await res.json();
+        console.log(data);
+        if (!res.ok) {
+          throw new Error(data.message || "You're not logged in");
+        } else {
+           navigate("/apilogs");
+        }
+      }
+      toDashboard(token);
+    }
+
+  
+
   function handleLogout() {
     localStorage.removeItem("token");
+     localStorage.removeItem("dashBoardData");
     navigate("/");
   }
 
-  function handleBilling() {
-    navigate("/billing");
-  }
+
+   function handleBilling() {
+     const token = localStorage.getItem("token");
+     async function toDashboard(authCode) {
+       const res = await fetch(
+         "https://sprintcheck.megasprintlimited.com.ng/api/history",
+         {
+           method: "GET",
+           headers: {
+             //  "Content-Type": "application/json",
+             Accept: "application/json",
+             Authorization: `Bearer ${authCode}`,
+           },
+           // body: JSON.stringify(authCode),
+         }
+       );
+
+       const data = await res.json();
+       console.log(data);
+       if (!res.ok) {
+         throw new Error(data.message || "You're not logged in");
+       } else {
+         navigate("/billing");
+       }
+     }
+     toDashboard(token);
+   }
 
   function handleDeveloper() {
     navigate("/developer");
