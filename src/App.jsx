@@ -24,14 +24,7 @@ function App() {
 
         {/* Protected Routes */}
 
-        <Route
-          path="/verify-code"
-          element={
-            <ProtectedRoute>
-              <VerificationCode />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/verify-code" element={<VerificationCode /> } />
         <Route
           path="/dashboard"
           element={

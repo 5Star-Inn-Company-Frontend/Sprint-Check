@@ -100,7 +100,7 @@ export default function ApiLogs() {
   // const maxValue = Math.max(...chartData.flatMap((d) => [d.verified, d.fail]));
   const avatarChar = dashboardInfo.businessName;
   const avatar = avatarChar ? avatarChar[0] : "";
-  console.log(avatar);
+
 
   return (
     <div className="dashboard">
@@ -111,6 +111,14 @@ export default function ApiLogs() {
       />
 
       <SideBar sidebarOpen={sidebarOpen} isMobile={isMobile} />
+      <div className="accNo_Modal">
+        <p>
+          You do not have an account number yet. Kindly generate account number
+          by clicking the button below
+        </p>
+
+        <button>Generate account number</button>
+      </div>
 
       {/* Main Content */}
       <div className={`main-content ${isMobile ? "mobile" : ""}`}>

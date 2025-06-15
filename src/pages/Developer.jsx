@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Copy, Eye, EyeOff } from "lucide-react";
 // import logo from "../assets/dashboardAssets/WhatsApp Image 2025-05-15 at 11.15.05_db0fe0fa 1.png";
 // import dashboardIcon from "../assets/dashboardAssets/element-4.png";
@@ -7,8 +7,8 @@ import notificationIcon from "../assets/dashboardAssets/notification-bing.png";
 // import logOutIcon from "../assets/dashboardAssets/login.png";
 // import billingIcon from "../assets/dashboardAssets/stash_billing-info.png";
 import searchIcon from "../assets/dashboardAssets/search-normal.png";
-// import nav_icon from "../assets/dashboardAssets/Chart.png";
-// import profileIcon from "../assets/dashboardAssets/user.png";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import CopyIcon from "../assets/dashboardAssets/solar_copy-bold.png";
 import SideBar from "../components/sideBar";
 import { useNavigate } from "react-router-dom";
@@ -21,16 +21,23 @@ import {
 } from "lucide-react";
 export default function Developer() {
   const [isMobile, setIsMobile] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showEncryptionKey, setShowEncryptionKey] = useState(false);
   const [showApiKey, setShowApiKey] = useState(false);
+  const IdRef = useRef(null);
+  useEffect(() => {
+    IdRef.current.focus();
+  }, []);
+
   const [formData, setFormData] = useState({
     clientId: "",
     encryptionKey: "sk_test_12345678901234567890",
     apiKey: "api_key_abcdefghijklmnopqrstuvwxyz",
-    webhookUrl: "",
   });
+  const [webHookUrl, setWebHookUrl] = useState("");
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({
@@ -38,27 +45,10 @@ export default function Developer() {
       [field]: value,
     }));
   };
-  // function handleBilling() {
-  //   navigate("/billing");
-  // }
 
   function handleApiDoc() {
     navigate("/apiDoc");
   }
-  // function handleDashboard() {
-  //   navigate("/dashboard");
-  // }
-
-  // function handleLogout() {
-  //   navigate("/");
-  // }
-  // function handleHistory() {
-  //   navigate("/apilogs");
-  // }
-
-  // function handleProfile() {
-  //   navigate("/profile");
-  // }
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
@@ -76,11 +66,50 @@ export default function Developer() {
       encryptionKey: newEncryptionKey,
       apiKey: newApiKey,
     }));
+
+    console.log(formData);
   };
 
-  const handleSave = () => {
-    console.log("Saving configuration:", formData);
-    // Add save logic here
+  const validatewebHook = (webHookUrl) => {
+    const hookRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return hookRegex.test(webHookUrl);
+  };
+
+  async function updateWebHook(webHook) {
+    const token = localStorage.getItem("token");
+    const res = await fetch(
+      "https://sprintcheck.megasprintlimited.com.ng/api/update-webhook",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(webHook),
+      }
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || "Failed to Update");
+    }
+  }
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+    // if (!validatewebHook()) return;
+
+    setLoading(true);
+    try {
+      const response = await updateWebHook({ webhook_url: webHookUrl });
+      toast.success("Update successful!");
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setLoading(false);
+      console.log("Saving configuration:");
+    }
   };
 
   useEffect(() => {
@@ -114,6 +143,8 @@ export default function Developer() {
           min-height: 100vh;
           background-color: rgb(234, 237, 239);
         }
+
+     
 
         // .sidebar {
         //   width: 250px;
@@ -212,7 +243,7 @@ export default function Developer() {
 
         .main-content {
           flex: 1;
-          width:100%;
+          width: 100%;
           margin-left: 250px;
           transition: margin-left 0.3s ease;
         }
@@ -336,8 +367,8 @@ export default function Developer() {
 
         .content {
           padding: 32px;
-          
-          margin-left:0px;
+
+          margin-left: 0px;
           width: 100%;
 
           display: flex;
@@ -575,6 +606,7 @@ export default function Developer() {
 
       {/* Main Content */}
       <div className={`main-content ${isMobile ? "mobile" : ""}`}>
+        
         {/* Top Bar */}
         <div className="top-bar">
           <div className="hamSearch">
@@ -609,6 +641,7 @@ export default function Developer() {
 
         {/* Content */}
         <div className="content">
+          <ToastContainer position="bottom-right" autoClose={3000} />
           {/* API Section */}
           <div className="section">
             <h2 className="section-title">API</h2>
@@ -624,6 +657,7 @@ export default function Developer() {
                   onChange={(e) =>
                     handleInputChange("clientId", e.target.value)
                   }
+                  ref={IdRef}
                 />
               </div>
             </div>
@@ -700,15 +734,13 @@ export default function Developer() {
                   type="text"
                   className="form-input"
                   placeholder="Webhook URL"
-                  value={formData.webhookUrl}
-                  onChange={(e) =>
-                    handleInputChange("webhookUrl", e.target.value)
-                  }
+                  value={webHookUrl}
+                  onChange={(e) => setWebHookUrl(e.target.value)}
                 />
                 <div className="input-actions">
                   <button
                     className="action-button"
-                    onClick={() => copyToClipboard(formData.webhookUrl)}
+                    onClick={() => copyToClipboard(webHookUrl)}
                   >
                     <img src={CopyIcon} alt="copy" />
                   </button>
@@ -717,7 +749,11 @@ export default function Developer() {
             </div>
 
             <div className="button-group">
-              <button className="primary-button" onClick={handleSave}>
+              <button
+                type="submit"
+                className="primary-button"
+                onClick={(e) => handleSave(e)}
+              >
                 Save
               </button>
             </div>
