@@ -15,7 +15,7 @@ export default function ApiLogs() {
   const [isMobile, setIsMobile] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [dashboardData, setDashboardData] = useState(null);
-
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     const storedData = localStorage.getItem("dashboardData");
     if (storedData) {
@@ -35,6 +35,10 @@ export default function ApiLogs() {
   //  if (!dashboardData) {
   //    return <p>Loading dashboard...</p>;
   //  }
+
+  function handleGetAcc() {
+    setLoading(!loading);
+  }
 
   function extractDashboardInfo(dashboardData) {
     if (!dashboardData?.data?.user) return {};
@@ -84,7 +88,9 @@ export default function ApiLogs() {
 
   // Usage:
   const dashboardInfo = extractDashboardInfo(dashboardData);
-  const TotalApiCalls =Number(dashboardInfo.total + dashboardInfo.successful + dashboardInfo.failed);
+  const TotalApiCalls = Number(
+    dashboardInfo.total + dashboardInfo.successful + dashboardInfo.failed
+  );
 
   const chartData = [
     { date: "14/05/2025", verified: 28, fail: 15 },
@@ -101,7 +107,6 @@ export default function ApiLogs() {
   const avatarChar = dashboardInfo.businessName;
   const avatar = avatarChar ? avatarChar[0] : "";
 
-
   return (
     <div className="dashboard">
       {/* Overlay for mobile */}
@@ -117,7 +122,9 @@ export default function ApiLogs() {
           by clicking the button below
         </p>
 
-        <button>Generate account number</button>
+        <button onClick={() => handleGetAcc()}>
+          {loading ? <Loader/> : `Generate account number`}
+        </button>
       </div>
 
       {/* Main Content */}
@@ -346,4 +353,9 @@ export default function ApiLogs() {
       </div>
     </div>
   );
+}
+
+
+function Loader() {
+  return <div className="loader"></div>
 }
