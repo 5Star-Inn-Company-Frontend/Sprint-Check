@@ -123,7 +123,7 @@ export default function ApiLogs() {
         </p>
 
         <button onClick={() => handleGetAcc()}>
-          {loading ? <Loader/> : `Generate account number`}
+          {loading ? <Loaderacc /> : `Generate account number`}
         </button>
       </div>
 
@@ -355,7 +355,6 @@ export default function ApiLogs() {
   );
 }
 
-
-function Loader() {
-  return <div className="loader"></div>
+function Loaderacc() {
+  return <div className="loaderAcc"></div>;
 }

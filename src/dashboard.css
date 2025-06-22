@@ -48,7 +48,7 @@ body {
 }
 
 /* HTML: <div class="loader"></div> */
-.loader {
+.loaderAcc {
   width: 10px;
   padding: 8px;
   aspect-ratio: 1;
@@ -61,9 +61,9 @@ body {
           mask: var(--_m);
   -webkit-mask-composite: source-out;
           mask-composite: subtract;
-  animation: l3 1s infinite linear;
+  animation: l33 1s infinite linear;
 }
-@keyframes l3 {to{transform: rotate(1turn)}}
+@keyframes l33 {to{transform: rotate(1turn)}}
 
 .sidebar {
   width: 250px;
