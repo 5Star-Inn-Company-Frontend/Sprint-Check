@@ -93,14 +93,14 @@ export default function ApiLogs() {
   );
 
   const chartData = [
-    { date: "14/05/2025", verified: 28, fail: 15 },
-    { date: "15/05/2025", verified: 80, fail: 28 },
-    { date: "16/05/2025", verified: 16, fail: 32 },
-    { date: "17/05/2025", verified: 79, fail: 95 },
-    { date: "18/05/2025", verified: 43, fail: 73 },
-    { date: "19/05/2025", verified: 24, fail: 63 },
-    { date: "20/05/2025", verified: 52, fail: 112 },
-    { date: "21/05/2025", verified: 44, fail: 98 },
+    // { date: "14/05/2025", verified: 28, fail: 15 },
+    // { date: "15/05/2025", verified: 80, fail: 28 },
+    // { date: "16/05/2025", verified: 16, fail: 32 },
+    // { date: "17/05/2025", verified: 79, fail: 95 },
+    // { date: "18/05/2025", verified: 43, fail: 73 },
+    // { date: "19/05/2025", verified: 24, fail: 63 },
+    // { date: "20/05/2025", verified: 52, fail: 112 },
+    // { date: "21/05/2025", verified: 44, fail: 98 },
   ];
 
   // const maxValue = Math.max(...chartData.flatMap((d) => [d.verified, d.fail]));
@@ -301,7 +301,7 @@ export default function ApiLogs() {
 
             {/* Chart bars */}
             <div className="chart">
-              {chartData.map((data, index) => (
+              {chartData ?.map((data, index) => (
                 <div
                   key={index}
                   className="chart-bar-group"

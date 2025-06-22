@@ -46,98 +46,103 @@ export default function Billing() {
   // }
 
   // Mock billing data
-  const billingData = [
-    {
-      id: 1,
-      description: "Fund",
-      transactionId: "#12548796",
-      type: "Transfer",
-      date: "28 Jan, 12.30 AM",
-      amount: 750,
-      direction: "credit",
-      icon: "up",
-    },
-    {
-      id: 2,
-      description: "BVN",
-      transactionId: "#12548796",
-      type: "API",
-      date: "25 Jan, 10.40 PM",
-      amount: 450,
-      direction: "credit",
-      icon: "down",
-    },
-    {
-      id: 3,
-      description: "BVN",
-      transactionId: "#12548796",
-      type: "API",
-      date: "20 Jan, 10.40 PM",
-      amount: 150,
-      direction: "debit",
-      icon: "down",
-    },
-    {
-      id: 4,
-      description: "BVN",
-      transactionId: "#12548796",
-      type: "API",
-      date: "15 Jan, 03.29 PM",
-      amount: 1050,
-      direction: "debit",
-      icon: "down",
-    },
-    {
-      id: 5,
-      description: "BVN",
-      transactionId: "#12548796",
-      type: "API",
-      date: "25 Jan, 10.40 PM",
-      amount: 450,
-      direction: "credit",
-      icon: "down",
-    },
-    {
-      id: 6,
-      description: "Fund",
-      transactionId: "#12548796",
-      type: "Transfer",
-      date: "28 Jan, 12.30 AM",
-      amount: 750,
-      direction: "credit",
-      icon: "up",
-    },
-    {
-      id: 7,
-      description: "BVN",
-      transactionId: "#12548796",
-      type: "API",
-      date: "20 Jan, 10.40 PM",
-      amount: 150,
-      direction: "debit",
-      icon: "down",
-    },
-    {
-      id: 8,
-      description: "BVN",
-      transactionId: "#12548796",
-      type: "API",
-      date: "15 Jan, 03.29 PM",
-      amount: 1050,
-      direction: "debit",
-      icon: "down",
-    },
-    {
-      id: 9,
-      description: "BVN",
-      transactionId: "#12548796",
-      type: "API",
-      date: "14 Jan, 10.40 PM",
-      amount: 850,
-      direction: "debit",
-      icon: "down",
-    },
-  ];
+  // const billingData = [
+  //   {
+  //     id: 1,
+  //     description: "Fund",
+  //     transactionId: "#12548796",
+  //     type: "Transfer",
+  //     date: "28 Jan, 12.30 AM",
+  //     amount: 750,
+  //     direction: "credit",
+  //     icon: "up",
+  //   },
+  //   {
+  //     id: 2,
+  //     description: "BVN",
+  //     transactionId: "#12548796",
+  //     type: "API",
+  //     date: "25 Jan, 10.40 PM",
+  //     amount: 450,
+  //     direction: "credit",
+  //     icon: "down",
+  //   },
+  //   {
+  //     id: 3,
+  //     description: "BVN",
+  //     transactionId: "#12548796",
+  //     type: "API",
+  //     date: "20 Jan, 10.40 PM",
+  //     amount: 150,
+  //     direction: "debit",
+  //     icon: "down",
+  //   },
+  //   {
+  //     id: 4,
+  //     description: "BVN",
+  //     transactionId: "#12548796",
+  //     type: "API",
+  //     date: "15 Jan, 03.29 PM",
+  //     amount: 1050,
+  //     direction: "debit",
+  //     icon: "down",
+  //   },
+  //   {
+  //     id: 5,
+  //     description: "BVN",
+  //     transactionId: "#12548796",
+  //     type: "API",
+  //     date: "25 Jan, 10.40 PM",
+  //     amount: 450,
+  //     direction: "credit",
+  //     icon: "down",
+  //   },
+  //   {
+  //     id: 6,
+  //     description: "Fund",
+  //     transactionId: "#12548796",
+  //     type: "Transfer",
+  //     date: "28 Jan, 12.30 AM",
+  //     amount: 750,
+  //     direction: "credit",
+  //     icon: "up",
+  //   },
+  //   {
+  //     id: 7,
+  //     description: "BVN",
+  //     transactionId: "#12548796",
+  //     type: "API",
+  //     date: "20 Jan, 10.40 PM",
+  //     amount: 150,
+  //     direction: "debit",
+  //     icon: "down",
+  //   },
+  //   {
+  //     id: 8,
+  //     description: "BVN",
+  //     transactionId: "#12548796",
+  //     type: "API",
+  //     date: "15 Jan, 03.29 PM",
+  //     amount: 1050,
+  //     direction: "debit",
+  //     icon: "down",
+  //   },
+  //   {
+  //     id: 9,
+  //     description: "BVN",
+  //     transactionId: "#12548796",
+  //     type: "API",
+  //     date: "14 Jan, 10.40 PM",
+  //     amount: 850,
+  //     direction: "debit",
+  //     icon: "down",
+  //   },
+  // ];
+
+  //Real Billing Data
+
+  const billingData = JSON.parse(localStorage.getItem("billingData")).data;
+  console.log(billingData);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -753,7 +758,7 @@ export default function Billing() {
                 </tr>
               </thead>
               <tbody>
-                {billingData.map((transaction) => (
+                {billingData?.map((transaction) => (
                   <tr key={transaction.id} className="table-row">
                     <td className="table-cell">
                       <div className="description-cell">

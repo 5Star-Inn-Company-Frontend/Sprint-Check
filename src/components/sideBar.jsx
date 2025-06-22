@@ -63,6 +63,7 @@ export default function SideBar({ isMobile, sidebarOpen }) {
 
         const data = await res.json();
         console.log(data);
+         localStorage.setItem("apiLogsData", JSON.stringify(data.data));
         if (!res.ok) {
           throw new Error(data.message || "You're not logged in");
         } else {
@@ -99,6 +100,7 @@ export default function SideBar({ isMobile, sidebarOpen }) {
 
        const data = await res.json();
        console.log(data);
+       localStorage.setItem("billingData", JSON.stringify(data.data));
        if (!res.ok) {
          throw new Error(data.message || "You're not logged in");
        } else {
