@@ -13,20 +13,13 @@ import eyeIcon from "../assets/dashboardAssets/hugeicons_view.png";
 import SideBar from "../components/sideBar";
 import returnIcon from "../assets/dashboardAssets/icon-park_return.png";
 import searchIcon from "../assets/dashboardAssets/search-normal.png";
-import { useNavigate } from "react-router-dom";
+
 const Dashboard = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedLog, setSelectedLog] = useState(null);
-  const navigate = useNavigate();
-  // function handleDashboard() {
-  //   navigate("/dashboard");
-  // }
 
-  // function handleLogout() {
-  //   navigate("/");
-  // }
 
   const handleViewClick = (log) => {
     if (log.userDetails) {
@@ -40,17 +33,9 @@ const Dashboard = () => {
     setSelectedLog(null);
   };
 
-  // function handleBilling() {
-  //   navigate("/billing");
-  // }
 
-  // function handleDeveloper() {
-  //   navigate("/developer");
-  // }
-
-  // function handleProfile() {
-  //   navigate("/profile");
-  // }
+  // Example usage:
+  // const transformedLogs = transformApiLogs(apiResponse);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -63,7 +48,7 @@ const Dashboard = () => {
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
-  const apiLogs = JSON.parse(localStorage.getItem("apiLogsData")).data;
+  const apiLogs = JSON.parse(localStorage.getItem("apiLogsData"));
   console.log(apiLogs);
   // Sample API logs data
   // const apiLogs = [

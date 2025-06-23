@@ -44,6 +44,81 @@ export default function SideBar({ isMobile, sidebarOpen }) {
     toDashboard(token);
   }
 
+  
+  function transformApiLogs(apiResponse) {
+    return apiResponse.data.data.map((item) => {
+      // Parse BVN data if available
+      let userDetails = null;
+      let bvnData = null;
+
+      try {
+        if (item.bvn?.data) {
+          bvnData = JSON.parse(item.bvn.data);
+        }
+      } catch (e) {
+        console.error("Error parsing BVN data:", e);
+      }
+
+      // Construct userDetails if BVN data exists
+      if (bvnData) {
+        userDetails = {
+          avatar: item.image || "avatar",
+          bvn: bvnData.bvn || "",
+          firstName: bvnData.firstName || "",
+          lastName: bvnData.lastName || "",
+          middleName: bvnData.middleName || "",
+          dateOfBirth: bvnData.dateOfBirth || "",
+          gender: bvnData.gender || "",
+          phoneNumber: bvnData.phoneNumber1 || "",
+          lgaOfOrigin: bvnData.lgaOfOrigin || "",
+          lgaOfResidence: bvnData.lgaOfResidence || "",
+          maritalStatus: bvnData.maritalStatus || "",
+          nationality: bvnData.nationality || "",
+          residentialAddress: bvnData.residentialAddress || "",
+          stateOfOrigin: bvnData.stateOfOrigin || "",
+          stateOfResidence: bvnData.stateOfResidence || "",
+          enrollmentBank: bvnData.enrollmentBank || "",
+          enrollmentBranch: bvnData.enrollmentBranch || "",
+          nameOnCard: bvnData.nameOnCard || "",
+          nin: bvnData.nin || "",
+          levelOfAccount: bvnData.levelOfAccount || "",
+          watchlisted: bvnData.watchListed === "True" ? "Yes" : "No",
+          number: bvnData.number || "",
+        };
+      }
+
+      // Format date
+      const formattedDate = new Date(item.created_at).toLocaleString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true,
+      });
+
+      // Determine status
+      const status = item.status === 1 ? "SUCCESSFUL" : "FAILED";
+
+      // Construct full name
+      const fullName = bvnData
+        ? `${bvnData.firstName || ""} ${bvnData.lastName || ""}`.trim()
+        : "Null";
+
+      return {
+        id: item.id,
+        endpoint: item.type,
+        name: fullName || "Null",
+        amount: 40.0, // Static value as in mock data
+        source: item.source,
+        performedBy: "Samuel Odejirmi", // Static as in mock
+        date: formattedDate,
+        status: status,
+        userDetails: userDetails, // null when BVN data unavailable
+      };
+    });
+  }
+
 
     function handleHistory() {
       const token = localStorage.getItem("token");
@@ -62,8 +137,8 @@ export default function SideBar({ isMobile, sidebarOpen }) {
         );
 
         const data = await res.json();
-        console.log(data);
-         localStorage.setItem("apiLogsData", JSON.stringify(data.data));
+        const apiData = transformApiLogs(data);
+         localStorage.setItem("apiLogsData", JSON.stringify(apiData));
         if (!res.ok) {
           throw new Error(data.message || "You're not logged in");
         } else {
