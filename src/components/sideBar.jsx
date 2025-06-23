@@ -161,7 +161,7 @@ export default function SideBar({ isMobile, sidebarOpen }) {
      const token = localStorage.getItem("token");
      async function toDashboard(authCode) {
        const res = await fetch(
-         "https://sprintcheck.megasprintlimited.com.ng/api/history",
+         "https://sprintcheck.megasprintlimited.com.ng/api/wallet-history",
          {
            method: "GET",
            headers: {

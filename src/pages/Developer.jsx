@@ -6,7 +6,7 @@ import { Copy, Eye, EyeOff } from "lucide-react";
 import notificationIcon from "../assets/dashboardAssets/notification-bing.png";
 // import logOutIcon from "../assets/dashboardAssets/login.png";
 // import billingIcon from "../assets/dashboardAssets/stash_billing-info.png";
-import searchIcon from "../assets/dashboardAssets/search-normal.png";
+
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CopyIcon from "../assets/dashboardAssets/solar_copy-bold.png";
@@ -143,8 +143,6 @@ export default function Developer() {
           min-height: 100vh;
           background-color: rgb(234, 237, 239);
         }
-
-     
 
         // .sidebar {
         //   width: 250px;
@@ -542,6 +540,10 @@ export default function Developer() {
           .user-name {
             display: none;
           }
+          .hamSearch {
+            display: flex;
+            gap: 1rem;
+          }
         }
 
         @media (max-width: 768px) {
@@ -606,7 +608,6 @@ export default function Developer() {
 
       {/* Main Content */}
       <div className={`main-content ${isMobile ? "mobile" : ""}`}>
-        
         {/* Top Bar */}
         <div className="top-bar">
           <div className="hamSearch">

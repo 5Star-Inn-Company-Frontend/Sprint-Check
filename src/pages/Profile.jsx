@@ -9,15 +9,10 @@ import {
 import pencilIcon from "../assets/dashboardAssets/Group 194.png";
 // import logo from "../assets/dashboardAssets/WhatsApp Image 2025-05-15 at 11.15.05_db0fe0fa 1.png";
 import { Eye, RotateCcw, FileDown } from "lucide-react";
-// import dashboardIcon from "../assets/dashboardAssets/element-4.png";
-// import historyIcon from "../assets/dashboardAssets/Calendar.png";
+
 import notificationIcon from "../assets/dashboardAssets/notification-bing.png";
 import SideBar from "../components/sideBar";
-// import billingIcon from "../assets/dashboardAssets/stash_billing-info.png";
-// import nav_icon from "../assets/dashboardAssets/Chart.png";
-// import profileIcon from "../assets/dashboardAssets/user.png";
-// import logOutIcon from "../assets/dashboardAssets/login.png";
-// import searchIcon from "../assets/dashboardAssets/search-normal.png";
+
 import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
@@ -26,26 +21,6 @@ export default function Profile() {
   const [activeTab, setActiveTab] = useState("profile");
 
   const navigate = useNavigate();
-
-  // function handleDashboard() {
-  //   navigate("/dashboard");
-  // }
-
-  // function handleLogout() {
-  //   navigate("/");
-  // }
-
-  // function handleHistory() {
-  //   navigate("/apilogs");
-  // }
-
-  // function handleDeveloper() {
-  //   navigate("/developer");
-  // }
-
-  // function handleBilling() {
-  //   navigate("/billing");
-  // }
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -494,6 +469,11 @@ export default function Profile() {
           .profile-form {
             grid-template-columns: 1fr;
           }
+
+          .hamSearch {
+            display: flex;
+            gap:1rem;
+          }
         }
 
         @media (max-width: 768px) {
@@ -582,7 +562,7 @@ export default function Profile() {
       />
 
       {/* Sidebar */}
-    <SideBar sidebarOpen={sidebarOpen} isMobile={isMobile} />
+      <SideBar sidebarOpen={sidebarOpen} isMobile={isMobile} />
 
       {/* Main Content */}
       <div className={`main-content ${isMobile ? "mobile" : ""}`}>

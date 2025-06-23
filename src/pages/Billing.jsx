@@ -588,6 +588,11 @@ export default function Billing() {
             max-width: 200px;
           }
 
+          .hamSearch {
+            display: flex;
+            gap: 1rem;
+          }
+
           .user-name {
             display: none;
           }
