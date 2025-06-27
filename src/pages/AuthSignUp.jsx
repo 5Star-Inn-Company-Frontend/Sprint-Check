@@ -6,7 +6,7 @@ import { EyeClosed, EyeIcon } from "lucide-react";
 import mailIcon from "../assets/codicon_mail.png";
 import passwordIcon from "../assets/bx_bxs-lock-alt.png";
 import userIcon from "../assets/mdi_user-outline.png";
-import Logog from "../assets/dashboardAssets/logof 2.png";
+import Logo from "../assets/logo.png";
 import userPhone from "../assets/line-md_phone.png";
 
 export default function AuthSignUp() {
@@ -84,12 +84,11 @@ export default function AuthSignUp() {
   return (
     <div className="main">
       <ToastContainer position="top-right" autoClose={3000} />
-      <img src={Logog} alt="logo" />
-      <div className="login">
+      <img className="logo" src={Logo} alt="logo" />
+      <div className="login signUp">
         <form className="login-form" onSubmit={handleSubmit}>
-          <div className="login-header">
-            <h2>Let's get you Started</h2>
-            <p>Create an account</p>
+          <div className="login-header signupHeader">
+            <h2>Sign Up</h2>
           </div>
 
           <div className="input-wrapper">
@@ -146,6 +145,11 @@ export default function AuthSignUp() {
               {showPassword ? <EyeIcon /> : <EyeClosed />}
             </span>
           </div>
+
+          <p className="privacy">
+            <input type="checkbox" /> &nbsp; By registering in Sprint Check, I agree
+            with the privacy policy
+          </p>
 
           <button
             type="submit"

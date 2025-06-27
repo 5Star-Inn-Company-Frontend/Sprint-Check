@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import mailIcon from "../assets/codicon_mail.png";
 import passwordIcon from "../assets/bx_bxs-lock-alt.png";
 import { useNavigate } from "react-router-dom";
-import Logog from "../assets/dashboardAssets/logof 2.png";
+import Logo from "../assets/logo.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { EyeClosed, EyeIcon } from "lucide-react";
@@ -117,20 +117,19 @@ export default function AuthLogin() {
 
   return (
     <div className="main">
-      <ToastContainer position="bottom-right" autoClose={3000} />
-      <img src={Logog} alt="logo" />
+      <ToastContainer position="top-right" autoClose={3000} />
+      <img className="logo" src={Logo} alt="logo" />
       <div className="login">
         <form className="login-form" onSubmit={handleSubmit}>
           <div className="login-header">
-            <h2>Welcome Back</h2>
-            <p>Login to your account</p>
+            <h2>Login</h2>
           </div>
 
           <div className="input-wrapper">
             <img className="input-icon" alt="icon" src={mailIcon} />
             <input
               type="email"
-              placeholder="Email Address"
+              placeholder="Enter your email..."
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               ref={emailRef}
@@ -141,7 +140,7 @@ export default function AuthLogin() {
             <img className="input-icon" alt="icon" src={passwordIcon} />
             <input
               type={showPassword ? "text" : "password"}
-              placeholder="Password"
+              placeholder="Enter your password..."
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -161,14 +160,6 @@ export default function AuthLogin() {
             </span>
           </div>
 
-          <button
-            disabled={loading}
-            style={{ cursor: "pointer" }}
-            type="submit"
-          >
-            {loading ? <div className="loader"></div> : "Login"}
-          </button>
-
           <p
             onClick={() => navigate("/forgot-password")}
             className="login-forgotPsw"
@@ -177,13 +168,21 @@ export default function AuthLogin() {
             Forgot Password
           </p>
 
+          <button
+            disabled={loading}
+            style={{ cursor: "pointer" }}
+            type="submit"
+          >
+            {loading ? <div className="loader"></div> : "Login"}
+          </button>
+
           <p className="login-signup">
             Do not have an account?{" "}
             <strong
               onClick={() => navigate("/signup")}
-              style={{ cursor: "pointer" }}
+              style={{ cursor: "pointer", color: "blue" }}
             >
-              Signup
+              &nbsp;Signup
             </strong>
           </p>
         </form>

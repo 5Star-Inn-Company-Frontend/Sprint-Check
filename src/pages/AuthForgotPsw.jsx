@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import mailIcon from "../assets/codicon_mail.png";
 import { useNavigate } from "react-router-dom";
-import Logog from "../assets/dashboardAssets/logof 2.png";
+import Logo from "../assets/logo.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const ApiKey = "scb1edcd88-64f7485186d9781ca624a903";
@@ -63,13 +63,12 @@ export default function AuthForgotPsw() {
 
   return (
     <div className="main">
-      <ToastContainer position="bottom-right" autoClose={3000} />
-      <img src={Logog} alt="logo" />
-      <div className="login">
+      <ToastContainer position="top-right" autoClose={3000} />
+      <img className="logo" src={Logo} alt="logo" />
+      <div className="login signUp forgetPsw">
         <form className="login-form" onSubmit={handleSubmit}>
           <div className="login-header">
             <h2>Forgot Passsword</h2>
-            <p>Forgot Password</p>
           </div>
 
           <div className="input-wrapper">
@@ -97,7 +96,10 @@ export default function AuthForgotPsw() {
         </p> */}
           <p className="login-signup">
             Remember login details?{" "}
-            <strong onClick={() => handleLogin()} style={{ cursor: "pointer" }}>
+            <strong
+              onClick={() => handleLogin()}
+              style={{ cursor: "pointer", color: "blue" }}
+            >
               Login
             </strong>
           </p>

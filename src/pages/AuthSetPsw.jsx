@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Logog from "../assets/dashboardAssets/logof 2.png";
+import Logo from "../assets/logo.png";
 const ApiKey = "scb1edcd88-64f7485186d9781ca624a903";
 export default function AuthSetPsw() {
   const [newPsw, setnewPsw] = useState("");
@@ -12,15 +12,14 @@ export default function AuthSetPsw() {
   const email = localStorage.getItem("resetEmail");
   const code = localStorage.getItem("resetCode");
   const navigate = useNavigate();
-useEffect(() => {
-  pswRef.current.focus();
+  useEffect(() => {
+    pswRef.current.focus();
 
-  if (!email || !code) {
-    toast.error("Session expired. Please start password reset again.");
-    navigate("/forgot-password");
-  }
-}, [code, email, navigate]);
-
+    if (!email || !code) {
+      toast.error("Session expired. Please start password reset again.");
+      navigate("/forgot-password");
+    }
+  }, [code, email, navigate]);
 
   const validatePsw = newPsw === confPsw;
 
@@ -58,7 +57,7 @@ useEffect(() => {
       toast.success("Password Changed");
       localStorage.removeItem("resetEmail");
       localStorage.removeItem("resetCode");
-      navigate("/verify-code");
+      navigate("/");
     } catch (err) {
       toast.error(err.message);
     } finally {
@@ -66,18 +65,20 @@ useEffect(() => {
     }
   };
 
-  // const handleLogin = () => {
-  //   navigate("/");
-  // };
+  const handleResend = () => {
+    navigate("/forgot-password");
+  };
   return (
     <div className="main">
-      <ToastContainer position="bottom-right" autoClose={3000} />
-      <img src={Logog} alt="logo" />
-      <div className="login">
+      <ToastContainer position="top-right" autoClose={3000} />
+      <img className="logo" src={Logo} alt="logo" />
+      <div className="login setPsw">
         <form onSubmit={handleSubmit} className="login-form">
           <div className="login-header">
-            <h2>Set a new Password</h2>
-            <p>An authentication code has been sent to your email</p>
+            <h2>Set Password</h2>
+            <p style={{ cursor: "pointer", color: "black", fontSize: "14px" }}>
+              Set a new Password
+            </p>
           </div>
 
           <div className="input-wrapper">
@@ -99,6 +100,11 @@ useEffect(() => {
             />
           </div>
 
+          <p className="resend">
+            Didn't receive a code?{" "}
+            <span onClick={() => handleResend()}>Resend</span>
+          </p>
+
           <button
             disabled={loading}
             style={{ cursor: "pointer" }}
@@ -110,7 +116,10 @@ useEffect(() => {
 
           <p className="login-signup">
             Remember login details?{" "}
-            <strong onClick={() => navigate("/")} style={{ cursor: "pointer" }}>
+            <strong
+              onClick={() => navigate("/")}
+              style={{ cursor: "pointer", color: "blue" }}
+            >
               Login
             </strong>
           </p>

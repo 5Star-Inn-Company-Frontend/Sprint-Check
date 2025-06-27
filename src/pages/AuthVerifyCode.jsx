@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import Logog from "../assets/dashboardAssets/logof 2.png";
+import Logo from "../assets/logo.png";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
@@ -46,7 +46,7 @@ export default function AuthVerifyCode() {
     try {
       const response = await verifyCode({ code, email });
       toast.success("successful!");
-       localStorage.setItem("resetCode", code);
+      localStorage.setItem("resetCode", code);
       navigate("/reset-password");
     } catch (err) {
       toast.error(err.message);
@@ -58,8 +58,8 @@ export default function AuthVerifyCode() {
   return (
     <div className="main">
       <ToastContainer position="bottom-right" autoClose={3000} />
-      <img src={Logog} alt="logo" />
-      <div className="login">
+      <img className="logo" src={Logo} alt="logo" />
+      <div className="login verifyCode">
         <form className="login-form" onSubmit={handleSubmit}>
           <div className="login-header">
             <h2>Verify Code</h2>
@@ -71,6 +71,7 @@ export default function AuthVerifyCode() {
             <input
               type="number"
               value={code}
+              placeholder="Enter Code"
               onChange={(e) => setAuthCode(e.target.value)}
               ref={codeRef}
             />
@@ -96,7 +97,7 @@ export default function AuthVerifyCode() {
 
           <p className="login-signup">
             Remember login details?{" "}
-            <strong onClick={() => navigate("/")} style={{ cursor: "pointer" }}>
+            <strong onClick={() => navigate("/")} style={{ cursor: "pointer", color:"blue" }}>
               Login
             </strong>
           </p>
