@@ -8,18 +8,10 @@ import {
 } from "lucide-react";
 // import logo from "../assets/dashboardAssets/WhatsApp Image 2025-05-15 at 11.15.05_db0fe0fa 1.png";
 import { Eye, RotateCcw, FileDown } from "lucide-react";
-// import dashboardIcon from "../assets/dashboardAssets/element-4.png";
-// import historyIcon from "../assets/dashboardAssets/Calendar.png";
+
 import notificationIcon from "../assets/dashboardAssets/notification-bing.png";
 import SideBar from "../components/sideBar";
-// import billingIcon from "../assets/dashboardAssets/stash_billing-info.png";
-// import nav_icon from "../assets/dashboardAssets/Chart.png";
-// import profileIcon from "../assets/dashboardAssets/user.png";
-
-// import logOutIcon from "../assets/dashboardAssets/login.png";
-
-// import searchIcon from "../assets/dashboardAssets/search-normal.png";
-// import { useNavigate } from "react-router-dom";
+import empty from "../assets/Empty.gif";
 
 export default function Billing() {
   const [isMobile, setIsMobile] = useState(false);
@@ -450,6 +442,13 @@ export default function Billing() {
           background: white;
         }
 
+        .table-container img {
+          position: relative;
+          top: 50%;
+
+          right: -27%;
+        }
+
         .table {
           width: 100%;
           border-collapse: collapse;
@@ -646,6 +645,12 @@ export default function Billing() {
           .main-content {
             width: 100%;
           }
+
+          .table-container img {
+            width: 70%;
+            left:17%;
+            margin-top:3rem;
+          }
         }
       `}</style>
 
@@ -735,60 +740,66 @@ export default function Billing() {
           </div>
 
           <div className="table-container">
-            <table className="table">
-              <thead className="table-header">
-                <tr>
-                  <th>Description</th>
-                  <th>Transaction ID</th>
-                  <th>Type</th>
-                  <th>Date</th>
-                  <th>Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                {billingData?.map((transaction) => (
-                  <tr key={transaction.id} className="table-row">
-                    <td className="table-cell">
-                      <div className="description-cell">
-                        <div
-                          className={`transaction-icon ${
-                            transaction.icon === "up" ? "icon-up" : "icon-down"
-                          }`}
-                        >
-                          {transaction.icon === "up" ? (
-                            <ArrowUp size={16} />
-                          ) : (
-                            <ArrowDown size={16} />
-                          )}
-                        </div>
-                        <span>{transaction.description}</span>
-                      </div>
-                    </td>
-                    <td className="table-cell">
-                      <span className="transaction-id">
-                        {transaction.transactionId}
-                      </span>
-                    </td>
-                    <td className="table-cell">{transaction.type}</td>
-                    <td className="table-cell">
-                      <span className="date-text">{transaction.date}</span>
-                    </td>
-                    <td className="table-cell">
-                      <span
-                        className={
-                          transaction.direction === "credit"
-                            ? "amount-credit"
-                            : "amount-debit"
-                        }
-                      >
-                        {transaction.direction === "credit" ? "+" : "-"}₦
-                        {transaction.amount}
-                      </span>
-                    </td>
+            {billingData[0] ? (
+              <table className="table">
+                <thead className="table-header">
+                  <tr>
+                    <th>Description</th>
+                    <th>Transaction ID</th>
+                    <th>Type</th>
+                    <th>Date</th>
+                    <th>Amount</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {billingData?.map((transaction) => (
+                    <tr key={transaction.id} className="table-row">
+                      <td className="table-cell">
+                        <div className="description-cell">
+                          <div
+                            className={`transaction-icon ${
+                              transaction.icon === "up"
+                                ? "icon-up"
+                                : "icon-down"
+                            }`}
+                          >
+                            {transaction.icon === "up" ? (
+                              <ArrowUp size={16} />
+                            ) : (
+                              <ArrowDown size={16} />
+                            )}
+                          </div>
+                          <span>{transaction.description}</span>
+                        </div>
+                      </td>
+                      <td className="table-cell">
+                        <span className="transaction-id">
+                          {transaction.transactionId}
+                        </span>
+                      </td>
+                      <td className="table-cell">{transaction.type}</td>
+                      <td className="table-cell">
+                        <span className="date-text">{transaction.date}</span>
+                      </td>
+                      <td className="table-cell">
+                        <span
+                          className={
+                            transaction.direction === "credit"
+                              ? "amount-credit"
+                              : "amount-debit"
+                          }
+                        >
+                          {transaction.direction === "credit" ? "+" : "-"}₦
+                          {transaction.amount}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <img src={empty} alt="emptyGif" />
+            )}
           </div>
         </div>
       </div>

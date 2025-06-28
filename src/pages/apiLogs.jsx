@@ -484,13 +484,16 @@ const Dashboard = () => {
           background: white;
         }
 
+        .table-container img {
+          position: relative;
+          top: 50%;
+
+          right: -27%;
+        }
+
         .table {
           width: 100%;
           border-collapse: collapse;
-        }
-
-        .table img {
-          margin-left: 15rem;
         }
 
         .table-header {
@@ -887,6 +890,10 @@ const Dashboard = () => {
             margin-bottom: 32px;
             flex-direction: column;
           }
+
+          .table-container img {
+            width: 50%;
+          }
         }
       `}</style>
 
@@ -1109,9 +1116,9 @@ const Dashboard = () => {
           </div>
 
           <div className="table-container">
-            <table className="table">
-              <thead className="table-header">
-                {apiLogs[0] ? (
+            {apiLogs[0] ? (
+              <table className="table">
+                <thead className="table-header">
                   <tr>
                     <th>Endpoint</th>
                     <th>Name</th>
@@ -1122,11 +1129,7 @@ const Dashboard = () => {
                     <th>Status</th>
                     <th>Action</th>
                   </tr>
-                ) : (
-                  ""
-                )}
-              </thead>
-              {apiLogs[0] ? (
+                </thead>
                 <tbody>
                   {apiLogs.map((log) => (
                     <tr key={log.id} className="table-row">
@@ -1164,11 +1167,12 @@ const Dashboard = () => {
                       </td>
                     </tr>
                   ))}
-                </tbody>
-              ) : (
-                <img src={empty} alt="logo" />
-              )}
-            </table>
+                </tbody>{" "}
+                :
+              </table>
+            ) : (
+              <img src={empty} alt="emptyGif" />
+            )}
           </div>
 
           <div className="pagination">
