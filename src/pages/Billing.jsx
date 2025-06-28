@@ -25,25 +25,8 @@ export default function Billing() {
   const [isMobile, setIsMobile] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedPeriod, setSelectedPeriod] = useState("Day");
-
-  // const navigate = useNavigate();
-  // function handleDashboard() {
-  //   navigate("/dashboard");
-  // }
-
-  // function handleLogout() {
-  //   navigate("/");
-  // }
-  // function handleHistory() {
-  //   navigate("/apilogs");
-  // }
-
-  // function handleDeveloper() {
-  //   navigate("/developer");
-  // }
-  // function handleProfile() {
-  //   navigate("/profile");
-  // }
+  const billingChar = localStorage.getItem("avatarChar");
+  const billingAvatar = localStorage.getItem("avatar");
 
   // Mock billing data
   // const billingData = [
@@ -701,8 +684,8 @@ export default function Billing() {
             <div className="notification-icon">
               <img src={notificationIcon} alt="icon" />
             </div>
-            <div className="user-avatar">E</div>
-            <span className="user-name">emmy</span>
+            <div className="user-avatar">{billingAvatar.toUpperCase()}</div>
+            <span className="user-name">{billingChar}</span>
             <span className="arrow-down">
               <ChevronDown size={16} />
             </span>

@@ -54,16 +54,18 @@ body {
   aspect-ratio: 1;
   border-radius: 50%;
   background: #25b09b;
-  --_m: 
-    conic-gradient(#0000 10%,#000),
-    linear-gradient(#000 0 0) content-box;
+  --_m: conic-gradient(#0000 10%, #000), linear-gradient(#000 0 0) content-box;
   -webkit-mask: var(--_m);
-          mask: var(--_m);
+  mask: var(--_m);
   -webkit-mask-composite: source-out;
-          mask-composite: subtract;
+  mask-composite: subtract;
   animation: l33 1s infinite linear;
 }
-@keyframes l33 {to{transform: rotate(1turn)}}
+@keyframes l33 {
+  to {
+    transform: rotate(1turn);
+  }
+}
 
 .sidebar {
   width: 250px;
@@ -421,6 +423,10 @@ body {
   margin: 1.7rem;
 }
 
+.chart-container img {
+  margin-left: 15rem;
+}
+
 .chart-wrapper {
   position: relative;
   background: white;
@@ -715,7 +721,7 @@ body {
     right: 70%;
   }
   .accNo_Modal button {
-    padding:1rem;
+    padding: 1rem;
   }
 }
 
@@ -773,5 +779,12 @@ body {
 
   .main-content {
     width: 100%;
+  }
+
+  .chart-container img {
+    max-width: 100px;
+    position: relative;
+    top:50%;
+    right:50%;
   }
 }

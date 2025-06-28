@@ -1,25 +1,22 @@
 import React, { useState, useEffect } from "react";
 // import logo from "../assets/dashboardAssets/WhatsApp Image 2025-05-15 at 11.15.05_db0fe0fa 1.png";
 import { Eye, RotateCcw, Filter, FileDown, ChevronDown } from "lucide-react";
-// import dashboardIcon from "../assets/dashboardAssets/element-4.png";
-// import historyIcon from "../assets/dashboardAssets/Calendar.png";
-import notificationIcon from "../assets/dashboardAssets/notification-bing.png";
-// import billingIcon from "../assets/dashboardAssets/stash_billing-info.png";
-// import nav_icon from "../assets/dashboardAssets/Chart.png";
-// import profileIcon from "../assets/dashboardAssets/user.png";
 
-// import logOutIcon from "../assets/dashboardAssets/login.png";
+import notificationIcon from "../assets/dashboardAssets/notification-bing.png";
+
 import eyeIcon from "../assets/dashboardAssets/hugeicons_view.png";
 import SideBar from "../components/sideBar";
 import returnIcon from "../assets/dashboardAssets/icon-park_return.png";
 import searchIcon from "../assets/dashboardAssets/search-normal.png";
+import empty from "../assets/Empty.gif";
 
 const Dashboard = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedLog, setSelectedLog] = useState(null);
-
+  const apiChar = localStorage.getItem("avatarChar");
+  const apiAvatar = localStorage.getItem("avatar");
 
   const handleViewClick = (log) => {
     if (log.userDetails) {
@@ -32,7 +29,6 @@ const Dashboard = () => {
     setModalOpen(false);
     setSelectedLog(null);
   };
-
 
   // Example usage:
   // const transformedLogs = transformApiLogs(apiResponse);
@@ -491,6 +487,10 @@ const Dashboard = () => {
         .table {
           width: 100%;
           border-collapse: collapse;
+        }
+
+        .table img {
+          margin-left: 15rem;
         }
 
         .table-header {
@@ -1072,8 +1072,8 @@ const Dashboard = () => {
             <div className="notification-icon">
               <img src={notificationIcon} alt="icon" />
             </div>
-            <div className="user-avatar">E</div>
-            <span className="user-name">emmy</span>
+            <div className="user-avatar">{apiAvatar.toUpperCase()}</div>
+            <span className="user-name">{apiChar}</span>
             <span className="arrow-down">
               <ChevronDown size={16} />
             </span>
@@ -1111,55 +1111,63 @@ const Dashboard = () => {
           <div className="table-container">
             <table className="table">
               <thead className="table-header">
-                <tr>
-                  <th>Endpoint</th>
-                  <th>Name</th>
-                  <th>Amount</th>
-                  <th>Source</th>
-                  <th>Performed By</th>
-                  <th>Date</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {apiLogs.map((log) => (
-                  <tr key={log.id} className="table-row">
-                    <td className="table-cell">{log.endpoint}</td>
-                    <td className="table-cell">{log.name}</td>
-                    <td className="table-cell">{log.amount}</td>
-                    <td className="table-cell">{log.source}</td>
-                    <td className="table-cell">{log.performedBy}</td>
-                    <td className="table-cell date">{log.date}</td>
-                    <td className="table-cell">
-                      <span
-                        className={`status-badge ${
-                          log.status === "SUCCESSFUL"
-                            ? "status-success"
-                            : "status-failed"
-                        }`}
-                      >
-                        {log.status}
-                      </span>
-                    </td>
-                    <td className="table-cell">
-                      <div className="action-buttons">
-                        <span
-                          onClick={() => handleViewClick(log)}
-                          className="action-btn"
-                        >
-                          <img src={eyeIcon} alt="icon" />
-                          <span>View</span>
-                        </span>
-                        <span className="action-btn">
-                          <img src={returnIcon} alt="icon" />
-                          <span>Resend to webhook</span>
-                        </span>
-                      </div>
-                    </td>
+                {apiLogs[0] ? (
+                  <tr>
+                    <th>Endpoint</th>
+                    <th>Name</th>
+                    <th>Amount</th>
+                    <th>Source</th>
+                    <th>Performed By</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
                   </tr>
-                ))}
-              </tbody>
+                ) : (
+                  ""
+                )}
+              </thead>
+              {apiLogs[0] ? (
+                <tbody>
+                  {apiLogs.map((log) => (
+                    <tr key={log.id} className="table-row">
+                      <td className="table-cell">{log.endpoint}</td>
+                      <td className="table-cell">{log.name}</td>
+                      <td className="table-cell">{log.amount}</td>
+                      <td className="table-cell">{log.source}</td>
+                      <td className="table-cell">{log.performedBy}</td>
+                      <td className="table-cell date">{log.date}</td>
+                      <td className="table-cell">
+                        <span
+                          className={`status-badge ${
+                            log.status === "SUCCESSFUL"
+                              ? "status-success"
+                              : "status-failed"
+                          }`}
+                        >
+                          {log.status}
+                        </span>
+                      </td>
+                      <td className="table-cell">
+                        <div className="action-buttons">
+                          <span
+                            onClick={() => handleViewClick(log)}
+                            className="action-btn"
+                          >
+                            <img src={eyeIcon} alt="icon" />
+                            <span>View</span>
+                          </span>
+                          <span className="action-btn">
+                            <img src={returnIcon} alt="icon" />
+                            <span>Resend to webhook</span>
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              ) : (
+                <img src={empty} alt="logo" />
+              )}
             </table>
           </div>
 

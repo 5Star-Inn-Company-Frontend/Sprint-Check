@@ -400,7 +400,7 @@ export default function SideBar({ isMobile, sidebarOpen }) {
       }`}
     >
       <div className="sidebar-header">
-        <div className="logoDashboard">
+        <div style={{"cursor":"pointer"}} onClick={handleDashboard} className="logoDashboard">
           <img src={logo} alt="logo" />
         </div>
       </div>

@@ -19,6 +19,8 @@ export default function Profile() {
   const [isMobile, setIsMobile] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("profile");
+  const profChar = localStorage.getItem("avatarChar");
+  const profAvatar = localStorage.getItem("avatar");
 
   const navigate = useNavigate();
 
@@ -472,7 +474,7 @@ export default function Profile() {
 
           .hamSearch {
             display: flex;
-            gap:1rem;
+            gap: 1rem;
           }
         }
 
@@ -580,8 +582,8 @@ export default function Profile() {
             <div className="notification-icon">
               <img src={notificationIcon} alt="icon" />
             </div>
-            <div className="user-avatar">E</div>
-            <span className="user-name">emmy</span>
+            <div className="user-avatar">{profAvatar.toUpperCase()}</div>
+            <span className="user-name">{profChar}</span>
             <span className="arrow-down">
               <ChevronDown size={16} />
             </span>

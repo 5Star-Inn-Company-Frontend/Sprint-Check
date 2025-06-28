@@ -10,6 +10,7 @@ import blueIcon from "../assets/dashboardAssets/blue.png";
 import yellowIcon from "../assets/dashboardAssets/yellow.png";
 import export1Icon from "../assets/dashboardAssets/export1.png";
 import exportIcon from "../assets/dashboardAssets/export.png";
+import empty from "../assets/Empty.gif";
 
 export default function ApiLogs() {
   const [isMobile, setIsMobile] = useState(false);
@@ -106,6 +107,9 @@ export default function ApiLogs() {
   // const maxValue = Math.max(...chartData.flatMap((d) => [d.verified, d.fail]));
   const avatarChar = dashboardInfo.businessName;
   const avatar = avatarChar ? avatarChar[0] : "";
+
+  localStorage.setItem("avatarChar", avatarChar);
+  localStorage.setItem("avatar", avatar);
 
   return (
     <div className="dashboard">
@@ -278,67 +282,70 @@ export default function ApiLogs() {
 
         {/* Chart */}
         <div className="chart-container">
-          <div className="chart-wrapper">
-            {/* Y-axis labels */}
-            <div className="chart-y-axis">
-              <div className="y-axis-label">100</div>
-              <div className="y-axis-label">80</div>
-              <div className="y-axis-label">60</div>
-              <div className="y-axis-label">40</div>
-              <div className="y-axis-label">20</div>
-              <div className="y-axis-label">0</div>
-            </div>
+          {chartData[0] ? (
+            <div className="chart-wrapper">
+              {/* Y-axis labels */}
+              <div className="chart-y-axis">
+                <div className="y-axis-label">100</div>
+                <div className="y-axis-label">80</div>
+                <div className="y-axis-label">60</div>
+                <div className="y-axis-label">40</div>
+                <div className="y-axis-label">20</div>
+                <div className="y-axis-label">0</div>
+              </div>
 
-            {/* Grid lines */}
-            <div className="chart-grid">
-              <div className="grid-line" style={{ top: "0%" }}></div>
-              <div className="grid-line" style={{ top: "20%" }}></div>
-              <div className="grid-line" style={{ top: "40%" }}></div>
-              <div className="grid-line" style={{ top: "60%" }}></div>
-              <div className="grid-line" style={{ top: "80%" }}></div>
-              <div className="grid-line" style={{ top: "100%" }}></div>
-            </div>
+              {/* Grid lines */}
+              <div className="chart-grid">
+                <div className="grid-line" style={{ top: "0%" }}></div>
+                <div className="grid-line" style={{ top: "20%" }}></div>
+                <div className="grid-line" style={{ top: "40%" }}></div>
+                <div className="grid-line" style={{ top: "60%" }}></div>
+                <div className="grid-line" style={{ top: "80%" }}></div>
+                <div className="grid-line" style={{ top: "100%" }}></div>
+              </div>
 
-            {/* Chart bars */}
-            <div className="chart">
-              {chartData ?.map((data, index) => (
-                <div
-                  key={index}
-                  className="chart-bar-group"
-                  style={{
-                    "--stagger-delay": `${index * 0.15}s`,
-                  }}
-                >
-                  <div className="chart-bars">
-                    <div
-                      className="chart-bar verified"
-                      style={{
-                        height: `${(data.verified / 100) * 240}px`,
-                        animationDelay: `${index * 0.15}s`,
-                        "--bar-scale-y": `${
-                          ((data.verified / 100) * 240) / 24
-                        }`,
-                      }}
-                    >
-                      <div className="tooltip">Verified: {data.verified}</div>
+              {/* Chart bars */}
+              <div className="chart">
+                {chartData?.map((data, index) => (
+                  <div
+                    key={index}
+                    className="chart-bar-group"
+                    style={{
+                      "--stagger-delay": `${index * 0.15}s`,
+                    }}
+                  >
+                    <div className="chart-bars">
+                      <div
+                        className="chart-bar verified"
+                        style={{
+                          height: `${(data.verified / 100) * 240}px`,
+                          animationDelay: `${index * 0.15}s`,
+                          "--bar-scale-y": `${
+                            ((data.verified / 100) * 240) / 24
+                          }`,
+                        }}
+                      >
+                        <div className="tooltip">Verified: {data.verified}</div>
+                      </div>
+                      <div
+                        className="chart-bar fail"
+                        style={{
+                          height: `${(data.fail / 100) * 240}px`,
+                          animationDelay: `${index * 0.15 + 0.1}s`,
+                          "--bar-scale-y": `${((data.fail / 100) * 240) / 24}`,
+                        }}
+                      >
+                        <div className="tooltip">Failed: {data.fail}</div>
+                      </div>
                     </div>
-                    <div
-                      className="chart-bar fail"
-                      style={{
-                        height: `${(data.fail / 100) * 240}px`,
-                        animationDelay: `${index * 0.15 + 0.1}s`,
-                        "--bar-scale-y": `${((data.fail / 100) * 240) / 24}`,
-                      }}
-                    >
-                      <div className="tooltip">Failed: {data.fail}</div>
-                    </div>
+                    <div className="chart-date">{data.date}</div>
                   </div>
-                  <div className="chart-date">{data.date}</div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-
+          ) : (
+            <img src={empty} alt="logo" />
+          )}
           <div className="chart-legend">
             <div className="legend-item">
               <div className="legend-color verified"></div>

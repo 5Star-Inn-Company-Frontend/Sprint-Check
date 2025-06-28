@@ -27,6 +27,9 @@ export default function Developer() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showEncryptionKey, setShowEncryptionKey] = useState(false);
   const [showApiKey, setShowApiKey] = useState(false);
+  const devChar = localStorage.getItem("avatarChar");
+  const devAvatar = localStorage.getItem("avatar");
+
   const IdRef = useRef(null);
   useEffect(() => {
     IdRef.current.focus();
@@ -632,8 +635,8 @@ export default function Developer() {
             <div className="notification-icon">
               <img src={notificationIcon} alt="icon" />
             </div>
-            <div className="user-avatar">E</div>
-            <span className="user-name">emmy</span>
+            <div className="user-avatar">{devAvatar.toUpperCase()}</div>
+            <span className="user-name">{devChar}</span>
             <span className="arrow-down">
               <ChevronDown size={16} />
             </span>
