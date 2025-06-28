@@ -388,7 +388,11 @@ export default function SideBar({ isMobile, sidebarOpen }) {
     setActiveItem(""); // Clear active
     localStorage.removeItem("token");
     localStorage.removeItem("dashBoardData");
-    localStorage.removeItem("activeTab"); // clear active tab
+    localStorage.removeItem("activeTab");
+    localStorage.removeItem("apiLogsData");
+    localStorage.removeItem("avatar");
+    localStorage.removeItem("avatarChar");
+    localStorage.removeItem("billingData");
     setActiveItem(""); // clear state too
     navigate("/");
   }
@@ -400,7 +404,11 @@ export default function SideBar({ isMobile, sidebarOpen }) {
       }`}
     >
       <div className="sidebar-header">
-        <div style={{"cursor":"pointer"}} onClick={handleDashboard} className="logoDashboard">
+        <div
+          style={{ cursor: "pointer" }}
+          onClick={handleDashboard}
+          className="logoDashboard"
+        >
           <img src={logo} alt="logo" />
         </div>
       </div>

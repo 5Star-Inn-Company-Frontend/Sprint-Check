@@ -645,7 +645,7 @@ export default function Developer() {
 
         {/* Content */}
         <div className="content">
-          <ToastContainer position="bottom-right" autoClose={3000} />
+          <ToastContainer position="top-right" autoClose={3000} />
           {/* API Section */}
           <div className="section">
             <h2 className="section-title">API</h2>
