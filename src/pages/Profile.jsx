@@ -61,11 +61,11 @@ export default function Profile() {
       setProfileForm(JSON.parse(storedProfileData));
     }
 
-       const storedBusinessData = localStorage.getItem("businessData");
-       if (storedBusinessData) {
-         setbusinessForm(JSON.parse(storedBusinessData));
-       }
-   
+    const storedBusinessData = localStorage.getItem("businessData");
+    if (storedBusinessData) {
+      setbusinessForm(JSON.parse(storedBusinessData));
+    }
+
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
@@ -403,6 +403,7 @@ export default function Profile() {
         .form-input:focus {
           border-color: #3b82f6;
           background: white;
+          color: black;
         }
 
         .form-select {
