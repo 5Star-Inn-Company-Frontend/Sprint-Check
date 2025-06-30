@@ -14,13 +14,14 @@ import empty from "../assets/Empty.gif";
 import { ToastContainer, toast } from "react-toastify";
 import bankLogo from "../assets/dashboardAssets/bankLogo.png";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 export default function ApiLogs() {
   const [isMobile, setIsMobile] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(false);
-
+  const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [modalStep, setModalStep] = useState(1); // 1 = initial modal, 2 = BVN modal
   // Usage:
@@ -34,14 +35,26 @@ export default function ApiLogs() {
     setTimeout(() => {
       setShowModal(false);
     }, 2000);
-    console.log("heelloe");
   }
 
   function showAccountCardThenClose() {
-    setModalStep(5);
     setTimeout(() => {
+      setModalStep(5);
       setShowModal(false);
+      handleLogout();
     }, 5000);
+  }
+
+  function handleLogout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("dashBoardData");
+    localStorage.removeItem("activeTab");
+    localStorage.removeItem("apiLogsData");
+    localStorage.removeItem("avatar");
+    localStorage.removeItem("avatarChar");
+    localStorage.removeItem("billingData");
+    // clear state too
+    navigate("/");
   }
 
   function handleDashboard() {
@@ -130,10 +143,17 @@ export default function ApiLogs() {
 
       if (response.success) {
         toast.success("BVN updated successfully!");
+
+        setModalStep(4);
+
         showAccountCardThenClose();
       } else {
         if (response.status) {
           toast.success(response.message);
+          setTimeout(() => {
+            setShowModal(false);
+            handleLogout();
+          }, 5000);
           showAccountCardThenClose();
         } else {
           toast.error(response.message || "Failed to update BVN");
@@ -211,7 +231,11 @@ export default function ApiLogs() {
   const avatarChar = dashboardInfo.businessName;
   const avatar = avatarChar ? avatarChar[0] : "";
   console.log(dashboardInfo.virtual_accounts);
-  const accountInfo = dashboardInfo?.virtual_accounts?.[0] || {};
+  const accountInfo = dashboardInfo?.virtual_accounts?.[0] || {
+    account_number: "xxxxx",
+    customer_name: "xxxxx",
+    bank_name: "xxxxxx",
+  };
   const { account_number, customer_name, bank_name } = accountInfo;
 
   const TotalApiCalls = Number(
