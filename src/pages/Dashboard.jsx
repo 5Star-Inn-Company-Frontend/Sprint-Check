@@ -12,6 +12,7 @@ import export1Icon from "../assets/dashboardAssets/export1.png";
 import exportIcon from "../assets/dashboardAssets/export.png";
 import empty from "../assets/Empty.gif";
 import { ToastContainer, toast } from "react-toastify";
+import bankLogo from "../assets/dashboardAssets/bankLogo.png";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function ApiLogs() {
@@ -25,6 +26,43 @@ export default function ApiLogs() {
   // Usage:
 
   const [bvn, setBvn] = useState("");
+  function card() {
+    setShowModal(true);
+    setModalStep(5); // show account info
+
+    // Wait 5 seconds, then hide modal
+    setTimeout(() => {
+      setShowModal(false);
+    }, 2000);
+    console.log("heelloe");
+  }
+
+  function showAccountCardThenClose() {
+    setModalStep(5);
+    setTimeout(() => {
+      setShowModal(false);
+    }, 5000);
+  }
+
+  function handleDashboard() {
+    const token = localStorage.getItem("token");
+    async function toDashboard(authCode) {
+      const res = await fetch(
+        "https://sprintcheck.megasprintlimited.com.ng/api/dashboard",
+        {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${authCode}`,
+          },
+        }
+      );
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Failed to login");
+      console.log(data);
+    }
+    toDashboard(token);
+  }
 
   useEffect(() => {
     const storedData = localStorage.getItem("dashboardData");
@@ -32,6 +70,7 @@ export default function ApiLogs() {
       const parsed = JSON.parse(storedData);
       setDashboardData(parsed);
 
+      handleDashboard();
       const dashboardInfo = extractDashboardInfo(parsed);
       const hasAccountNumber = dashboardInfo?.virtual_accounts?.length > 0;
 
@@ -91,12 +130,11 @@ export default function ApiLogs() {
 
       if (response.success) {
         toast.success("BVN updated successfully!");
-        setShowModal(false); // optionally close modal
-        // Optionally refresh dashboard data here
+        showAccountCardThenClose();
       } else {
         if (response.status) {
           toast.success(response.message);
-          setShowModal(false);
+          showAccountCardThenClose();
         } else {
           toast.error(response.message || "Failed to update BVN");
           setModalStep(2);
@@ -172,6 +210,9 @@ export default function ApiLogs() {
   const dashboardInfo = extractDashboardInfo(dashboardData);
   const avatarChar = dashboardInfo.businessName;
   const avatar = avatarChar ? avatarChar[0] : "";
+  console.log(dashboardInfo.virtual_accounts);
+  const accountInfo = dashboardInfo?.virtual_accounts?.[0] || {};
+  const { account_number, customer_name, bank_name } = accountInfo;
 
   const TotalApiCalls = Number(
     dashboardInfo.total + dashboardInfo.successful + dashboardInfo.failed
@@ -192,66 +233,73 @@ export default function ApiLogs() {
       {showModal && (
         <div className="modal-overlay">
           <ToastContainer position="top-right" autoClose={3000} />
-          <div className="accNo_Modal">
-            {modalStep === 1 && (
-              <>
-                <p>
-                  You do not have an account number yet. Kindly generate account
-                  number by clicking the button below.
-                </p>
-                <button onClick={() => setModalStep(2)}>
-                  Generate account number
-                </button>
-              </>
-            )}
+          {modalStep !== 5 && (
+            <div className="accNo_Modal">
+              {modalStep === 1 && (
+                <>
+                  <p>
+                    You do not have an account number yet. Kindly generate
+                    account number by clicking the button below.
+                  </p>
+                  <button onClick={() => setModalStep(2)}>
+                    Generate account number
+                  </button>
+                </>
+              )}
 
-            {modalStep === 2 && (
-              <>
-                <p>Enter BVN</p>
-                <input
-                  type="text"
-                  value={bvn}
-                  onChange={(e) => setBvn(e.target.value)}
-                  placeholder="Enter your BVN"
-                  className="bvn-input"
-                />
-                <button
-                  onClick={
-                    handleBvnSubmit // Add your backend logic here
-                  }
-                >
-                  {loading ? <Loaderacc /> : `Generate account number`}
-                </button>
-              </>
-            )}
+              {modalStep === 2 && (
+                <>
+                  <p>Enter BVN</p>
+                  <input
+                    type="text"
+                    value={bvn}
+                    onChange={(e) => setBvn(e.target.value)}
+                    placeholder="Enter your BVN"
+                    className="bvn-input"
+                  />
+                  <button onClick={handleBvnSubmit}>
+                    {loading ? <Loaderacc /> : `Generate account number`}
+                  </button>
+                </>
+              )}
 
-            {modalStep === 3 && (
-              <>
-                <p>Generating account number...</p>
-                <button>
-                  <Loaderacc />
-                </button>
-              </>
-            )}
+              {modalStep === 3 && (
+                <>
+                  <p>Generating account number...</p>
+                  <button>
+                    <Loaderacc />
+                  </button>
+                </>
+              )}
 
-            {/* {modalStep === 4 && (
-              <div className="accCard">
-                <img src="" alt="" />
-                <p>
-                  <strong>Account Number: </strong>1234567891
-                </p>
-                <p>
-                  <strong>Account Name: </strong>MNFY/5startco/emmy
-                </p>
-                <p>
-                  <strong>Bank Name: </strong>Wema
-                </p>
-                <button>
-                  <Loaderacc />
-                </button>
-              </div>
-            )} */}
-          </div>
+              {modalStep === 4 && (
+                <>
+                  <p>Recheck in the next 5 minutes for your account number</p>
+                  <button onClick={() => showAccountCardThenClose()}>
+                    Okay
+                  </button>
+                </>
+              )}
+            </div>
+          )}
+
+          {modalStep === 5 && (
+            <div className="accCard">
+              <img src={bankLogo} alt="bank"></img>
+              <p>
+                <strong>Account Number: </strong>
+                {account_number}
+              </p>
+              <p>
+                <strong>Account Name: </strong>
+                {customer_name}
+              </p>
+              <p>
+                s<strong>Bank Name: </strong>
+                {bank_name}
+              </p>
+            </div>
+          )}
         </div>
       )}
 
@@ -303,7 +351,9 @@ export default function ApiLogs() {
             </div>
             <div className="balance-fund">
               <div className="balance-amount">${dashboardInfo.wallet}</div>
-              <button className="fund-wallet-btn">Fund Wallet</button>
+              <button onClick={() => card()} className="fund-wallet-btn">
+                Fund Wallet
+              </button>
             </div>
           </div>
 
