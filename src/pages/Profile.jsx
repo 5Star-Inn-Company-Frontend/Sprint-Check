@@ -12,7 +12,8 @@ import { Eye, RotateCcw, FileDown } from "lucide-react";
 
 import notificationIcon from "../assets/dashboardAssets/notification-bing.png";
 import SideBar from "../components/sideBar";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
@@ -21,8 +22,32 @@ export default function Profile() {
   const [activeTab, setActiveTab] = useState("profile");
   const profChar = localStorage.getItem("avatarChar");
   const profAvatar = localStorage.getItem("avatar");
+  const [editMode, setEditMode] = useState(false);
+  const [bEditMode, setbEditMode] = useState(false);
+  const [profileImage, setProfileImage] = useState(null);
+  const [profileForm, setProfileForm] = useState({
+    name: "Emmanuel",
+    username: "emmy",
+    email: "emmy@gmail.com",
+    dob: "1990-01-17", // ✅ fixed format
+    address: "San Jose, California, USA",
+    city: "Abule",
+    postalCode: "45962",
+    country: "USA",
+  });
 
-  const navigate = useNavigate();
+  const [businessForm, setbusinessForm] = useState({
+    businessName: "Del",
+    businessEmail: "emmy@gmail.com",
+    businessPhone: "0808453834728",
+    businessRegNo: "3473943",
+    pAddress: "abule",
+    city: "abule",
+    postalCode: "45962",
+    country: "USA",
+    tin: "1328938230",
+    website: "business.com",
+  });
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -31,12 +56,22 @@ export default function Profile() {
 
     checkScreenSize();
     window.addEventListener("resize", checkScreenSize);
+    const storedProfileData = localStorage.getItem("profileData");
+    if (storedProfileData) {
+      setProfileForm(JSON.parse(storedProfileData));
+    }
 
+       const storedBusinessData = localStorage.getItem("businessData");
+       if (storedBusinessData) {
+         setbusinessForm(JSON.parse(storedBusinessData));
+       }
+   
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
   return (
     <div className="dashboard">
+      <ToastContainer position="top-right" autoClose={3000} />
       <style jsx>{`
         * {
           margin: 0;
@@ -300,7 +335,7 @@ export default function Profile() {
           width: 120px;
           height: 120px;
           border-radius: 50%;
-          background: #f3f4f6;
+          background-size: cover;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -619,9 +654,31 @@ export default function Profile() {
             <div className="profile-content">
               {/* Avatar Section */}
               <div className="profile-avatar-section">
-                <div className="profile-avatar">
+                <div
+                  style={{ backgroundImage: `url(${profileImage})` }}
+                  className="profile-avatar"
+                >
                   <div className="edit-avatar-btn">
-                    <img className="EditIcon" src={pencilIcon} alt="icon" />
+                    <label htmlFor="profileImageInput">
+                      <img className="EditIcon" src={pencilIcon} alt="Edit" />
+                    </label>
+                    <input
+                      type="file"
+                      id="profileImageInput"
+                      accept="image/*"
+                      style={{ display: "none" }}
+                      onChange={(e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                          const reader = new FileReader();
+                          reader.onloadend = () => {
+                            setProfileImage(reader.result);
+                            localStorage.setItem("profileImage", reader.result);
+                          };
+                          reader.readAsDataURL(file);
+                        }
+                      }}
+                    />
                   </div>
                 </div>
               </div>
@@ -634,8 +691,11 @@ export default function Profile() {
                     <input
                       type="text"
                       className="form-input"
-                      value="Emmanuel"
-                      readOnly
+                      value={profileForm.name}
+                      onChange={(e) =>
+                        setProfileForm({ ...profileForm, name: e.target.value })
+                      }
+                      readOnly={!editMode}
                     />
                   </div>
 
@@ -644,26 +704,62 @@ export default function Profile() {
                     <input
                       type="text"
                       className="form-input"
-                      value="emmy"
-                      readOnly
+                      value={profileForm.username}
+                      onChange={(e) =>
+                        setProfileForm({
+                          ...profileForm,
+                          username: e.target.value,
+                        })
+                      }
+                      readOnly={!editMode}
                     />
                   </div>
 
                   <div className="form-group">
                     <label className="form-label">Email</label>
                     <input
-                      type="email"
+                      type="text"
                       className="form-input"
-                      value="emmy@gmail.com"
-                      readOnly
+                      value={profileForm.email}
+                      onChange={(e) =>
+                        setProfileForm({
+                          ...profileForm,
+                          email: e.target.value,
+                        })
+                      }
+                      readOnly={!editMode}
                     />
                   </div>
 
                   <div className="form-group">
                     <label className="form-label">Date of Birth</label>
-                    <select className="form-select">
-                      <option>25 January 1990</option>
-                    </select>
+                    {editMode ? (
+                      <input
+                        type="date"
+                        className="form-input"
+                        value={profileForm.dob}
+                        onChange={(e) =>
+                          setProfileForm({
+                            ...profileForm,
+                            dob: e.target.value,
+                          })
+                        }
+                      />
+                    ) : (
+                      <input
+                        type="text"
+                        className="form-input"
+                        value={new Date(profileForm.dob).toLocaleDateString(
+                          "en-US",
+                          {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          }
+                        )}
+                        readOnly
+                      />
+                    )}
                   </div>
 
                   <div className="form-group">
@@ -671,8 +767,14 @@ export default function Profile() {
                     <input
                       type="text"
                       className="form-input"
-                      value="San Jose, California, USA"
-                      readOnly
+                      value={profileForm.address}
+                      onChange={(e) =>
+                        setProfileForm({
+                          ...profileForm,
+                          address: e.target.value,
+                        })
+                      }
+                      readOnly={!editMode}
                     />
                   </div>
 
@@ -681,8 +783,14 @@ export default function Profile() {
                     <input
                       type="text"
                       className="form-input"
-                      value="Abule"
-                      readOnly
+                      value={profileForm.city}
+                      onChange={(e) =>
+                        setProfileForm({
+                          ...profileForm,
+                          city: e.target.value,
+                        })
+                      }
+                      readOnly={!editMode}
                     />
                   </div>
 
@@ -691,8 +799,14 @@ export default function Profile() {
                     <input
                       type="text"
                       className="form-input"
-                      value="45962"
-                      readOnly
+                      value={profileForm.postalCode}
+                      onChange={(e) =>
+                        setProfileForm({
+                          ...profileForm,
+                          postalCode: e.target.value,
+                        })
+                      }
+                      readOnly={!editMode}
                     />
                   </div>
 
@@ -701,13 +815,40 @@ export default function Profile() {
                     <input
                       type="text"
                       className="form-input"
-                      value="USA"
-                      readOnly
+                      value={profileForm.country}
+                      onChange={(e) =>
+                        setProfileForm({
+                          ...profileForm,
+                          country: e.target.value,
+                        })
+                      }
+                      readOnly={!editMode}
                     />
                   </div>
 
                   <div className="form-actions">
-                    <button className="btn btn-primary">Save</button>
+                    {editMode ? (
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => {
+                          localStorage.setItem(
+                            "profileData",
+                            JSON.stringify(profileForm)
+                          );
+                          toast.success("Profile saved");
+                          setEditMode(false);
+                        }}
+                      >
+                        Save
+                      </button>
+                    ) : (
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => setEditMode(true)}
+                      >
+                        Edit
+                      </button>
+                    )}
                   </div>
                 </div>
               ) : (
@@ -717,18 +858,30 @@ export default function Profile() {
                     <input
                       type="text"
                       className="form-input"
-                      value="Dell"
-                      readOnly
+                      value={businessForm.businessName}
+                      onChange={(e) =>
+                        setbusinessForm({
+                          ...businessForm,
+                          businessName: e.target.value,
+                        })
+                      }
+                      readOnly={!bEditMode}
                     />
                   </div>
 
                   <div className="form-group">
                     <label className="form-label">Business Email</label>
                     <input
-                      type="email"
+                      type="text"
                       className="form-input"
-                      value="emmy@gmail.com"
-                      readOnly
+                      value={businessForm.businessEmail}
+                      onChange={(e) =>
+                        setbusinessForm({
+                          ...businessForm,
+                          businessEmail: e.target.value,
+                        })
+                      }
+                      readOnly={!bEditMode}
                     />
                   </div>
 
@@ -737,11 +890,16 @@ export default function Profile() {
                     <input
                       type="text"
                       className="form-input"
-                      value="emmy@gmail.com"
-                      readOnly
+                      value={businessForm.businessPhone}
+                      onChange={(e) =>
+                        setbusinessForm({
+                          ...businessForm,
+                          businessPhone: e.target.value,
+                        })
+                      }
+                      readOnly={!bEditMode}
                     />
                   </div>
-
                   <div className="form-group">
                     <label className="form-label">
                       Business Registration Number
@@ -749,54 +907,94 @@ export default function Profile() {
                     <input
                       type="text"
                       className="form-input"
-                      value="345678"
-                      readOnly
+                      value={businessForm.businessRegNo}
+                      onChange={(e) =>
+                        setbusinessForm({
+                          ...businessForm,
+                          businessRegNo: e.target.value,
+                        })
+                      }
+                      readOnly={!bEditMode}
                     />
                   </div>
-
                   <div className="form-group">
                     <label className="form-label">Permanent Address</label>
                     <input
                       type="text"
                       className="form-input"
-                      value="San Jose, California, USA"
-                      readOnly
+                      value={businessForm.pAddress}
+                      onChange={(e) =>
+                        setbusinessForm({
+                          ...businessForm,
+                          pAddress: e.target.value,
+                        })
+                      }
+                      readOnly={!bEditMode}
                     />
                   </div>
 
                   <div className="form-group">
                     <label className="form-label">City</label>
-                    <select className="form-select">
-                      <option>Abule</option>
-                    </select>
+                    <input
+                      type="text"
+                      className="form-input"
+                      value={businessForm.city}
+                      onChange={(e) =>
+                        setbusinessForm({
+                          ...businessForm,
+                          city: e.target.value,
+                        })
+                      }
+                      readOnly={!bEditMode}
+                    />
                   </div>
-
                   <div className="form-group">
                     <label className="form-label">Postal Code</label>
                     <input
                       type="text"
                       className="form-input"
-                      value="45962"
-                      readOnly
+                      value={businessForm.postalCode}
+                      onChange={(e) =>
+                        setbusinessForm({
+                          ...businessForm,
+                          postalCode: e.target.value,
+                        })
+                      }
+                      readOnly={!bEditMode}
                     />
                   </div>
 
                   <div className="form-group">
                     <label className="form-label">Country</label>
-                    <select className="form-select">
-                      <option>USA</option>
-                    </select>
+                    <input
+                      type="text"
+                      className="form-input"
+                      value={businessForm.country}
+                      onChange={(e) =>
+                        setbusinessForm({
+                          ...businessForm,
+                          country: e.target.value,
+                        })
+                      }
+                      readOnly={!bEditMode}
+                    />
                   </div>
 
                   <div className="form-group">
                     <label className="form-label">
-                      Tax Identification number
+                      Tax Identification Number
                     </label>
                     <input
                       type="text"
                       className="form-input"
-                      value="228678367286726"
-                      readOnly
+                      value={businessForm.tin}
+                      onChange={(e) =>
+                        setbusinessForm({
+                          ...businessForm,
+                          tin: e.target.value,
+                        })
+                      }
+                      readOnly={!bEditMode}
                     />
                   </div>
 
@@ -805,13 +1003,40 @@ export default function Profile() {
                     <input
                       type="text"
                       className="form-input"
-                      value="null"
-                      readOnly
+                      value={businessForm.website}
+                      onChange={(e) =>
+                        setbusinessForm({
+                          ...businessForm,
+                          website: e.target.value,
+                        })
+                      }
+                      readOnly={!bEditMode}
                     />
                   </div>
 
                   <div className="form-actions">
-                    <button className="btn btn-primary">Edit</button>
+                    {bEditMode ? (
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => {
+                          localStorage.setItem(
+                            "businessData",
+                            JSON.stringify(businessForm)
+                          );
+                          toast.success("Profile saved");
+                          setbEditMode(false);
+                        }}
+                      >
+                        Save
+                      </button>
+                    ) : (
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => setbEditMode(true)}
+                      >
+                        Edit
+                      </button>
+                    )}
                   </div>
                 </div>
               )}

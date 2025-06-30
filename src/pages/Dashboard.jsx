@@ -11,16 +11,33 @@ import yellowIcon from "../assets/dashboardAssets/yellow.png";
 import export1Icon from "../assets/dashboardAssets/export1.png";
 import exportIcon from "../assets/dashboardAssets/export.png";
 import empty from "../assets/Empty.gif";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function ApiLogs() {
   const [isMobile, setIsMobile] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const [showModal, setShowModal] = useState(false);
+  const [modalStep, setModalStep] = useState(1); // 1 = initial modal, 2 = BVN modal
+  // Usage:
+
+  const [bvn, setBvn] = useState("");
+
   useEffect(() => {
     const storedData = localStorage.getItem("dashboardData");
     if (storedData) {
-      setDashboardData(JSON.parse(storedData));
+      const parsed = JSON.parse(storedData);
+      setDashboardData(parsed);
+
+      const dashboardInfo = extractDashboardInfo(parsed);
+      const hasAccountNumber = dashboardInfo?.virtual_accounts?.length > 0;
+
+      if (!hasAccountNumber) {
+        setShowModal(true);
+      }
     }
 
     const checkScreenSize = () => {
@@ -33,13 +50,66 @@ export default function ApiLogs() {
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
-  //  if (!dashboardData) {
-  //    return <p>Loading dashboard...</p>;
-  //  }
-
-  function handleGetAcc() {
-    setLoading(!loading);
+  async function getAcc(bvnData) {
+    const token = localStorage.getItem("token");
+    const res = await fetch(
+      "https://sprintcheck.megasprintlimited.com.ng/api/generate-account",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(bvnData),
+      }
+    );
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Incorrect BVN");
+    console.log(data);
+    return data;
   }
+
+  const handleBvnSubmit = async () => {
+    const cleanBvn = bvn.trim();
+
+    if (!cleanBvn) {
+      toast.error("BVN field is required");
+      return;
+    }
+
+    if (!/^\d{11}$/.test(cleanBvn)) {
+      toast.error("Please enter a valid 11-digit BVN");
+      return;
+    }
+
+    setLoading(true);
+    setModalStep(3); // Show loader UI
+
+    try {
+      const response = await getAcc({ bvn: cleanBvn });
+
+      if (response.success) {
+        toast.success("BVN updated successfully!");
+        setShowModal(false); // optionally close modal
+        // Optionally refresh dashboard data here
+      } else {
+        if (response.status) {
+          toast.success(response.message);
+          setShowModal(false);
+        } else {
+          toast.error(response.message || "Failed to update BVN");
+          setModalStep(2);
+        }
+      }
+    } catch (err) {
+      toast.error(err.message || "Something went wrong");
+      setModalStep(2);
+    } finally {
+      setLoading(false);
+      console.log("BVN submission finished");
+    }
+  };
 
   function extractDashboardInfo(dashboardData) {
     if (!dashboardData?.data?.user) return {};
@@ -87,12 +157,6 @@ export default function ApiLogs() {
     };
   }
 
-  // Usage:
-  const dashboardInfo = extractDashboardInfo(dashboardData);
-  const TotalApiCalls = Number(
-    dashboardInfo.total + dashboardInfo.successful + dashboardInfo.failed
-  );
-
   const chartData = [
     // { date: "14/05/2025", verified: 28, fail: 15 },
     // { date: "15/05/2025", verified: 80, fail: 28 },
@@ -105,8 +169,13 @@ export default function ApiLogs() {
   ];
 
   // const maxValue = Math.max(...chartData.flatMap((d) => [d.verified, d.fail]));
+  const dashboardInfo = extractDashboardInfo(dashboardData);
   const avatarChar = dashboardInfo.businessName;
   const avatar = avatarChar ? avatarChar[0] : "";
+
+  const TotalApiCalls = Number(
+    dashboardInfo.total + dashboardInfo.successful + dashboardInfo.failed
+  );
 
   localStorage.setItem("avatarChar", avatarChar);
   localStorage.setItem("avatar", avatar);
@@ -120,16 +189,71 @@ export default function ApiLogs() {
       />
 
       <SideBar sidebarOpen={sidebarOpen} isMobile={isMobile} />
-      <div className="accNo_Modal">
-        <p>
-          You do not have an account number yet. Kindly generate account number
-          by clicking the button below
-        </p>
+      {showModal && (
+        <div className="modal-overlay">
+          <ToastContainer position="top-right" autoClose={3000} />
+          <div className="accNo_Modal">
+            {modalStep === 1 && (
+              <>
+                <p>
+                  You do not have an account number yet. Kindly generate account
+                  number by clicking the button below.
+                </p>
+                <button onClick={() => setModalStep(2)}>
+                  Generate account number
+                </button>
+              </>
+            )}
 
-        <button onClick={() => handleGetAcc()}>
-          {loading ? <Loaderacc /> : `Generate account number`}
-        </button>
-      </div>
+            {modalStep === 2 && (
+              <>
+                <p>Enter BVN</p>
+                <input
+                  type="text"
+                  value={bvn}
+                  onChange={(e) => setBvn(e.target.value)}
+                  placeholder="Enter your BVN"
+                  className="bvn-input"
+                />
+                <button
+                  onClick={
+                    handleBvnSubmit // Add your backend logic here
+                  }
+                >
+                  {loading ? <Loaderacc /> : `Generate account number`}
+                </button>
+              </>
+            )}
+
+            {modalStep === 3 && (
+              <>
+                <p>Generating account number...</p>
+                <button>
+                  <Loaderacc />
+                </button>
+              </>
+            )}
+
+            {/* {modalStep === 4 && (
+              <div className="accCard">
+                <img src="" alt="" />
+                <p>
+                  <strong>Account Number: </strong>1234567891
+                </p>
+                <p>
+                  <strong>Account Name: </strong>MNFY/5startco/emmy
+                </p>
+                <p>
+                  <strong>Bank Name: </strong>Wema
+                </p>
+                <button>
+                  <Loaderacc />
+                </button>
+              </div>
+            )} */}
+          </div>
+        </div>
+      )}
 
       {/* Main Content */}
       <div className={`main-content ${isMobile ? "mobile" : ""}`}>
