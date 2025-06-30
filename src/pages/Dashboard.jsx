@@ -225,7 +225,7 @@ export default function ApiLogs() {
     <div className="dashboard">
       {/* Overlay for mobile */}
       <div
-        className={`overlay ${isMobile && sidebarOpen ? "show" : ""}`}
+        className={` ${isMobile && sidebarOpen ? "show" : ""}`}
         onClick={() => setSidebarOpen(false)}
       />
 
