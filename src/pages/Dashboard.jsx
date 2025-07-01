@@ -244,12 +244,15 @@ export default function ApiLogs() {
 
   localStorage.setItem("avatarChar", avatarChar);
   localStorage.setItem("avatar", avatar);
+  localStorage.setItem("business_Id", dashboardInfo.businessId);
+  localStorage.setItem("api_key", dashboardInfo.api_key);
+  localStorage.setItem("encryption_key", dashboardInfo.encryption_key);
 
   return (
     <div className="dashboard">
       {/* Overlay for mobile */}
       <div
-        className={` ${isMobile && sidebarOpen ? "show" : ""}`}
+        className={` overlay ${isMobile && sidebarOpen ? "show" : ""}`}
         onClick={() => setSidebarOpen(false)}
       />
 

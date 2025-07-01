@@ -29,6 +29,9 @@ export default function Developer() {
   const [showApiKey, setShowApiKey] = useState(false);
   const devChar = localStorage.getItem("avatarChar");
   const devAvatar = localStorage.getItem("avatar");
+  const clientId = localStorage.getItem("business_Id");
+  const api_key = localStorage.getItem("api_key");
+  const encryption_key = localStorage.getItem("encryption_key");
 
   const IdRef = useRef(null);
   useEffect(() => {
@@ -36,9 +39,9 @@ export default function Developer() {
   }, []);
 
   const [formData, setFormData] = useState({
-    clientId: "",
-    encryptionKey: "sk_test_12345678901234567890",
-    apiKey: "api_key_abcdefghijklmnopqrstuvwxyz",
+    clientId: clientId,
+    encryptionKey: encryption_key,
+    apiKey: api_key,
   });
   const [webHookUrl, setWebHookUrl] = useState("");
 
@@ -57,18 +60,55 @@ export default function Developer() {
     navigator.clipboard.writeText(text);
   };
 
-  const handleRegenerateKeys = () => {
-    // Generate new keys
-    const newEncryptionKey = `sk_test_${Math.random()
-      .toString(36)
-      .substring(2, 28)}`;
-    const newApiKey = `api_key_${Math.random().toString(36).substring(2, 28)}`;
+  async function regenerate() {
+    const token = localStorage.getItem("token");
+    const res = await fetch(
+      "https://sprintcheck.megasprintlimited.com.ng/api/regenerate-keys",
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({}),
+      }
+    );
 
-    setFormData((prev) => ({
-      ...prev,
-      encryptionKey: newEncryptionKey,
-      apiKey: newApiKey,
-    }));
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || "Failed to Update");
+    }
+
+    return data;
+  }
+
+  const handleRegenerateKeys = async () => {
+    setLoading(true);
+    try {
+      const response = await regenerate();
+      if (response.status) {
+        toast.success(response.message);
+        const id = response.data.id;
+        const newEncryptionKey = response.data.encryption_key;
+        const newApiKey = response.data.api_key;
+
+        setFormData((prev) => ({
+          ...prev,
+          clientId: id,
+          encryptionKey: newEncryptionKey,
+          apiKey: newApiKey,
+        }));
+      } else {
+        toast.error(response.message);
+      }
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setLoading(false);
+      console.log("Saving configuration:");
+    }
+    // Generate new keys
 
     console.log(formData);
   };
@@ -722,7 +762,7 @@ export default function Developer() {
 
             <div className="button-group">
               <button className="primary-button" onClick={handleRegenerateKeys}>
-                Regenerate Keys
+                {loading ? "regenerating" : "Regenerate Keys"}
               </button>
             </div>
           </div>
