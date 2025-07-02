@@ -154,7 +154,7 @@ button:hover {
 
 .input-wrapper input {
   width: 100%;
-  padding: 1rem 3rem 1rem 4rem; /* Left padding for icon */
+  padding: 1rem 3rem 1rem 2rem; /* Left padding for icon */
   border: 1px solid white;
   border-radius: 18px;
   font-size: 1rem;

@@ -92,7 +92,7 @@ export default function AuthSignUp() {
           </div>
 
           <div className="input-wrapper">
-            <img className="input-icon" alt="icon" src={userIcon} />
+            {/* <img className="input-icon" alt="icon" src={userIcon} /> */}
             <input
               type="text"
               placeholder="Full name"
@@ -103,7 +103,7 @@ export default function AuthSignUp() {
           </div>
 
           <div className="input-wrapper">
-            <img className="input-icon" alt="icon" src={mailIcon} />
+            {/* <img className="input-icon" alt="icon" src={mailIcon} /> */}
             <input
               type="email"
               placeholder="Email Address"
@@ -113,7 +113,7 @@ export default function AuthSignUp() {
           </div>
 
           <div className="input-wrapper">
-            <img className="input-icon" alt="icon" src={userPhone} />
+            {/* <img className="input-icon" alt="icon" src={userPhone} /> */}
             <input
               type="tel"
               placeholder="Phone Number"
@@ -123,7 +123,7 @@ export default function AuthSignUp() {
           </div>
 
           <div className="input-wrapper" style={{ position: "relative" }}>
-            <img className="input-icon" alt="icon" src={passwordIcon} />
+            {/* <img className="input-icon" alt="icon" src={passwordIcon} /> */}
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Password"

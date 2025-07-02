@@ -126,7 +126,7 @@ export default function AuthLogin() {
           </div>
 
           <div className="input-wrapper">
-            <img className="input-icon" alt="icon" src={mailIcon} />
+            {/* <img className="input-icon" alt="icon" src={mailIcon} /> */}
             <input
               type="email"
               placeholder="Enter your email..."
@@ -137,7 +137,7 @@ export default function AuthLogin() {
           </div>
 
           <div className="input-wrapper">
-            <img className="input-icon" alt="icon" src={passwordIcon} />
+            {/* <img className="input-icon" alt="icon" src={passwordIcon} /> */}
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Enter your password..."

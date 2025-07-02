@@ -72,7 +72,7 @@ export default function AuthForgotPsw() {
           </div>
 
           <div className="input-wrapper">
-            <img className="input-icon" alt="icon" src={mailIcon} />
+            {/* <img className="input-icon" alt="icon" src={mailIcon} /> */}
             <input
               type="email"
               placeholder="Email Address"
