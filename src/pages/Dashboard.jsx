@@ -15,6 +15,9 @@ import { ToastContainer, toast } from "react-toastify";
 import bankLogo from "../assets/dashboardAssets/bankLogo.png";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import searchData from "../../src/utils/seacrhdata.js";
+
+
 
 export default function ApiLogs() {
   const [isMobile, setIsMobile] = useState(false);
@@ -24,6 +27,9 @@ export default function ApiLogs() {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [modalStep, setModalStep] = useState(1); // 1 = initial modal, 2 = BVN modal
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+
   // Usage:
 
   const [bvn, setBvn] = useState("");
@@ -44,6 +50,12 @@ export default function ApiLogs() {
       handleLogout();
     }, 5000);
   }
+
+  const handleSearchSelect = (route) => {
+    navigate(route);
+    setSearchTerm("");
+    setSearchResults([]);
+  };
 
   function handleLogout() {
     localStorage.removeItem("token");
@@ -98,9 +110,18 @@ export default function ApiLogs() {
 
     checkScreenSize();
     window.addEventListener("resize", checkScreenSize);
+    if (searchTerm.trim() === "") {
+      setSearchResults([]);
+      return;
+    }
+
+    const filtered = searchData.filter((item) =>
+      item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setSearchResults(filtered);
 
     return () => window.removeEventListener("resize", checkScreenSize);
-  }, []);
+  }, [searchTerm]);
 
   async function getAcc(bvnData) {
     const token = localStorage.getItem("token");
@@ -214,6 +235,55 @@ export default function ApiLogs() {
       failed,
     };
   }
+
+
+  function transformAPILogsToChartData(apiLogs) {
+    // Create an object to aggregate counts by date
+    const dateCounts = {};
+
+    apiLogs.forEach((log) => {
+      // Parse the log date string (e.g., "Apr 21, 2025 6:12 AM")
+      const dateObj = new Date(log.date);
+
+      // Format date as "DD/MM/YYYY"
+      const day = String(dateObj.getDate()).padStart(2, "0");
+      const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+      const year = dateObj.getFullYear();
+      const formattedDate = `${day}/${month}/${year}`;
+
+      // Initialize date entry if not exists
+      if (!dateCounts[formattedDate]) {
+        dateCounts[formattedDate] = { verified: 0, fail: 0 };
+      }
+
+      // Increment counts based on status
+      if (log.status === "SUCCESSFUL") {
+        dateCounts[formattedDate].verified++;
+      } else if (log.status === "Failed") {
+        dateCounts[formattedDate].fail++;
+      }
+    });
+
+    // Convert to array format and sort chronologically
+    return Object.entries(dateCounts)
+      .map(([date, counts]) => ({
+        date,
+        verified: counts.verified,
+        fail: counts.fail,
+      }))
+      .sort((a, b) => {
+        const [aDay, aMonth, aYear] = a.date.split("/").map(Number);
+        const [bDay, bMonth, bYear] = b.date.split("/").map(Number);
+        return (
+          new Date(aYear, aMonth - 1, aDay) - new Date(bYear, bMonth - 1, bDay)
+        );
+      });
+  }
+
+
+
+  // Usage example:
+  // const chartData = transformAPILogsToChartData(apiLogs);
 
   const chartData = [
     // { date: "14/05/2025", verified: 28, fail: 15 },
@@ -339,7 +409,7 @@ export default function ApiLogs() {
               ☰
             </button>
 
-            <div className="search-bar">
+            <div className="search-bar" style={{ position: "relative" }}>
               <div className="search-icon">
                 <img src={searchIcon} alt="icon" />
               </div>
@@ -347,7 +417,22 @@ export default function ApiLogs() {
                 type="text"
                 className="search-input"
                 placeholder="Search here ..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
+              {searchResults.length > 0 && (
+                <ul className="search-dropdown">
+                  {searchResults.map((item, index) => (
+                    <li
+                      key={index}
+                      onClick={() => handleSearchSelect(item.route)}
+                      className="search-dropdown-item"
+                    >
+                      {item.name}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </div>
 
