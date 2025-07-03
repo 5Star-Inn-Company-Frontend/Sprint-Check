@@ -557,12 +557,13 @@ const Dashboard = () => {
           display: flex;
           gap: 8px;
           flex-direction: column;
+         
         }
 
         .action-btn {
           display: flex;
           align-items: center;
-          gap: 10px;
+          gap: 50px;
 
           border: none;
           background: transparent;

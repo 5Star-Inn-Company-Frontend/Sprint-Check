@@ -32,6 +32,7 @@ export default function Developer() {
   const clientId = localStorage.getItem("business_Id");
   const api_key = localStorage.getItem("api_key");
   const encryption_key = localStorage.getItem("encryption_key");
+  const webhook_URL = localStorage.getItem("webhook");
 
   const IdRef = useRef(null);
   useEffect(() => {
@@ -43,7 +44,7 @@ export default function Developer() {
     encryptionKey: encryption_key,
     apiKey: api_key,
   });
-  const [webHookUrl, setWebHookUrl] = useState("");
+  const [webHookUrl, setWebHookUrl] = useState(webhook_URL);
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({
@@ -113,10 +114,11 @@ export default function Developer() {
     console.log(formData);
   };
 
-  const validatewebHook = (webHookUrl) => {
-    const hookRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return hookRegex.test(webHookUrl);
-  };
+const validatewebHook = (url) => {
+  const urlRegex = /^(https?:\/\/)[^\s$.?#].[^\s]*$/i;
+  return urlRegex.test(url);
+};
+
 
   async function updateWebHook(webHook) {
     const token = localStorage.getItem("token");
@@ -141,7 +143,11 @@ export default function Developer() {
 
   const handleSave = async (e) => {
     e.preventDefault();
-    // if (!validatewebHook()) return;
+   if (!validatewebHook(webHookUrl)) {
+     toast.error("Invalid webhook URL");
+     return;
+   }
+
 
     setLoading(true);
     try {
@@ -151,7 +157,7 @@ export default function Developer() {
       toast.error(err.message);
     } finally {
       setLoading(false);
-      console.log("Saving configuration:");
+      localStorage.setItem("webhook", webHookUrl);
     }
   };
 
@@ -637,6 +643,14 @@ export default function Developer() {
           .main-content {
             width: 100%;
           }
+
+          .Key {
+            padding-right: 5rem;
+          }
+
+          .enKey {
+            padding-right: 3rem;
+          }
         }
       `}</style>
 
@@ -711,7 +725,7 @@ export default function Developer() {
               <div className="input-container">
                 <input
                   type={showEncryptionKey ? "text" : "password"}
-                  className="form-input"
+                  className="form-input enKey"
                   placeholder="Secret Key"
                   value={formData.encryptionKey}
                   onChange={(e) =>
@@ -738,7 +752,7 @@ export default function Developer() {
               <div className="input-container">
                 <input
                   type={showApiKey ? "text" : "password"}
-                  className="form-input"
+                  className="form-input Key"
                   placeholder="API Key"
                   value={formData.apiKey}
                   onChange={(e) => handleInputChange("apiKey", e.target.value)}
@@ -777,9 +791,9 @@ export default function Developer() {
                 <input
                   type="text"
                   className="form-input"
-                  placeholder="Webhook URL"
+                  placeholder="https://example.com/webhook"
                   value={webHookUrl}
-                  onChange={(e) => setWebHookUrl(e.target.value)}
+                  onChange={(e) => setWebHookUrl(e.target.value.trim())}
                 />
                 <div className="input-actions">
                   <button

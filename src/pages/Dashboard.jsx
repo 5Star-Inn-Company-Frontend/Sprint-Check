@@ -17,8 +17,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import searchData from "../../src/utils/seacrhdata.js";
 
-
-
 export default function ApiLogs() {
   const [isMobile, setIsMobile] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -36,19 +34,14 @@ export default function ApiLogs() {
   function card() {
     setShowModal(true);
     setModalStep(5); // show account info
-
-    // Wait 5 seconds, then hide modal
-    setTimeout(() => {
-      setShowModal(false);
-    }, 2000);
   }
 
-  function showAccountCardThenClose() {
-    setTimeout(() => {
-      setModalStep(5);
+  function closeCard() {
+    if (modalStep !== 5) {
+      return;
+    } else {
       setShowModal(false);
-      handleLogout();
-    }, 5000);
+    }
   }
 
   const handleSearchSelect = (route) => {
@@ -57,17 +50,17 @@ export default function ApiLogs() {
     setSearchResults([]);
   };
 
-  function handleLogout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("dashBoardData");
-    localStorage.removeItem("activeTab");
-    localStorage.removeItem("apiLogsData");
-    localStorage.removeItem("avatar");
-    localStorage.removeItem("avatarChar");
-    localStorage.removeItem("billingData");
-    // clear state too
-    navigate("/");
-  }
+  // function handleLogout() {
+  //   localStorage.removeItem("token");
+  //   localStorage.removeItem("dashBoardData");
+  //   localStorage.removeItem("activeTab");
+  //   localStorage.removeItem("apiLogsData");
+  //   localStorage.removeItem("avatar");
+  //   localStorage.removeItem("avatarChar");
+  //   localStorage.removeItem("billingData");
+  //   // clear state too
+  //   navigate("/");
+  // }
 
   function handleDashboard() {
     const token = localStorage.getItem("token");
@@ -84,6 +77,8 @@ export default function ApiLogs() {
       );
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Failed to login");
+      localStorage.setItem("dashboardData", JSON.stringify(data));
+      setDashboardData(data);
       console.log(data);
     }
     toDashboard(token);
@@ -164,18 +159,13 @@ export default function ApiLogs() {
 
       if (response.success) {
         toast.success("BVN updated successfully!");
-
+        await handleDashboard();
         setModalStep(4);
-
-        showAccountCardThenClose();
       } else {
         if (response.status) {
           toast.success(response.message);
-          setTimeout(() => {
-            setShowModal(false);
-            handleLogout();
-          }, 5000);
-          showAccountCardThenClose();
+          await handleDashboard();
+          setModalStep(4);
         } else {
           toast.error(response.message || "Failed to update BVN");
           setModalStep(2);
@@ -236,7 +226,6 @@ export default function ApiLogs() {
     };
   }
 
-
   function transformAPILogsToChartData(apiLogs) {
     // Create an object to aggregate counts by date
     const dateCounts = {};
@@ -279,8 +268,6 @@ export default function ApiLogs() {
         );
       });
   }
-
-
 
   // Usage example:
   // const chartData = transformAPILogsToChartData(apiLogs);
@@ -328,9 +315,10 @@ export default function ApiLogs() {
 
       <SideBar sidebarOpen={sidebarOpen} isMobile={isMobile} />
       {showModal && (
-        <div className="modal-overlay">
+        <div onClick={() => closeCard()} className="modal-overlay">
           <ToastContainer position="top-right" autoClose={3000} />
-          {modalStep !== 5 && (
+
+          {modalStep !== 5 ? (
             <div className="accNo_Modal">
               {modalStep === 1 && (
                 <>
@@ -372,17 +360,14 @@ export default function ApiLogs() {
               {modalStep === 4 && (
                 <>
                   <p>Recheck in the next 5 minutes for your account number</p>
-                  <button onClick={() => showAccountCardThenClose()}>
-                    Okay
-                  </button>
+                  <button onClick={() => setShowModal(false)}>Okay</button>
                 </>
               )}
             </div>
-          )}
-
-          {modalStep === 5 && (
+          ) : (
             <div className="accCard">
               <img src={bankLogo} alt="bank"></img>
+              {/* <button onClick={() => setShowModal(false)}>X</button> */}
               <p>
                 <strong>Account Number: </strong>
                 {account_number}
@@ -392,7 +377,7 @@ export default function ApiLogs() {
                 {customer_name}
               </p>
               <p>
-                s<strong>Bank Name: </strong>
+                <strong>Bank Name: </strong>
                 {bank_name}
               </p>
             </div>
@@ -462,7 +447,7 @@ export default function ApiLogs() {
               <span className="balance-title">Your Balance</span>
             </div>
             <div className="balance-fund">
-              <div className="balance-amount">${dashboardInfo.wallet}</div>
+              <div className="balance-amount">₦ {dashboardInfo.wallet}</div>
               <button onClick={() => card()} className="fund-wallet-btn">
                 Fund Wallet
               </button>

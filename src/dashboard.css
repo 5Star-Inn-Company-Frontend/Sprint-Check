@@ -35,7 +35,6 @@ body {
   background-color: #f0f0f0;
 }
 
-
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -98,6 +97,17 @@ body {
 
 .accCard img {
   width: 20%;
+}
+
+.accCard button {
+  position: relative;
+  top: -4.7rem;
+  left: 95%;
+  color: white;
+  background-color: transparent;
+  outline: none;
+  border: none;
+  cursor: pointer;
 }
 
 .dashboard {
@@ -887,5 +897,9 @@ body {
     position: relative;
     top: 50%;
     right: 50%;
+  }
+
+  .accCard {
+    margin: 2rem;
   }
 }
