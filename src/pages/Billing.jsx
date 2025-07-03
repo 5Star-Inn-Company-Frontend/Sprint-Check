@@ -116,7 +116,34 @@ export default function Billing() {
 
   //Real Billing Data
 
-  const billingData = JSON.parse(localStorage.getItem("billingData")).data;
+  const rawBillingData = JSON.parse(localStorage.getItem("billingData")).data;
+
+  function transformBillingData(data) {
+    return data.map((item) => {
+      const createdAt = new Date(item.created_at);
+      const dateString = createdAt.toLocaleString("en-US", {
+        day: "2-digit",
+        month: "short",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      });
+
+      return {
+        id: item.id,
+        description: item.description.replace(/_/g, " "), // Format e.g. BVN_VERIFICATION
+        transactionId: `#${item.reference.slice(0, 8)}`,
+        type: item.description.includes("FUND") ? "Transfer" : "API",
+        date: dateString,
+        amount: parseFloat(item.amount),
+        direction: item.type.toLowerCase(),
+        icon: item.type.toLowerCase() === "credit" ? "up" : "down",
+      };
+    });
+  }
+
+  const billingData = transformBillingData(rawBillingData);
+
   console.log(billingData);
 
   useEffect(() => {
@@ -648,8 +675,8 @@ export default function Billing() {
 
           .table-container img {
             width: 70%;
-            left:17%;
-            margin-top:3rem;
+            left: 17%;
+            margin-top: 3rem;
           }
         }
       `}</style>

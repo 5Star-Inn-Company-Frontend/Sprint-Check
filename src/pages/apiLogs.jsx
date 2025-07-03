@@ -15,6 +15,9 @@ const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedLog, setSelectedLog] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredLogs, setFilteredLogs] = useState([]);
+
   const apiChar = localStorage.getItem("avatarChar");
   const apiAvatar = localStorage.getItem("avatar");
 
@@ -30,10 +33,48 @@ const Dashboard = () => {
     setSelectedLog(null);
   };
 
+  const highlightText = (text, query) => {
+    if (!query) return text;
+
+    const regex = new RegExp(`(${query})`, "gi");
+    const parts = text.split(regex);
+
+    return parts.map((part, index) =>
+      part.toLowerCase() === query.toLowerCase() ? (
+        <mark
+          key={index}
+          style={{ backgroundColor: "skyblue", padding: "0 2px" }}
+        >
+          {part}
+        </mark>
+      ) : (
+        part
+      )
+    );
+  };
+
   // Example usage:
   // const transformedLogs = transformApiLogs(apiResponse);
+  const apiLogs = JSON.parse(localStorage.getItem("apiLogsData"));
+  console.log(apiLogs);
 
   useEffect(() => {
+    if (!apiLogs) return;
+
+    const filtered = apiLogs.filter((log) => {
+      const query = searchQuery.toLowerCase();
+      return (
+        log.endpoint?.toLowerCase().includes(query) ||
+        log.name?.toLowerCase().includes(query) ||
+        log.status?.toLowerCase().includes(query) ||
+        log.performedBy?.toLowerCase().includes(query) ||
+        log.date?.toLowerCase().includes(query) ||
+        log.amount?.toString().includes(query)
+      );
+    });
+
+    setFilteredLogs(filtered);
+
     const checkScreenSize = () => {
       setIsMobile(window.innerWidth < 1024);
     };
@@ -42,10 +83,10 @@ const Dashboard = () => {
     window.addEventListener("resize", checkScreenSize);
 
     return () => window.removeEventListener("resize", checkScreenSize);
-  }, []);
+  }, [searchQuery, apiLogs]);
 
-  const apiLogs = JSON.parse(localStorage.getItem("apiLogsData"));
-  console.log(apiLogs);
+  // const apiLogs = JSON.parse(localStorage.getItem("apiLogsData"));
+  // console.log(apiLogs);
   // Sample API logs data
   // const apiLogs = [
   //   {
@@ -199,6 +240,47 @@ const Dashboard = () => {
   //     },
   //   },
   // ];
+
+  const exportToCSV = () => {
+    if (!filteredLogs || filteredLogs.length === 0) {
+      alert("No data to export.");
+      return;
+    }
+
+    const headers = [
+      "Name",
+      "Endpoint",
+      "Amount",
+      "Source",
+      "Performed By",
+      "Status",
+      "Date",
+    ];
+
+    const rows = filteredLogs.map((log) => [
+      log.name,
+      log.endpoint,
+      log.amount,
+      log.source,
+      log.performedBy,
+      log.status,
+      log.date,
+    ]);
+
+    const csvContent = [headers, ...rows]
+      .map((row) => row.map((value) => `"${value}"`).join(","))
+      .join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "api_logs.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <div className="dashboard">
@@ -557,7 +639,6 @@ const Dashboard = () => {
           display: flex;
           gap: 8px;
           flex-direction: column;
-         
         }
 
         .action-btn {
@@ -913,7 +994,7 @@ const Dashboard = () => {
                 X
               </button> */}
               <img
-                src={selectedLog.userDetails.avatar}
+                src={`data:image/png;base64,${selectedLog.userDetails.base64Image}`}
                 alt="User Avatar"
                 className="modal-avatar"
               />
@@ -961,7 +1042,7 @@ const Dashboard = () => {
                   <div className="modal-field">
                     <span className="modal-label">Phone number</span>
                     <div className="modal-value">
-                      {selectedLog.userDetails.phoneNumber}
+                      {selectedLog.userDetails.phoneNumber1}
                     </div>
                   </div>
                   <div className="modal-field">
@@ -1042,7 +1123,7 @@ const Dashboard = () => {
                   <div className="modal-field">
                     <span className="modal-label">Watchlisted</span>
                     <div className="modal-value">
-                      {selectedLog.userDetails.watchlisted}
+                      {selectedLog.userDetails.watchListed}
                     </div>
                   </div>
                   <div className="modal-field">
@@ -1096,7 +1177,7 @@ const Dashboard = () => {
                 <Filter size={16} />
                 Filter
               </button>
-              <button className="export-btn">
+              <button onClick={exportToCSV} className="export-btn">
                 <FileDown size={16} />
                 Export
               </button>
@@ -1111,13 +1192,15 @@ const Dashboard = () => {
               <input
                 type="text"
                 className="logs-search-input"
-                placeholder="Search by reference number, press enter to search"
+                placeholder="Search by endpoint, name, status, or performer"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
           </div>
 
           <div className="table-container">
-            {apiLogs[0] ? (
+            {filteredLogs.length > 0 ? (
               <table className="table">
                 <thead className="table-header">
                   <tr>
@@ -1132,14 +1215,27 @@ const Dashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {apiLogs.map((log) => (
+                  {filteredLogs.map((log) => (
                     <tr key={log.id} className="table-row">
-                      <td className="table-cell">{log.endpoint}</td>
-                      <td className="table-cell">{log.name}</td>
-                      <td className="table-cell">{log.amount}</td>
-                      <td className="table-cell">{log.source}</td>
-                      <td className="table-cell">{log.performedBy}</td>
-                      <td className="table-cell date">{log.date}</td>
+                      <td className="table-cell">
+                        {highlightText(log.endpoint, searchQuery)}
+                      </td>
+                      <td className="table-cell">
+                        {highlightText(log.name, searchQuery)}
+                      </td>
+                      <td className="table-cell">
+                        {highlightText(log.amount.toString(), searchQuery)}
+                      </td>
+                      <td className="table-cell">
+                        {highlightText(log.source, searchQuery)}
+                      </td>
+                      <td className="table-cell">
+                        {highlightText(log.performedBy, searchQuery)}
+                      </td>
+                      <td className="table-cell date">
+                        {highlightText(log.date, searchQuery)}
+                      </td>
+
                       <td className="table-cell">
                         <span
                           className={`status-badge ${
@@ -1168,8 +1264,7 @@ const Dashboard = () => {
                       </td>
                     </tr>
                   ))}
-                </tbody>{" "}
-                :
+                </tbody>
               </table>
             ) : (
               <img src={empty} alt="emptyGif" />

@@ -27,7 +27,7 @@ export default function ApiLogs() {
   const [modalStep, setModalStep] = useState(1); // 1 = initial modal, 2 = BVN modal
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-
+  const apiLogs = JSON.parse(localStorage.getItem("apiLogsData"));
   // Usage:
 
   const [bvn, setBvn] = useState("");
