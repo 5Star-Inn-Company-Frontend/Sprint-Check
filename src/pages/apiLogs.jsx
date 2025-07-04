@@ -17,7 +17,6 @@ const Dashboard = () => {
   const [selectedLog, setSelectedLog] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredLogs, setFilteredLogs] = useState([]);
-
   const apiChar = localStorage.getItem("avatarChar");
   const apiAvatar = localStorage.getItem("avatar");
 
@@ -55,8 +54,16 @@ const Dashboard = () => {
 
   // Example usage:
   // const transformedLogs = transformApiLogs(apiResponse);
-  const apiLogs = JSON.parse(localStorage.getItem("apiLogsData"));
-  console.log(apiLogs);
+  // const apiLogs = JSON.parse(localStorage.getItem("apiLogsData"));
+  // console.log(apiLogs);
+
+const [apiLogs, setApiLogs] = useState([]);
+
+useEffect(() => {
+  const storedLogs = JSON.parse(localStorage.getItem("apiLogsData")) || [];
+  setApiLogs(storedLogs);
+}, []);
+
 
   useEffect(() => {
     if (!apiLogs) return;
@@ -85,162 +92,7 @@ const Dashboard = () => {
     return () => window.removeEventListener("resize", checkScreenSize);
   }, [searchQuery, apiLogs]);
 
-  // const apiLogs = JSON.parse(localStorage.getItem("apiLogsData"));
-  // console.log(apiLogs);
-  // Sample API logs data
-  // const apiLogs = [
-  //   {
-  //     id: 1,
-  //     endpoint: "Bank Verification Number (Advance)",
-  //     name: "NUNGAMIYA BOKUNGA",
-  //     amount: 40.0,
-  //     source: "API",
-  //     performedBy: "Samuel Odejirmi",
-  //     date: "Apr 21, 2025 6:12 AM",
-  //     status: "SUCCESSFUL",
-  //     userDetails: {
-  //       avatar:
-  //         "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-  //       bvn: "22167783258",
-  //       firstName: "Emmy",
-  //       lastName: "PAM",
-  //       middleName: "Adewole",
-  //       dateOfBirth: "22-Feb-1834",
-  //       gender: "Male",
-  //       phoneNumber: "08167783258",
-  //       lgaOfOrigin: "Barkin Ladi",
-  //       lgaOfResidence: "Jos South",
-  //       maritalStatus: "Married",
-  //       nationality: "Nigeria",
-  //       residentialAddress: "TCNN BUKURU",
-  //       stateOfOrigin: "Plateau State",
-  //       stateOfResidence: "Plateau State",
-  //       enrollmentBank: "035",
-  //       enrollmentBranch: "BUKURU,OLD JOS RD.",
-  //       nameOnCard: "PAM EMMY ADEWOLE",
-  //       nin: "22167783258",
-  //       levelOfAccount: "Level 2 - Medium level Accounts",
-  //       watchlisted: "No",
-  //       number: "22152629818",
-  //     },
-  //   },
-  //   {
-  //     id: 2,
-  //     endpoint: "Bank Verification Number (Advance)",
-  //     name: "Null",
-  //     amount: 40.0,
-  //     source: "API",
-  //     performedBy: "Samuel Odejirmi",
-  //     date: "Apr 21, 2025 6:12 AM",
-  //     status: "Failed",
-  //   },
-  //   {
-  //     id: 3,
-  //     endpoint: "Bank Verification Number (Advance)",
-  //     name: "NUNGAMIYA BOKUNGA",
-  //     amount: 40.0,
-  //     source: "API",
-  //     performedBy: "Samuel Odejirmi",
-  //     date: "Apr 21, 2025 6:12 AM",
-  //     status: "SUCCESSFUL",
-  //     userDetails: {
-  //       avatar:
-  //         "https://images.unsplash.com/photo-1494790108755-2616b612b47c?w=150&h=150&fit=crop&crop=face",
-  //       bvn: "22167783258",
-  //       firstName: "Sarah",
-  //       lastName: "Johnson",
-  //       middleName: "Grace",
-  //       dateOfBirth: "15-Mar-1990",
-  //       gender: "Female",
-  //       phoneNumber: "08123456789",
-  //       lgaOfOrigin: "Ikeja",
-  //       lgaOfResidence: "Victoria Island",
-  //       maritalStatus: "Single",
-  //       nationality: "Nigeria",
-  //       residentialAddress: "12 Victoria Island Lagos",
-  //       stateOfOrigin: "Lagos State",
-  //       stateOfResidence: "Lagos State",
-  //       enrollmentBank: "058",
-  //       enrollmentBranch: "VICTORIA ISLAND BRANCH",
-  //       nameOnCard: "SARAH GRACE JOHNSON",
-  //       nin: "12345678901",
-  //       levelOfAccount: "Level 3 - High level Accounts",
-  //       watchlisted: "No",
-  //       number: "11122334455",
-  //     },
-  //   },
-  //   {
-  //     id: 4,
-  //     endpoint: "Bank Verification Number (Advance)",
-  //     name: "NUNGAMIYA BOKUNGA",
-  //     amount: 40.0,
-  //     source: "API",
-  //     performedBy: "Samuel Odejirmi",
-  //     date: "Apr 21, 2025 6:12 AM",
-  //     status: "SUCCESSFUL",
-  //     userDetails: {
-  //       avatar:
-  //         "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-  //       bvn: "33445566778",
-  //       firstName: "Michael",
-  //       lastName: "Brown",
-  //       middleName: "David",
-  //       dateOfBirth: "08-Jul-1985",
-  //       gender: "Male",
-  //       phoneNumber: "08198765432",
-  //       lgaOfOrigin: "Abuja Municipal",
-  //       lgaOfResidence: "Garki",
-  //       maritalStatus: "Married",
-  //       nationality: "Nigeria",
-  //       residentialAddress: "45 Garki District Abuja",
-  //       stateOfOrigin: "FCT",
-  //       stateOfResidence: "FCT",
-  //       enrollmentBank: "011",
-  //       enrollmentBranch: "GARKI BRANCH",
-  //       nameOnCard: "MICHAEL DAVID BROWN",
-  //       nin: "98765432109",
-  //       levelOfAccount: "Level 2 - Medium level Accounts",
-  //       watchlisted: "No",
-  //       number: "99887766554",
-  //     },
-  //   },
-  //   {
-  //     id: 5,
-  //     endpoint: "Bank Verification Number (Advance)",
-  //     name: "NUNGAMIYA BOKUNGA",
-  //     amount: 40.0,
-  //     source: "API",
-  //     performedBy: "Samuel Odejirmi",
-  //     date: "Apr 21, 2025 6:12 AM",
-  //     status: "SUCCESSFUL",
-  //     userDetails: {
-  //       avatar:
-  //         "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
-  //       bvn: "55667788990",
-  //       firstName: "Blessing",
-  //       lastName: "Okoro",
-  //       middleName: "Chioma",
-  //       dateOfBirth: "20-Dec-1992",
-  //       gender: "Female",
-  //       phoneNumber: "08167890123",
-  //       lgaOfOrigin: "Owerri North",
-  //       lgaOfResidence: "Owerri West",
-  //       maritalStatus: "Single",
-  //       nationality: "Nigeria",
-  //       residentialAddress: "23 New Owerri Road",
-  //       stateOfOrigin: "Imo State",
-  //       stateOfResidence: "Imo State",
-  //       enrollmentBank: "214",
-  //       enrollmentBranch: "OWERRI MAIN BRANCH",
-  //       nameOnCard: "BLESSING CHIOMA OKORO",
-  //       nin: "11223344556",
-  //       levelOfAccount: "Level 1 - Basic Accounts",
-  //       watchlisted: "No",
-  //       number: "77889900112",
-  //     },
-  //   },
-  // ];
-
+  
   const exportToCSV = () => {
     if (!filteredLogs || filteredLogs.length === 0) {
       alert("No data to export.");
@@ -951,6 +803,11 @@ const Dashboard = () => {
             flex-direction: column;
           }
 
+          .action-buttons .eye img {
+            max-width: 18px;
+        
+          }
+
           .modal {
             margin: 5px;
             border-radius: 12px;
@@ -1173,10 +1030,10 @@ const Dashboard = () => {
         <div className="content">
           <div className="page-header">
             <div className="header-actions">
-              <button className="filter-btn">
+              {/* <button className="filter-btn">
                 <Filter size={16} />
                 Filter
-              </button>
+              </button> */}
               <button onClick={exportToCSV} className="export-btn">
                 <FileDown size={16} />
                 Export
@@ -1251,7 +1108,7 @@ const Dashboard = () => {
                         <div className="action-buttons">
                           <span
                             onClick={() => handleViewClick(log)}
-                            className="action-btn"
+                            className="action-btn eye"
                           >
                             <img src={eyeIcon} alt="icon" />
                             <span>View</span>
