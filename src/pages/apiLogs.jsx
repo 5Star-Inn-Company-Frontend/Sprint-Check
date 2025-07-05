@@ -19,6 +19,12 @@ const Dashboard = () => {
   const [filteredLogs, setFilteredLogs] = useState([]);
   const apiChar = localStorage.getItem("avatarChar");
   const apiAvatar = localStorage.getItem("avatar");
+  const [showFilterOptions, setShowFilterOptions] = useState(false);
+  const [filterStatus, setFilterStatus] = useState(""); // SUCCESSFUL / FAILED
+  const [filterStartDate, setFilterStartDate] = useState("");
+  const [filterEndDate, setFilterEndDate] = useState("");
+  const [filterMinAmount, setFilterMinAmount] = useState("");
+  const [filterMaxAmount, setFilterMaxAmount] = useState("");
 
   const handleViewClick = (log) => {
     if (log.userDetails) {
@@ -52,31 +58,52 @@ const Dashboard = () => {
     );
   };
 
-  // Example usage:
-  // const transformedLogs = transformApiLogs(apiResponse);
-  // const apiLogs = JSON.parse(localStorage.getItem("apiLogsData"));
-  // console.log(apiLogs);
+  const [apiLogs, setApiLogs] = useState([]);
 
-const [apiLogs, setApiLogs] = useState([]);
-
-useEffect(() => {
-  const storedLogs = JSON.parse(localStorage.getItem("apiLogsData")) || [];
-  setApiLogs(storedLogs);
-}, []);
-
+  useEffect(() => {
+    const storedLogs = JSON.parse(localStorage.getItem("apiLogsData")) || [];
+    setApiLogs(storedLogs);
+  }, []);
 
   useEffect(() => {
     if (!apiLogs) return;
 
     const filtered = apiLogs.filter((log) => {
       const query = searchQuery.toLowerCase();
-      return (
+
+      const matchesSearch =
         log.endpoint?.toLowerCase().includes(query) ||
         log.name?.toLowerCase().includes(query) ||
         log.status?.toLowerCase().includes(query) ||
         log.performedBy?.toLowerCase().includes(query) ||
         log.date?.toLowerCase().includes(query) ||
-        log.amount?.toString().includes(query)
+        log.amount?.toString().includes(query);
+
+      const matchesStatus = filterStatus ? log.status === filterStatus : true;
+
+      const matchesStartDate = filterStartDate
+        ? new Date(log.date) >= new Date(filterStartDate)
+        : true;
+
+      const matchesEndDate = filterEndDate
+        ? new Date(log.date) <= new Date(filterEndDate)
+        : true;
+
+      const matchesMinAmount = filterMinAmount
+        ? parseFloat(log.amount) >= parseFloat(filterMinAmount)
+        : true;
+
+      const matchesMaxAmount = filterMaxAmount
+        ? parseFloat(log.amount) <= parseFloat(filterMaxAmount)
+        : true;
+
+      return (
+        matchesSearch &&
+        matchesStatus &&
+        matchesStartDate &&
+        matchesEndDate &&
+        matchesMinAmount &&
+        matchesMaxAmount
       );
     });
 
@@ -90,9 +117,16 @@ useEffect(() => {
     window.addEventListener("resize", checkScreenSize);
 
     return () => window.removeEventListener("resize", checkScreenSize);
-  }, [searchQuery, apiLogs]);
+  }, [
+    searchQuery,
+    apiLogs,
+    filterEndDate,
+    filterMaxAmount,
+    filterMinAmount,
+    filterStartDate,
+    filterStatus,
+  ]);
 
-  
   const exportToCSV = () => {
     if (!filteredLogs || filteredLogs.length === 0) {
       alert("No data to export.");
@@ -368,6 +402,36 @@ useEffect(() => {
           background: #f9fafb;
         }
 
+        .filterOptions {
+          margin-top: 1rem;
+          background: #f8fafc;
+          padding: 1rem;
+          border-radius: 10px;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 1.5rem;
+          max-width: 300px;
+          font-size: 0.8rem;
+        }
+
+        .filterOptions select {
+          width: 50%;
+          margin-left: 1rem;
+          border: none;
+          outline: none;
+          padding: 0.5rem;
+          border-radius: 1rem;
+        }
+
+        .filterOptions input {
+          border: 1px solid lightgrey;
+          border-radius: 5px;
+          width: 50%;
+          margin-left: 1rem;
+          padding: 0.5rem;
+          outline: none;
+        }
+
         .export-btn {
           background: #4f46e5;
           border: 1px solid #4f46e5;
@@ -379,7 +443,7 @@ useEffect(() => {
         }
 
         .search-section {
-          margin-bottom: 24px;
+          margin-bottom: 0px;
         }
 
         .logs-search {
@@ -805,7 +869,6 @@ useEffect(() => {
 
           .action-buttons .eye img {
             max-width: 18px;
-        
           }
 
           .modal {
@@ -1029,30 +1092,95 @@ useEffect(() => {
         {/* Content */}
         <div className="content">
           <div className="page-header">
+            {showFilterOptions && (
+              <div className="filterOptions">
+                <div>
+                  <label>Status :</label>
+                  <select
+                    value={filterStatus}
+                    onChange={(e) => setFilterStatus(e.target.value)}
+                  >
+                    <option value="">All</option>
+                    <option value="SUCCESSFUL">SUCCESSFUL</option>
+                    <option value="FAILED">FAILED</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label>Start Date :</label>
+                  <input
+                    type="date"
+                    value={filterStartDate}
+                    onChange={(e) => setFilterStartDate(e.target.value)}
+                  />
+                </div>
+
+                <div>
+                  <label>End Date :</label>
+                  <input
+                    type="date"
+                    value={filterEndDate}
+                    onChange={(e) => setFilterEndDate(e.target.value)}
+                  />
+                </div>
+
+                <div>
+                  <label>Min Amount :</label>
+                  <input
+                    type="number"
+                    value={filterMinAmount}
+                    onChange={(e) => setFilterMinAmount(e.target.value)}
+                  />
+                </div>
+
+                <div>
+                  <label>Max Amount :</label>
+                  <input
+                    type="number"
+                    value={filterMaxAmount}
+                    onChange={(e) => setFilterMaxAmount(e.target.value)}
+                  />
+                </div>
+              </div>
+            )}
+
+            <div className="search-section">
+              <div className="logs-search">
+                <div className="logs-search-icon">
+                  <img src={searchIcon} alt="icon" />
+                </div>
+                <input
+                  type="text"
+                  className="logs-search-input"
+                  placeholder="Search by endpoint, name, status, or performer"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+            </div>
             <div className="header-actions">
-              {/* <button className="filter-btn">
+              <button
+                className="filter-btn"
+                onClick={() => {
+                  if (showFilterOptions) {
+                    // Reset filters if closing
+                    setFilterStatus("");
+                    setFilterStartDate("");
+                    setFilterEndDate("");
+                    setFilterMinAmount("");
+                    setFilterMaxAmount("");
+                  }
+                  setShowFilterOptions((prev) => !prev);
+                }}
+              >
                 <Filter size={16} />
-                Filter
-              </button> */}
+                {showFilterOptions ? "Clear Filter" : "Filter"}
+              </button>
+
               <button onClick={exportToCSV} className="export-btn">
                 <FileDown size={16} />
                 Export
               </button>
-            </div>
-          </div>
-
-          <div className="search-section">
-            <div className="logs-search">
-              <div className="logs-search-icon">
-                <img src={searchIcon} alt="icon" />
-              </div>
-              <input
-                type="text"
-                className="logs-search-input"
-                placeholder="Search by endpoint, name, status, or performer"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
             </div>
           </div>
 
