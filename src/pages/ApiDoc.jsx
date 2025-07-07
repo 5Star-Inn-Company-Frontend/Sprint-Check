@@ -1,62 +1,112 @@
 import React, { useState } from "react";
-import { ChevronDown, ChevronRight, Copy } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 
-export default function ApiDocumentation() {
-  const [activeSection, setActiveSection] = useState("get-started");
-  const [openSections, setOpenSections] = useState({
-    "get-started": true,
-    guide: false,
-    "core-resources": false,
-  });
-  const [activeTab, setActiveTab] = useState("curl");
+const ApiDocPage = () => {
+  const [selectedLanguage, setSelectedLanguage] = useState("curl");
+  const [activeSection, setActiveSection] = useState("introduction");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const toggleSection = (section) => {
-    setOpenSections((prev) => ({
-      ...prev,
-      [section]: !prev[section],
-    }));
-  };
+  const languages = [
+    { id: "curl", name: "Curl" },
+    { id: "javascript", name: "JavaScript" },
+    { id: "python", name: "Python" },
+    { id: "php", name: "PHP" },
+    { id: "ruby", name: "Ruby" },
+  ];
 
-  const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text);
-  };
-      const navigate = useNavigate();
-
-  const codeSnippets = {
+  const codeExamples = {
     curl: `curl -G https://api.protocol.chat/v1/conversations \\
   -H "Authorization: Bearer {token}" \\
   -d limit=10`,
     javascript: `const response = await fetch('https://api.protocol.chat/v1/conversations', {
-  method: 'GET',
   headers: {
     'Authorization': 'Bearer {token}'
-  },
-  params: {
-    limit: 10
   }
 });`,
     python: `import requests
 
 response = requests.get(
   'https://api.protocol.chat/v1/conversations',
-  headers={'Authorization': 'Bearer {token}'},
-  params={'limit': 10}
+  headers={'Authorization': 'Bearer {token}'}
 )`,
-    php: `<?php
-$response = Http::withHeaders([
-    'Authorization' => 'Bearer {token}',
-])->get('https://api.protocol.chat/v1/conversations', [
-    'limit' => 10,
-]);`,
-    ruby: `require 'net/http'
-require 'uri'
-
-uri = URI('https://api.protocol.chat/v1/conversations')
-uri.query = URI.encode_www_form(limit: 10)
-req = Net::HTTP::Get.new(uri)
-req['Authorization'] = 'Bearer {token}'`,
+    php: `$response = Http::withHeaders([
+  'Authorization' => 'Bearer {token}'
+])->get('https://api.protocol.chat/v1/conversations');`,
+    ruby: `response = HTTParty.get(
+  'https://api.protocol.chat/v1/conversations',
+  headers: { 'Authorization' => 'Bearer {token}' }
+)`,
   };
+
+  const sidebarItems = [
+    {
+      title: "Get Started",
+      items: [
+        { id: "introduction", name: "Introduction" },
+        { id: "quick-start", name: "Quick Start" },
+        { id: "client", name: "Client" },
+        { id: "libraries", name: "Libraries" },
+      ],
+    },
+    {
+      title: "Guide",
+      items: [
+        { id: "authentication", name: "Authentication" },
+        { id: "error-handling", name: "Error Handling" },
+        { id: "response", name: "Response" },
+        { id: "request", name: "Request" },
+        { id: "pagination", name: "Pagination" },
+        { id: "webhook", name: "Webhook" },
+      ],
+    },
+    {
+      title: "Core Resources",
+      items: [
+        { id: "payment", name: "Payment" },
+        { id: "overview", name: "Overview" },
+        { id: "accept-payment", name: "Accept Payment" },
+        { id: "subscription", name: "Subscription" },
+        { id: "payout", name: "Payout" },
+        { id: "refund", name: "Refund" },
+        { id: "split-payment", name: "Split Payment" },
+        { id: "transaction-search", name: "Transaction Search" },
+        { id: "orders", name: "Orders" },
+        { id: "invoicing", name: "Invoicing" },
+      ],
+    },
+  ];
+
+  const clientLibraries = [
+    {
+      name: "Rubby",
+      description:
+        "A dynamic, open source programming language with a focus on simplicity and productivity",
+      icon: "💎",
+    },
+    {
+      name: "Php",
+      description:
+        "A dynamic, open source programming language with a focus on simplicity and productivity",
+      icon: "🐘",
+    },
+    {
+      name: "Nodejs",
+      description:
+        "A dynamic, open source programming language with a focus on simplicity and productivity",
+      icon: "🟢",
+    },
+    {
+      name: "Python",
+      description:
+        "A dynamic, open source programming language with a focus on simplicity and productivity",
+      icon: "🐍",
+    },
+    {
+      name: "GO",
+      description:
+        "A dynamic, open source programming language with a focus on simplicity and productivity",
+      icon: "🔗",
+    },
+  ];
 
   return (
     <div className="api-doc-container">
@@ -68,694 +118,569 @@ req['Authorization'] = 'Bearer {token}'`,
         }
 
         .api-doc-container {
-          display: flex;
-          min-height: 100vh;
           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-            sans-serif;
-          background-color: #ffffff;
-        }
-
-        .sidebar {
-          width: 280px;
-          background: #ffffff;
-          border-right: 1px solid #e5e7eb;
-          padding: 24px 0;
-          position: fixed;
-          height: 100vh;
-          overflow-y: auto;
-        }
-
-        .sidebar-header {
-          padding: 0 24px 24px;
-          border-bottom: 1px solid #e5e7eb;
-        }
-
-        .logo {
-          font-size: 18px;
-          font-weight: 600;
-          color: #111827;
-        }
-
-        .sidebar-nav {
-          padding-top: 24px;
-        }
-
-        .nav-section {
-          margin-bottom: 24px;
-        }
-
-        .section-header {
+            Oxygen, Ubuntu, Cantarell, sans-serif;
+          min-height: 100vh;
+          background: #fafafa;
           display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 8px 24px;
-          cursor: pointer;
-          color: #374151;
-          font-weight: 500;
-          font-size: 14px;
-          transition: color 0.2s;
-        }
-
-        .section-header:hover {
-          color: #111827;
-        }
-
-        .section-content {
-          display: none;
-          padding-left: 24px;
-        }
-
-        .section-content.open {
-          display: block;
-        }
-
-        .nav-item {
-          display: block;
-          padding: 6px 24px 6px 40px;
-          color: #6b7280;
-          text-decoration: none;
-          font-size: 14px;
-          cursor: pointer;
-          transition: color 0.2s;
-          border-left: 2px solid transparent;
-        }
-
-        .nav-item:hover {
-          color: #374151;
-        }
-
-        .nav-item.active {
-          color: #3b82f6;
-          border-left-color: #3b82f6;
-          background-color: #f8fafc;
-        }
-
-        .main-content {
-          flex: 1;
-          margin-left: 280px;
-          background: #ffffff;
+          flex-direction: column;
         }
 
         .header {
-          background: #ffffff;
-          border-bottom: 1px solid #e5e7eb;
-          padding: 16px 32px;
+          background: white;
+          border-bottom: 1px solid #e2e8f0;
+          padding: 1rem 2rem;
           display: flex;
           align-items: center;
           justify-content: space-between;
+          position: sticky;
+          top: 0;
+          z-index: 100;
+        }
+
+        .logo {
+          font-size: 1.5rem;
+          font-weight: bold;
+          color: #1a202c;
         }
 
         .search-container {
           flex: 1;
           max-width: 400px;
+          margin: 0 2rem;
           position: relative;
         }
 
         .search-input {
           width: 100%;
-          padding: 8px 12px;
-          border: 1px solid #d1d5db;
-          border-radius: 6px;
-          font-size: 14px;
-          background: #f9fafb;
+          padding: 0.75rem 1rem;
+          border: 1px solid #e2e8f0;
+          border-radius: 0.5rem;
+          font-size: 0.875rem;
+          background: #f8fafc;
         }
 
-        .search-input::placeholder {
-          color: #9ca3af;
+        .search-input:focus {
+          outline: none;
+          border-color: #3b82f6;
+          background: white;
         }
 
-        .header-actions {
+        .nav-links {
           display: flex;
-          gap: 16px;
+          gap: 2rem;
           align-items: center;
         }
 
-        .header-link {
-          color: #374151;
+        .nav-link {
+          color: #64748b;
           text-decoration: none;
-          font-size: 14px;
           font-weight: 500;
+          transition: color 0.2s;
         }
 
-        .header-link:hover {
-          color: #111827;
+        .nav-link:hover {
+          color: #1a202c;
+        }
+
+        .mobile-menu-toggle {
+          display: none;
+          background: none;
+          border: none;
+          font-size: 1.5rem;
+          cursor: pointer;
+        }
+
+        .mainContent {
+          display: flex;
+          flex: 1;
+        }
+
+        .sidebar {
+          width: 280px;
+          background: white;
+          border-right: 1px solid #e2e8f0;
+          padding: 2rem 0;
+          height: calc(100vh - 80px);
+          overflow-y: auto;
+          position: sticky;
+          top: 80px;
+        }
+
+        .sidebar-section {
+          margin-bottom: 2rem;
+        }
+
+        .sidebar-title {
+          font-size: 0.875rem;
+          font-weight: 600;
+          color: #374151;
+          margin-bottom: 1rem;
+          padding: 0 1.5rem;
+        }
+
+        .sidebar-item {
+          display: block;
+          padding: 0.5rem 1.5rem;
+          color: #6b7280;
+          text-decoration: none;
+          font-size: 0.875rem;
+          transition: all 0.2s;
+          border-left: 3px solid transparent;
+        }
+
+        .sidebar-item:hover {
+          background: #f8fafc;
+          color: #374151;
+        }
+
+        .sidebar-item.active {
+          background: #eff6ff;
+          color: #3b82f6;
+          border-left-color: #3b82f6;
         }
 
         .content {
-          padding: 32px;
+          flex: 1;
+          padding: 2rem;
           max-width: 800px;
         }
 
-        .page-title {
-          font-size: 28px;
+        .content h1 {
+          font-size: 2rem;
+          font-weight: bold;
+          color: #1a202c;
+          margin-bottom: 1rem;
+        }
+
+        .content h2 {
+          font-size: 1.5rem;
           font-weight: 600;
-          color: #111827;
-          margin-bottom: 16px;
+          color: #1a202c;
+          margin: 2rem 0 1rem 0;
         }
 
-        .page-description {
-          color: #6b7280;
-          font-size: 16px;
+        .content p {
+          color: #4b5563;
           line-height: 1.6;
-          margin-bottom: 32px;
+          margin-bottom: 1rem;
         }
 
-        .section {
-          margin-bottom: 48px;
-        }
-
-        .section-title {
-          font-size: 24px;
-          font-weight: 600;
-          color: #111827;
-          margin-bottom: 16px;
-        }
-
-        .section-description {
-          color: #6b7280;
-          font-size: 16px;
-          line-height: 1.6;
-          margin-bottom: 24px;
-        }
-
-        .cards-container {
+        .getting-started-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 24px;
-          margin-bottom: 32px;
+          gap: 2rem;
+          margin: 2rem 0;
         }
 
-        .card {
-          border: 1px solid #e5e7eb;
-          border-radius: 8px;
-          padding: 20px;
-          background: #ffffff;
-          transition: border-color 0.2s;
+        .getting-started-card {
+          background: white;
+          border: 1px solid #e2e8f0;
+          border-radius: 0.5rem;
+          padding: 1.5rem;
+          transition: shadow 0.2s;
         }
 
-        .card:hover {
-          border-color: #d1d5db;
+        .getting-started-card:hover {
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        .card-title {
-          font-size: 16px;
+        .getting-started-card h3 {
+          font-size: 1.125rem;
           font-weight: 600;
-          color: #111827;
-          margin-bottom: 8px;
+          color: #1a202c;
+          margin-bottom: 0.5rem;
         }
 
-        .card-description {
+        .getting-started-card p {
           color: #6b7280;
-          font-size: 14px;
+          font-size: 0.875rem;
           line-height: 1.5;
-          margin-bottom: 12px;
         }
 
-        .card-link {
+        .cta-link {
           color: #3b82f6;
           text-decoration: none;
-          font-size: 14px;
           font-weight: 500;
-          border-bottom: 1px solid transparent;
+          font-size: 0.875rem;
+          margin-top: 1rem;
+          display: inline-block;
         }
 
-        .card-link:hover {
-          border-bottom-color: #3b82f6;
+        .cta-link:hover {
+          text-decoration: underline;
         }
 
-        .client-section {
-          margin-top: 48px;
+        .setup-steps {
+          background: white;
+          border: 1px solid #e2e8f0;
+          border-radius: 0.5rem;
+          padding: 1.5rem;
+          margin: 2rem 0;
         }
 
-        .client-steps {
-          background: #f9fafb;
-          border-radius: 8px;
-          padding: 24px;
-          margin-bottom: 24px;
+        .setup-steps ol {
+          list-style: decimal;
+          margin-left: 1.5rem;
         }
 
-        .client-steps h4 {
-          font-size: 16px;
-          font-weight: 600;
-          color: #111827;
-          margin-bottom: 16px;
-        }
-
-        .client-steps ol {
-          color: #374151;
+        .setup-steps li {
+          color: #4b5563;
+          margin-bottom: 0.5rem;
           line-height: 1.6;
-          padding-left: 20px;
         }
 
-        .client-steps li {
-          margin-bottom: 8px;
-        }
-
-        .code-container {
-          background: #1f2937;
-          border-radius: 8px;
+        .code-block-container {
+          background: white;
+          border: 1px solid #e2e8f0;
+          border-radius: 0.5rem;
+          margin: 2rem 0;
           overflow: hidden;
-          margin-bottom: 32px;
         }
 
         .code-tabs {
           display: flex;
-          background: #374151;
-          border-bottom: 1px solid #4b5563;
+          background: #f8fafc;
+          border-bottom: 1px solid #e2e8f0;
+          overflow-x: auto;
         }
 
         .code-tab {
-          padding: 12px 16px;
+          padding: 0.75rem 1rem;
           background: none;
           border: none;
-          color: #d1d5db;
-          font-size: 13px;
           cursor: pointer;
+          font-size: 0.875rem;
+          color: #6b7280;
+          white-space: nowrap;
           transition: all 0.2s;
         }
 
         .code-tab.active {
-          background: #1f2937;
-          color: #ffffff;
+          color: #3b82f6;
+          background: white;
+          border-bottom: 2px solid #3b82f6;
         }
 
         .code-tab:hover {
-          color: #ffffff;
+          color: #374151;
         }
 
         .code-content {
-          position: relative;
-          padding: 20px;
-        }
-
-        .code-block {
-          color: #e5e7eb;
-          font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
-          font-size: 13px;
-          line-height: 1.5;
-          white-space: pre;
+          padding: 1.5rem;
+          background: #1e293b;
+          color: #e2e8f0;
+          font-family: "Monaco", "Consolas", monospace;
+          font-size: 0.875rem;
+          line-height: 1.6;
           overflow-x: auto;
         }
 
         .copy-button {
           position: absolute;
-          top: 12px;
-          right: 12px;
+          top: 1rem;
+          right: 1rem;
           background: #374151;
+          color: white;
           border: none;
-          color: #d1d5db;
-          padding: 6px;
-          border-radius: 4px;
+          padding: 0.5rem;
+          border-radius: 0.25rem;
           cursor: pointer;
-          transition: background-color 0.2s;
+          font-size: 0.75rem;
         }
 
         .copy-button:hover {
           background: #4b5563;
-          color: #ffffff;
+        }
+
+        .client-libraries {
+          margin: 2rem 0;
         }
 
         .libraries-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-          gap: 20px;
-          margin-top: 24px;
+          gap: 1.5rem;
+          margin-top: 1.5rem;
         }
 
         .library-card {
-          border: 1px solid #e5e7eb;
-          border-radius: 8px;
-          padding: 20px;
-          background: #ffffff;
-          transition: all 0.2s;
+          background: white;
+          border: 1px solid #e2e8f0;
+          border-radius: 0.5rem;
+          padding: 1.5rem;
+          transition: shadow 0.2s;
         }
 
         .library-card:hover {
-          border-color: #d1d5db;
-          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .library-header {
           display: flex;
           align-items: center;
-          gap: 12px;
-          margin-bottom: 12px;
+          gap: 0.75rem;
+          margin-bottom: 1rem;
         }
 
         .library-icon {
-          width: 32px;
-          height: 32px;
-          border-radius: 6px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-weight: 600;
-          color: #ffffff;
+          font-size: 1.5rem;
         }
 
-        .library-icon.ruby {
-          background: #cc342d;
-        }
-        .library-icon.php {
-          background: #777bb4;
-        }
-        .library-icon.nodejs {
-          background: #339933;
-        }
-        .library-icon.python {
-          background: #3776ab;
-        }
-        .library-icon.go {
-          background: #00add8;
-        }
-
-        .library-title {
-          font-size: 16px;
+        .library-name {
+          font-size: 1.125rem;
           font-weight: 600;
-          color: #111827;
+          color: #1a202c;
         }
 
         .library-description {
           color: #6b7280;
-          font-size: 14px;
+          font-size: 0.875rem;
           line-height: 1.5;
         }
 
         .footer {
+          background: white;
+          border-top: 1px solid #e2e8f0;
+          padding: 2rem;
           text-align: center;
-          padding: 24px;
           color: #6b7280;
-          font-size: 14px;
-          border-top: 1px solid #e5e7eb;
-          margin-top: 48px;
+          font-size: 0.875rem;
         }
 
         @media (max-width: 768px) {
-          .sidebar {
+          .header {
+            padding: 1rem;
+          }
+
+          header .logo {
+            margin-left: 2rem;
+          }
+
+          .search-container {
             display: none;
           }
 
-          .main-content {
-            margin-left: 0;
+          .nav-links {
+            display: none;
           }
 
-          .cards-container {
-            grid-template-columns: 1fr;
+          .mobile-menu-toggle {
+            display: block;
+          }
+
+          .mainContent {
+            flex-direction: column;
+          }
+
+          .sidebar {
+            position: fixed;
+            top: 55px;
+            left: 0;
+            width: 60%;
+            height: calc(100vh - 80px);
+            background: white;
+            z-index: 50;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+          }
+
+          .sidebar.open {
+            transform: translateX(0);
           }
 
           .content {
-            padding: 20px;
+            padding: 1rem;
+          }
+
+          .getting-started-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
           }
 
           .libraries-grid {
             grid-template-columns: 1fr;
           }
+
+          .code-tabs {
+            flex-wrap: wrap;
+          }
+
+          .code-tab {
+            flex: 1;
+            min-width: 80px;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .content h1 {
+            font-size: 1.5rem;
+          }
+
+          .content h2 {
+            font-size: 1.25rem;
+          }
+
+          .getting-started-card,
+          .library-card {
+            padding: 1rem;
+          }
+
+          .code-content {
+            padding: 1rem;
+            font-size: 0.8rem;
+          }
         }
       `}</style>
 
-      {/* Sidebar */}
-      <div className="sidebar">
-        <div className="sidebar-header">
-          <div className="logo">API-DOC</div>
+      <header className="header">
+        <div className="logo">API-DOC</div>
+        <div className="search-container">
+          <input type="text" className="search-input" placeholder="Search" />
         </div>
-
-        <nav className="sidebar-nav">
-          <div className="nav-section">
-            <div
-              className="section-header"
-              onClick={() => toggleSection("get-started")}
-            >
-              Get Started
-              {openSections["get-started"] ? (
-                <ChevronDown size={16} />
-              ) : (
-                <ChevronRight size={16} />
-              )}
-            </div>
-            <div
-              className={`section-content ${
-                openSections["get-started"] ? "open" : ""
-              }`}
-            >
-              <div
-                className={`nav-item ${
-                  activeSection === "introduction" ? "active" : ""
-                }`}
-                onClick={() => setActiveSection("introduction")}
-              >
-                Introduction
-              </div>
-              <div
-                className={`nav-item ${
-                  activeSection === "quick-start" ? "active" : ""
-                }`}
-                onClick={() => setActiveSection("quick-start")}
-              >
-                Quick Start
-              </div>
-              <div
-                className={`nav-item ${
-                  activeSection === "client" ? "active" : ""
-                }`}
-                onClick={() => setActiveSection("client")}
-              >
-                Client
-              </div>
-              <div
-                className={`nav-item ${
-                  activeSection === "libraries" ? "active" : ""
-                }`}
-                onClick={() => setActiveSection("libraries")}
-              >
-                Libraries
-              </div>
-            </div>
-          </div>
-
-          <div className="nav-section">
-            <div
-              className="section-header"
-              onClick={() => toggleSection("guide")}
-            >
-              Guide
-              {openSections["guide"] ? (
-                <ChevronDown size={16} />
-              ) : (
-                <ChevronRight size={16} />
-              )}
-            </div>
-            <div
-              className={`section-content ${
-                openSections["guide"] ? "open" : ""
-              }`}
-            >
-              <div className="nav-item">Authentication</div>
-              <div className="nav-item">Error Handling</div>
-              <div className="nav-item">Response</div>
-              <div className="nav-item">Request</div>
-              <div className="nav-item">Pagination</div>
-              <div className="nav-item">Webhook</div>
-            </div>
-          </div>
-
-          <div className="nav-section">
-            <div
-              className="section-header"
-              onClick={() => toggleSection("core-resources")}
-            >
-              Core Resources
-              {openSections["core-resources"] ? (
-                <ChevronDown size={16} />
-              ) : (
-                <ChevronRight size={16} />
-              )}
-            </div>
-            <div
-              className={`section-content ${
-                openSections["core-resources"] ? "open" : ""
-              }`}
-            >
-              <div className="nav-item">Payment</div>
-              <div className="nav-item">Overview</div>
-              <div className="nav-item">Accept Payment</div>
-              <div className="nav-item">Subscription</div>
-              <div className="nav-item">Payout</div>
-              <div className="nav-item">Refund</div>
-              <div className="nav-item">Split Payment</div>
-              <div className="nav-item">Transaction Search</div>
-              <div className="nav-item">Orders</div>
-              <div className="nav-item">Invoicing</div>
-            </div>
-          </div>
+        <nav className="nav-links">
+          <a href="#" className="nav-link">
+            API
+          </a>
+          <a href="#" className="nav-link">
+            Support
+          </a>
         </nav>
-      </div>
+        <button
+          className="mobile-menu-toggle"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          ☰
+        </button>
+      </header>
 
-      {/* Main Content */}
-      <div className="main-content">
-        <div className="header">
-          <div className="search-container">
-            <input type="text" className="search-input" placeholder="Search" />
-          </div>
-          <div className="header-actions">
-            <a href="#" className="header-link">
-              API
-            </a>
-            <a href="#" className="header-link">
-              Support
-            </a>
-          </div>
-        </div>
+      <div className="mainContent">
+        <aside className={`sidebar ${isMobileMenuOpen ? "open" : ""}`}>
+          {sidebarItems.map((section, index) => (
+            <div key={index} className="sidebar-section">
+              <div className="sidebar-title">{section.title}</div>
+              {section.items.map((item) => (
+                <a
+                  key={item.id}
+                  href={`#${item.id}`}
+                  className={`sidebar-item ${
+                    activeSection === item.id ? "active" : ""
+                  }`}
+                  onClick={() => {
+                    setActiveSection(item.id);
+                    setIsMobileMenuOpen(false);
+                  }}
+                >
+                  {item.name}
+                </a>
+              ))}
+            </div>
+          ))}
+        </aside>
 
-        <div className="content">
-          <h1 className="page-title">API-DOC Documentation</h1>
-          <p className="page-description">
+        <main className="content">
+          <h1>API-DOC Documentation</h1>
+          <p>
             Join the ranks of satisfied developers who have harnessed the power
             of our API to enhance their applications and drive business growth.
             Explore our documentation and start revolutionizing payment
             experiences today.
           </p>
-          <p className="page-description">
+          <p>
             You can use the API-DOC in test mode, which doesn't affect your live
             data or interact with the banking networks. The API key you use to
             authenticate the request determines whether the request is live mode
             or test mode.
           </p>
 
-          <div className="section">
-            <div className="cards-container">
-              <div className="card">
-                <h3 className="card-title">Getting started</h3>
-                <p className="card-description">
-                  Embark on your payment processing journey with ease by
-                  following these simple steps to get started with our Payment
-                  API.
-                </p>
-                <a href="#" className="card-link">
-                  Developer Quick Start Guide
-                </a>
-              </div>
-              <div className="card">
-                <h3 className="card-title">Not a developer?</h3>
-                <p className="card-description">
-                  Explore our no-code option to get started with API-DOC and do
-                  more with our API-DOC account
-                </p>
-                <a href="#" className="card-link">
-                  No Code Option
-                </a>
-              </div>
+          <div className="getting-started-grid">
+            <div className="getting-started-card">
+              <h3>Getting started</h3>
+              <p>
+                Embark on your payment processing journey with ease by following
+                these simple steps to get started with our Payment API.
+              </p>
+              <a href="#" className="cta-link">
+                Developer Quick Start Guide
+              </a>
+            </div>
+            <div className="getting-started-card">
+              <h3>Not a developer?</h3>
+              <p>
+                Explore our no-code option to get started with API-DOC and do
+                more with our API-DOC account.
+              </p>
+              <a href="#" className="cta-link">
+                No Code Option
+              </a>
             </div>
           </div>
 
-          <div className="section client-section">
-            <h2 className="section-title">Choose your client</h2>
-            <p className="section-description">
-              Select the client that best suits your development needs from our
-              comprehensive range of options. API-DOC offers clients for
-              JavaScript, Python, and PHP. In the following example, you can see
-              how to install each client.
+          <h2>Choose your client</h2>
+          <p>
+            Select the client that best suits your development needs from our
+            comprehensive range of options. API-DOC offers clients for
+            JavaScript, Python, and PHP. In the following example, you can see
+            how to install each client.
+          </p>
+
+          <div className="setup-steps">
+            <p>
+              <strong>
+                Here's how to get your client ID and client secret:
+              </strong>
             </p>
+            <ol>
+              <li>Select Log in to Dashboard and log in or sign up.</li>
+              <li>Select Apps & Credentials.</li>
+              <li>
+                New accounts come with a Default Application in the REST API
+                apps section. To create a new project, select Create App.
+              </li>
+              <li>Copy the client ID and client secret for your app.</li>
+            </ol>
+          </div>
 
-            <div className="client-steps">
-              <h4>Here's how to get your client ID and client secret:</h4>
-              <ol>
-                <li>Select Log in to Dashboard and log in or sign up.</li>
-                <li>Select Apps & Credentials.</li>
-                <li>
-                  New accounts come with a Default Application in the REST API
-                  apps section. To create a new project, select Create App.
-                </li>
-                <li>Copy the client ID and client secret for your app.</li>
-              </ol>
-            </div>
-
-            <div className="code-container">
-              <div className="code-tabs">
-                {Object.keys(codeSnippets).map((lang) => (
-                  <button
-                    key={lang}
-                    className={`code-tab ${activeTab === lang ? "active" : ""}`}
-                    onClick={() => setActiveTab(lang)}
-                  >
-                    {lang.charAt(0).toUpperCase() + lang.slice(1)}
-                  </button>
-                ))}
-              </div>
-              <div className="code-content">
+          <div className="code-block-container">
+            <div className="code-tabs">
+              {languages.map((lang) => (
                 <button
-                  className="copy-button"
-                  onClick={() => copyToClipboard(codeSnippets[activeTab])}
+                  key={lang.id}
+                  className={`code-tab ${
+                    selectedLanguage === lang.id ? "active" : ""
+                  }`}
+                  onClick={() => setSelectedLanguage(lang.id)}
                 >
-                  <Copy size={14} />
+                  {lang.name}
                 </button>
-                <pre className="code-block">{codeSnippets[activeTab]}</pre>
-              </div>
+              ))}
+            </div>
+            <div className="code-content" style={{ position: "relative" }}>
+              <button className="copy-button">Copy</button>
+              <pre>{codeExamples[selectedLanguage]}</pre>
             </div>
           </div>
 
-          <div className="section">
-            <h2 className="section-title">Client Libraries</h2>
+          <div className="client-libraries">
+            <h2>Client Libraries</h2>
             <div className="libraries-grid">
-              <div className="library-card">
-                <div className="library-header">
-                  <div className="library-icon ruby">💎</div>
-                  <h3 className="library-title">Rubby</h3>
+              {clientLibraries.map((library, index) => (
+                <div key={index} className="library-card">
+                  <div className="library-header">
+                    <span className="library-icon">{library.icon}</span>
+                    <span className="library-name">{library.name}</span>
+                  </div>
+                  <p className="library-description">{library.description}</p>
                 </div>
-                <p className="library-description">
-                  A dynamic, open source programming language with a focus on
-                  simplicity and productivity
-                </p>
-              </div>
-
-              <div className="library-card">
-                <div className="library-header">
-                  <div className="library-icon php">🐘</div>
-                  <h3 className="library-title">Php</h3>
-                </div>
-                <p className="library-description">
-                  A dynamic, open source programming language with a focus on
-                  simplicity and productivity
-                </p>
-              </div>
-
-              <div className="library-card">
-                <div className="library-header">
-                  <div className="library-icon nodejs">⬢</div>
-                  <h3 className="library-title">Nodejs</h3>
-                </div>
-                <p className="library-description">
-                  A dynamic, open source programming language with a focus on
-                  simplicity and productivity
-                </p>
-              </div>
-
-              <div className="library-card">
-                <div className="library-header">
-                  <div className="library-icon python">🐍</div>
-                  <h3 className="library-title">Python</h3>
-                </div>
-                <p className="library-description">
-                  A dynamic, open source programming language with a focus on
-                  simplicity and productivity
-                </p>
-              </div>
-
-              <div className="library-card">
-                <div className="library-header">
-                  <div className="library-icon go">∞</div>
-                  <h3 className="library-title">GO</h3>
-                </div>
-                <p className="library-description">
-                  A dynamic, open source programming language with a focus on
-                  simplicity and productivity
-                </p>
-              </div>
+              ))}
             </div>
           </div>
-
-          <div className="footer">© Copyright 2025. All rights reserved.</div>
-        </div>
+        </main>
       </div>
+
+      <footer className="footer">© Copyright 2025. All rights reserved.</footer>
     </div>
   );
-}
+};
+
+export default ApiDocPage;

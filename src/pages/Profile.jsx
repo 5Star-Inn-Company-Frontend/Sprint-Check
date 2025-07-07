@@ -26,27 +26,27 @@ export default function Profile() {
   const [bEditMode, setbEditMode] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
   const [profileForm, setProfileForm] = useState({
-    name: "Emmanuel",
-    username: "emmy",
-    email: "emmy@gmail.com",
-    dob: "1990-01-17", // ✅ fixed format
-    address: "San Jose, California, USA",
-    city: "Abule",
-    postalCode: "45962",
-    country: "USA",
+    name: "",
+    username: "",
+    email: "",
+    dob: "1991-01-17", // ✅ fixed format
+    address: "",
+    city: "",
+    postalCode: "",
+    country: "",
   });
 
   const [businessForm, setbusinessForm] = useState({
-    businessName: "Del",
-    businessEmail: "emmy@gmail.com",
-    businessPhone: "0808453834728",
-    businessRegNo: "3473943",
-    pAddress: "abule",
-    city: "abule",
-    postalCode: "45962",
-    country: "USA",
-    tin: "1328938230",
-    website: "business.com",
+    businessName: "",
+    businessEmail: "",
+    businessPhone: "",
+    businessRegNo: "",
+    pAddress: "",
+    city: "",
+    postalCode: "",
+    country: "",
+    tin: "",
+    website: "",
   });
 
   useEffect(() => {
@@ -56,6 +56,10 @@ export default function Profile() {
 
     checkScreenSize();
     window.addEventListener("resize", checkScreenSize);
+    const storedProfileImage = localStorage.getItem("profileImage");
+    if (storedProfileImage) {
+      setProfileImage(storedProfileImage);
+    }
     const storedProfileData = localStorage.getItem("profileData");
     if (storedProfileData) {
       setProfileForm(JSON.parse(storedProfileData));

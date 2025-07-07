@@ -139,6 +139,8 @@ const validatewebHook = (url) => {
     if (!res.ok) {
       throw new Error(data.message || "Failed to Update");
     }
+
+     return data;
   }
 
   const handleSave = async (e) => {

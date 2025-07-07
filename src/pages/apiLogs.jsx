@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 // import logo from "../assets/dashboardAssets/WhatsApp Image 2025-05-15 at 11.15.05_db0fe0fa 1.png";
 import { Eye, RotateCcw, Filter, FileDown, ChevronDown } from "lucide-react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 import notificationIcon from "../assets/dashboardAssets/notification-bing.png";
 
@@ -21,8 +23,9 @@ const Dashboard = () => {
   const apiAvatar = localStorage.getItem("avatar");
   const [showFilterOptions, setShowFilterOptions] = useState(false);
   const [filterStatus, setFilterStatus] = useState(""); // SUCCESSFUL / FAILED
-  const [filterStartDate, setFilterStartDate] = useState("");
-  const [filterEndDate, setFilterEndDate] = useState("");
+  const [filterStartDate, setFilterStartDate] = useState(null);
+  const [filterEndDate, setFilterEndDate] = useState(null);
+
   const [filterMinAmount, setFilterMinAmount] = useState("");
   const [filterMaxAmount, setFilterMaxAmount] = useState("");
 
@@ -430,6 +433,10 @@ const Dashboard = () => {
           margin-left: 1rem;
           padding: 0.5rem;
           outline: none;
+        }
+
+        .filterOptions .custom-date {
+          width: 37%;
         }
 
         .export-btn {
@@ -1108,19 +1115,25 @@ const Dashboard = () => {
 
                 <div>
                   <label>Start Date :</label>
-                  <input
-                    type="date"
-                    value={filterStartDate}
-                    onChange={(e) => setFilterStartDate(e.target.value)}
+                  <DatePicker
+                    selected={filterStartDate}
+                    onChange={(date) => setFilterStartDate(date)}
+                    dateFormat="yyyy-MM-dd"
+                    placeholderText="start date"
+                    className="custom-date"
+                    maxDate={new Date()}
                   />
                 </div>
 
                 <div>
                   <label>End Date :</label>
-                  <input
-                    type="date"
-                    value={filterEndDate}
-                    onChange={(e) => setFilterEndDate(e.target.value)}
+                  <DatePicker
+                    selected={filterEndDate}
+                    onChange={(date) => setFilterEndDate(date)}
+                    dateFormat="yyyy-MM-dd"
+                    placeholderText="end date"
+                    className="custom-date"
+                    maxDate={new Date()}
                   />
                 </div>
 
