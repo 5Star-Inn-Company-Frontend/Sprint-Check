@@ -1,122 +1,160 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   ChevronDown,
   Filter,
   Calendar,
   ArrowUp,
   ArrowDown,
+  X,
+  ChevronLeft, // For calendar navigation
+  ChevronRight, // For calendar navigation
 } from "lucide-react";
-// import logo from "../assets/dashboardAssets/WhatsApp Image 2025-05-15 at 11.15.05_db0fe0fa 1.png";
-import { Eye, RotateCcw, FileDown } from "lucide-react";
-
 import notificationIcon from "../assets/dashboardAssets/notification-bing.png";
 import SideBar from "../components/sideBar";
 import empty from "../assets/Empty.gif";
 
+// Basic Calendar Component (You might replace this with a library)
+const CalendarPicker = ({
+  selectedStartDate,
+  selectedEndDate,
+  onDateSelect,
+  onClose,
+}) => {
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+
+  const getDaysInMonth = (date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const firstDayOfMonth = new Date(year, month, 1);
+    const lastDayOfMonth = new Date(year, month + 1, 0);
+    const numDays = lastDayOfMonth.getDate();
+
+    const startDayOfWeek = firstDayOfMonth.getDay(); // 0 for Sunday, 1 for Monday
+
+    const days = [];
+    for (let i = 0; i < startDayOfWeek; i++) {
+      days.push(null); // Placeholder for days before the 1st of the month
+    }
+    for (let i = 1; i <= numDays; i++) {
+      days.push(new Date(year, month, i));
+    }
+    return days;
+  };
+
+  const days = getDaysInMonth(currentMonth);
+  const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  const handlePrevMonth = () => {
+    setCurrentMonth(
+      new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1)
+    );
+  };
+
+  const handleNextMonth = () => {
+    setCurrentMonth(
+      new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1)
+    );
+  };
+
+  const isSameDay = (date1, date2) => {
+    if (!date1 || !date2) return false;
+    return (
+      date1.getDate() === date2.getDate() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getFullYear() === date2.getFullYear()
+    );
+  };
+
+  const isInRange = (date, start, end) => {
+    if (!start || !end) return false;
+    return date >= start && date <= end;
+  };
+
+  const handleDayClick = (day) => {
+    if (!day) return;
+    if (!selectedStartDate || (selectedStartDate && selectedEndDate)) {
+      onDateSelect(day, null); // Start new selection
+    } else if (day < selectedStartDate) {
+      onDateSelect(day, selectedStartDate); // Swap if end date is before start
+    } else {
+      onDateSelect(selectedStartDate, day); // Complete the range
+    }
+  };
+
+  const handleOkClick = () => {
+    onClose();
+  };
+
+  return (
+    <div className="calendar-dropdown">
+      <div className="calendar-header">
+        <button onClick={handlePrevMonth}>
+          <ChevronLeft size={16} />
+        </button>
+        <span>
+          {currentMonth.toLocaleString("en-US", {
+            month: "long",
+            year: "numeric",
+          })}
+        </span>
+        <button onClick={handleNextMonth}>
+          <ChevronRight size={16} />
+        </button>
+      </div>
+      <div className="calendar-weekdays">
+        {weekdays.map((day) => (
+          <div key={day}>{day}</div>
+        ))}
+      </div>
+      <div className="calendar-days">
+        {days.map((day, index) => (
+          <div
+            key={index}
+            className={`calendar-day ${
+              isSameDay(day, selectedStartDate) ? "selected-start" : ""
+            } ${isSameDay(day, selectedEndDate) ? "selected-end" : ""} ${
+              isInRange(day, selectedStartDate, selectedEndDate) &&
+              !isSameDay(day, selectedStartDate) &&
+              !isSameDay(day, selectedEndDate)
+                ? "in-range"
+                : ""
+            } ${!day ? "empty" : ""}`}
+            onClick={() => handleDayClick(day)}
+          >
+            {day ? day.getDate() : ""}
+          </div>
+        ))}
+      </div>
+      <div className="calendar-footer">
+        <button className="calendar-ok-btn" onClick={handleOkClick}>
+          Ok
+        </button>
+      </div>
+    </div>
+  );
+};
+
 export default function Billing() {
   const [isMobile, setIsMobile] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [selectedPeriod, setSelectedPeriod] = useState("Day");
+
   const billingChar = localStorage.getItem("avatarChar");
   const billingAvatar = localStorage.getItem("avatar");
 
-  // Mock billing data
-  // const billingData = [
-  //   {
-  //     id: 1,
-  //     description: "Fund",
-  //     transactionId: "#12548796",
-  //     type: "Transfer",
-  //     date: "28 Jan, 12.30 AM",
-  //     amount: 750,
-  //     direction: "credit",
-  //     icon: "up",
-  //   },
-  //   {
-  //     id: 2,
-  //     description: "BVN",
-  //     transactionId: "#12548796",
-  //     type: "API",
-  //     date: "25 Jan, 10.40 PM",
-  //     amount: 450,
-  //     direction: "credit",
-  //     icon: "down",
-  //   },
-  //   {
-  //     id: 3,
-  //     description: "BVN",
-  //     transactionId: "#12548796",
-  //     type: "API",
-  //     date: "20 Jan, 10.40 PM",
-  //     amount: 150,
-  //     direction: "debit",
-  //     icon: "down",
-  //   },
-  //   {
-  //     id: 4,
-  //     description: "BVN",
-  //     transactionId: "#12548796",
-  //     type: "API",
-  //     date: "15 Jan, 03.29 PM",
-  //     amount: 1050,
-  //     direction: "debit",
-  //     icon: "down",
-  //   },
-  //   {
-  //     id: 5,
-  //     description: "BVN",
-  //     transactionId: "#12548796",
-  //     type: "API",
-  //     date: "25 Jan, 10.40 PM",
-  //     amount: 450,
-  //     direction: "credit",
-  //     icon: "down",
-  //   },
-  //   {
-  //     id: 6,
-  //     description: "Fund",
-  //     transactionId: "#12548796",
-  //     type: "Transfer",
-  //     date: "28 Jan, 12.30 AM",
-  //     amount: 750,
-  //     direction: "credit",
-  //     icon: "up",
-  //   },
-  //   {
-  //     id: 7,
-  //     description: "BVN",
-  //     transactionId: "#12548796",
-  //     type: "API",
-  //     date: "20 Jan, 10.40 PM",
-  //     amount: 150,
-  //     direction: "debit",
-  //     icon: "down",
-  //   },
-  //   {
-  //     id: 8,
-  //     description: "BVN",
-  //     transactionId: "#12548796",
-  //     type: "API",
-  //     date: "15 Jan, 03.29 PM",
-  //     amount: 1050,
-  //     direction: "debit",
-  //     icon: "down",
-  //   },
-  //   {
-  //     id: 9,
-  //     description: "BVN",
-  //     transactionId: "#12548796",
-  //     type: "API",
-  //     date: "14 Jan, 10.40 PM",
-  //     amount: 850,
-  //     direction: "debit",
-  //     icon: "down",
-  //   },
-  // ];
+  // State for filter visibility
+  const [showFilter, setShowFilter] = useState(false);
 
-  //Real Billing Data
+  // State for calendar visibility
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
-  const rawBillingData = JSON.parse(localStorage.getItem("billingData")).data;
+  // State for filter criteria
+  const [filterStatus, setFilterStatus] = useState("All");
+  const [filterDescription, setFilterDescription] = useState("");
+  const [filterType, setFilterType] = useState("All");
+  const [filterTransactionId, setFilterTransactionId] = useState("");
+  const [filterAmount, setFilterAmount] = useState("");
 
   function transformBillingData(data) {
     return data.map((item) => {
@@ -135,16 +173,25 @@ export default function Billing() {
         transactionId: `#${item.reference.slice(0, 8)}`,
         type: item.description.includes("FUND") ? "Transfer" : "API",
         date: dateString,
+        timestamp: createdAt.getTime(), // Add timestamp for easier date comparison
         amount: parseFloat(item.amount),
         direction: item.type.toLowerCase(),
         icon: item.type.toLowerCase() === "credit" ? "up" : "down",
       };
     });
   }
+const rawBillingData = useMemo(() => {
+  return JSON.parse(localStorage.getItem("billingData")).data;
+}, []);
 
-  const billingData = transformBillingData(rawBillingData);
+const billingData = useMemo(
+  () => transformBillingData(rawBillingData),
+  [rawBillingData]
+);
 
-  console.log(billingData);
+
+  // State for filtered data
+  const [filteredBillingData, setFilteredBillingData] = useState(billingData);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -156,6 +203,130 @@ export default function Billing() {
 
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
+
+  useEffect(() => {
+    // Apply filters whenever filter criteria or original billing data changes
+    applyFilters();
+  }, [
+    filterStatus,
+    filterDescription,
+    filterType,
+    filterTransactionId,
+    filterAmount,
+    startDate, // Include startDate in dependency array
+    endDate, // Include endDate in dependency array
+    billingData,
+  ]);
+
+  const applyFilters = () => {
+    let tempFilteredData = billingData;
+
+    // Filter by Status (direction)
+    if (filterStatus !== "All") {
+      tempFilteredData = tempFilteredData.filter(
+        (transaction) => transaction.direction === filterStatus.toLowerCase()
+      );
+    }
+
+    // Filter by Description
+    if (filterDescription) {
+      tempFilteredData = tempFilteredData.filter((transaction) =>
+        transaction.description
+          .toLowerCase()
+          .includes(filterDescription.toLowerCase())
+      );
+    }
+
+    // Filter by Type
+    if (filterType !== "All") {
+      tempFilteredData = tempFilteredData.filter(
+        (transaction) =>
+          transaction.type.toLowerCase() === filterType.toLowerCase()
+      );
+    }
+
+    // Filter by Transaction ID
+    if (filterTransactionId) {
+      tempFilteredData = tempFilteredData.filter((transaction) =>
+        transaction.transactionId
+          .toLowerCase()
+          .includes(filterTransactionId.toLowerCase())
+      );
+    }
+
+    // Filter by Amount
+    if (filterAmount) {
+      tempFilteredData = tempFilteredData.filter(
+        (transaction) => transaction.amount === parseFloat(filterAmount)
+      );
+    }
+
+    // Filter by Date Range
+    if (startDate && endDate) {
+      // Normalize dates to start/end of day for accurate range comparison
+      const startOfDay = new Date(
+        startDate.getFullYear(),
+        startDate.getMonth(),
+        startDate.getDate()
+      ).getTime();
+      const endOfDay = new Date(
+        endDate.getFullYear(),
+        endDate.getMonth(),
+        endDate.getDate(),
+        23,
+        59,
+        59,
+        999
+      ).getTime();
+
+      tempFilteredData = tempFilteredData.filter(
+        (transaction) =>
+          transaction.timestamp >= startOfDay &&
+          transaction.timestamp <= endOfDay
+      );
+    } else if (startDate && !endDate) {
+      // If only start date is selected, filter for that day
+      const startOfDay = new Date(
+        startDate.getFullYear(),
+        startDate.getMonth(),
+        startDate.getDate()
+      ).getTime();
+      const endOfDay = new Date(
+        startDate.getFullYear(),
+        startDate.getMonth(),
+        startDate.getDate(),
+        23,
+        59,
+        59,
+        999
+      ).getTime();
+      tempFilteredData = tempFilteredData.filter(
+        (transaction) =>
+          transaction.timestamp >= startOfDay &&
+          transaction.timestamp <= endOfDay
+      );
+    }
+
+    setFilteredBillingData(tempFilteredData);
+  };
+
+  const clearFilters = () => {
+    setFilterStatus("All");
+    setFilterDescription("");
+    setFilterType("All");
+    setFilterTransactionId("");
+    setFilterAmount("");
+    setStartDate(null); // Clear date filters
+    setEndDate(null); // Clear date filters
+    setFilteredBillingData(billingData); // Reset to original data
+    setShowFilter(false); // Close the filter
+    setShowCalendar(false); // Close the calendar
+  };
+
+  const handleDateSelect = (start, end) => {
+    setStartDate(start);
+    setEndDate(end);
+  };
 
   return (
     <div className="dashboard">
@@ -279,6 +450,7 @@ export default function Billing() {
           flex: 1;
           margin-left: 250px;
           transition: margin-left 0.3s ease;
+          position: relative; /* Added for filter positioning */
         }
 
         .main-content.mobile {
@@ -311,33 +483,6 @@ export default function Billing() {
           color: #2d3436;
           background: white;
         }
-
-        // .search-bar {
-        //   flex: 1;
-        //   max-width: 600px;
-        //   position: relative;
-        // }
-
-        // .search-input {
-        //   width: 100%;
-        //   padding: 15px 16px 15px 40px;
-        //   border: none;
-        //   border-radius: 2rem;
-        //   font-size: 14px;
-        //   outline: none;
-        // }
-
-        // .search-input::placeholder {
-        //   color: #636e72;
-        // }
-
-        // .search-icon {
-        //   position: absolute;
-        //   left: 12px;
-        //   top: 50%;
-        //   transform: translateY(-50%);
-        //   color: #636e72;
-        // }
 
         .user-section {
           background-color: white;
@@ -385,9 +530,10 @@ export default function Billing() {
 
         .page-header {
           display: flex;
-          justify-content: space-between;
+          justify-content: flex-end;
           align-items: center;
           margin-bottom: 32px;
+          position: relative; /* Added for filter dropdown positioning */
         }
 
         .page-title {
@@ -398,7 +544,7 @@ export default function Billing() {
 
         .header-controls {
           display: flex;
-          align-items: center;
+          align-items: flex-end;
           gap: 16px;
         }
 
@@ -439,6 +585,7 @@ export default function Billing() {
           font-size: 14px;
           cursor: pointer;
           transition: all 0.2s ease;
+          position: relative; /* For calendar positioning */
         }
 
         .select-period-btn:hover {
@@ -463,6 +610,226 @@ export default function Billing() {
           border-color: #d1d5db;
         }
 
+        /* Filter Dropdown Styles */
+        .filter-dropdown {
+          position: absolute;
+          top: 100%; /* Position below the filter button */
+          right: 0;
+          background: white;
+          border: 1px solid #e5e7eb;
+          border-radius: 8px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+          padding: 20px;
+          width: 500px; /* Adjust width as needed */
+          z-index: 10;
+          display: flex;
+          flex-direction: column;
+          gap: 15px;
+        }
+
+        .filter-body {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          gap: 15px;
+        }
+        .filter-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding-bottom: 15px;
+          border-bottom: 1px solid #f3f4f6;
+        }
+
+        .filter-header h4 {
+          font-size: 16px;
+          font-weight: 600;
+          color: #2d3436;
+        }
+
+        .filter-header .close-btn {
+          background: none;
+          border: none;
+          cursor: pointer;
+          color: #9ca3af;
+        }
+
+        .filter-group {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .filter-group label {
+          font-size: 13px;
+          font-weight: 500;
+          color: #6b7280;
+        }
+
+        .filter-group select,
+        .filter-group input {
+          width: 100%;
+          padding: 10px 12px;
+          border: 1px solid #e5e7eb;
+          border-radius: 6px;
+          font-size: 14px;
+          color: #374151;
+          outline: none;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+          border-color: #d1d5db;
+        }
+
+        .filter-actions {
+          display: flex;
+          gap: 10px;
+          justify-content: flex-end;
+          padding-top: 15px;
+          border-top: 1px solid #f3f4f6;
+        }
+
+        .filter-actions button {
+          padding: 10px 20px;
+          border-radius: 6px;
+          font-size: 14px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        .filter-actions .clear-btn {
+          background: brown;
+          border: 1px solid #e5e7eb;
+          color: white;
+        }
+
+        .filter-actions .clear-btn:hover {
+          background: brown;
+        }
+
+        .filter-actions .apply-btn {
+          background: #d97706; /* Adjusted to original brown, user prefers this */
+          color: white;
+          border: 1px solid #d97706;
+        }
+
+        .filter-actions .apply-btn:hover {
+          background: #b46105; /* Darker shade for hover */
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Calendar Dropdown Styles */
+        .calendar-dropdown {
+          position: absolute;
+          top: 100%; /* Position below the select period button */
+          right: 0;
+          background: white;
+          border: 1px solid #e5e7eb;
+          border-radius: 8px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+          padding: 15px;
+          width: 320px; /* Adjust width as needed */
+          z-index: 11; /* Higher than filter dropdown */
+          display: flex;
+          flex-direction: column;
+        }
+
+        .calendar-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 15px;
+          font-weight: 600;
+          color: #2d3436;
+        }
+
+        .calendar-header button {
+          background: none;
+          border: none;
+          cursor: pointer;
+          color: #6b7280;
+          padding: 5px;
+          border-radius: 4px;
+          transition: background 0.2s ease;
+        }
+
+        .calendar-header button:hover {
+          background: #f3f4f6;
+        }
+
+        .calendar-weekdays {
+          display: grid;
+          grid-template-columns: repeat(7, 1fr);
+          text-align: center;
+          font-size: 12px;
+          color: #9ca3af;
+          margin-bottom: 8px;
+        }
+
+        .calendar-days {
+          display: grid;
+          grid-template-columns: repeat(7, 1fr);
+          gap: 5px;
+        }
+
+        .calendar-day {
+          padding: 8px;
+          text-align: center;
+          cursor: pointer;
+          border-radius: 4px;
+          transition: background-color 0.2s ease, color 0.2s ease;
+          font-size: 14px;
+          color: #374151;
+        }
+
+        .calendar-day.empty {
+          visibility: hidden;
+        }
+
+        .calendar-day:hover {
+          background-color: #f3f4f6;
+        }
+
+        .calendar-day.selected-start,
+        .calendar-day.selected-end {
+          background-color: #d97706; /* Primary color */
+          color: white;
+        }
+
+        .calendar-day.in-range {
+          background-color: rgba(
+            217,
+            119,
+            6,
+            0.1
+          ); /* Lighter shade for range */
+          color: #d97706;
+        }
+        .calendar-day.selected-start:hover,
+        .calendar-day.selected-end:hover {
+          background-color: #b46105; /* Darker primary for hover */
+        }
+
+        .calendar-footer {
+          margin-top: 15px;
+          display: flex;
+          justify-content: flex-end;
+        }
+
+        .calendar-footer .calendar-ok-btn {
+          background-color: #d97706;
+          color: white;
+          border: none;
+          padding: 8px 16px;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: background-color 0.2s ease;
+        }
+
+        .calendar-footer .calendar-ok-btn:hover {
+          background-color: #b46105;
+        }
+
         .table-container {
           border-radius: 12px;
           overflow: hidden;
@@ -472,7 +839,6 @@ export default function Billing() {
         .table-container img {
           position: relative;
           top: 50%;
-
           right: -27%;
         }
 
@@ -593,10 +959,6 @@ export default function Billing() {
             display: block;
           }
 
-          .search-bar {
-            max-width: 200px;
-          }
-
           .hamSearch {
             display: flex;
             gap: 1rem;
@@ -620,6 +982,24 @@ export default function Billing() {
 
           .table {
             min-width: 700px;
+          }
+
+          /* Adjust calendar dropdown for smaller screens */
+          .calendar-dropdown {
+            width: calc(100% - 32px);
+            left: 16px;
+            right: 16px;
+          }
+
+          /* Adjust filter dropdown for smaller screens */
+          .filter-dropdown {
+            width: 300px;
+          }
+
+          .filter-body {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
           }
         }
 
@@ -699,16 +1079,6 @@ export default function Billing() {
               ☰
             </button>
 
-            {/* <div className="search-bar">
-              <div className="search-icon">
-                <img src={searchIcon} alt="icon" />
-              </div>
-              <input
-                type="text"
-                className="search-input"
-                placeholder="Search here ..."
-              />
-            </div> */}
             <h1 className="page-bar">Billing</h1>
           </div>
 
@@ -716,7 +1086,7 @@ export default function Billing() {
             <div className="notification-icon">
               <img src={notificationIcon} alt="icon" />
             </div>
-            <div className="user-avatar">{billingAvatar.toUpperCase()}</div>
+            <div className="user-avatar">{billingAvatar?.toUpperCase()}</div>
             <span className="user-name">{billingChar}</span>
             <span className="arrow-down">
               <ChevronDown size={16} />
@@ -727,47 +1097,139 @@ export default function Billing() {
         {/* Content */}
         <div className="content">
           <div className="page-header">
-            {/* <h1 className="page-title">Billing</h1> */}
             <div className="header-controls">
-              <div className="period-selector">
-                <button
-                  className={`period-btn ${
-                    selectedPeriod === "Day" ? "active" : ""
-                  }`}
-                  onClick={() => setSelectedPeriod("Day")}
-                >
-                  Day
-                </button>
-                <button
-                  className={`period-btn ${
-                    selectedPeriod === "Week" ? "active" : ""
-                  }`}
-                  onClick={() => setSelectedPeriod("Week")}
-                >
-                  Week
-                </button>
-                <button
-                  className={`period-btn ${
-                    selectedPeriod === "Month" ? "active" : ""
-                  }`}
-                  onClick={() => setSelectedPeriod("Month")}
-                >
-                  Month
-                </button>
-              </div>
-              <button className="select-period-btn">
+              <button
+                className="select-period-btn"
+                onClick={() => {
+                  setShowCalendar(!showCalendar);
+                  setShowFilter(false);
+                }}
+              >
                 <Calendar size={16} />
-                Select period
+                {startDate && endDate
+                  ? `${startDate.toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                    })} - ${endDate.toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                    })}`
+                  : "Select period"}
               </button>
-              <button className="filter-btn">
+              <button
+                className="filter-btn"
+                onClick={() => {
+                  setShowFilter(!showFilter);
+                  setShowCalendar(false);
+                }}
+              >
                 <Filter size={16} />
                 Filter
               </button>
             </div>
+
+            {/* Calendar Dropdown */}
+            {showCalendar && (
+              <CalendarPicker
+                selectedStartDate={startDate}
+                selectedEndDate={endDate}
+                onDateSelect={handleDateSelect}
+                onClose={() => setShowCalendar(false)}
+              />
+            )}
+
+            {/* Filter Dropdown */}
+            {showFilter && (
+              <div className="filter-dropdown">
+                <div className="filter-header">
+                  <h4>Filter</h4>
+                  <button
+                    className="close-btn"
+                    onClick={() => setShowFilter(false)}
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+                <div className="filter-body">
+                  <div className="filter-group">
+                    <label htmlFor="status">STATUS</label>
+                    <select
+                      id="status"
+                      value={filterStatus}
+                      onChange={(e) => setFilterStatus(e.target.value)}
+                    >
+                      <option value="All">All</option>
+                      <option value="Credit">Credit</option>
+                      <option value="Debit">Debit</option>
+                    </select>
+                  </div>
+
+                  <div className="filter-group">
+                    <label htmlFor="description">DESCRIPTION</label>
+                    <input
+                      type="text"
+                      id="description"
+                      placeholder="All"
+                      value={filterDescription}
+                      onChange={(e) => setFilterDescription(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="filter-group">
+                    <label htmlFor="type">TYPE</label>
+                    <select
+                      id="type"
+                      value={filterType}
+                      onChange={(e) => setFilterType(e.target.value)}
+                    >
+                      <option value="All">All</option>
+                      <option value="Transfer">Transfer</option>
+                      <option value="API">API</option>
+                    </select>
+                  </div>
+
+                  <div className="filter-group">
+                    <label htmlFor="transactionId">TRANSACTION ID</label>
+                    <input
+                      type="text"
+                      id="transactionId"
+                      placeholder=""
+                      value={filterTransactionId}
+                      onChange={(e) => setFilterTransactionId(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="filter-group">
+                    <label htmlFor="amount">AMOUNT</label>
+                    <input
+                      type="number"
+                      id="amount"
+                      value={filterAmount}
+                      onChange={(e) => setFilterAmount(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <div className="filter-actions">
+                  <button className="clear-btn" onClick={clearFilters}>
+                    Clear All
+                  </button>
+                  <button
+                    className="apply-btn"
+                    onClick={() => {
+                      applyFilters();
+                      setShowFilter(false);
+                    }}
+                  >
+                    Apply Filters
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="table-container">
-            {billingData[0] ? (
+            {filteredBillingData && filteredBillingData.length > 0 ? (
               <table className="table">
                 <thead className="table-header">
                   <tr>
@@ -779,7 +1241,7 @@ export default function Billing() {
                   </tr>
                 </thead>
                 <tbody>
-                  {billingData?.map((transaction) => (
+                  {filteredBillingData.map((transaction) => (
                     <tr key={transaction.id} className="table-row">
                       <td className="table-cell">
                         <div className="description-cell">
