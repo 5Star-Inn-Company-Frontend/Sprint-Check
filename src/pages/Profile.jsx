@@ -25,6 +25,8 @@ export default function Profile() {
   const [editMode, setEditMode] = useState(false);
   const [bEditMode, setbEditMode] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
+
   const [profileForm, setProfileForm] = useState({
     name: "",
     username: "",
@@ -454,6 +456,49 @@ export default function Profile() {
           border: none;
         }
 
+        .Modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: rgba(0, 0, 0, 0.5);
+          z-index: 1000;
+        }
+
+        .Modal {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background: white;
+          display:flex;
+          flex-direction:column;
+          gap:1.2rem;
+          border-radius: 12px;
+          padding: 2rem;
+          width: 90%;
+          max-width: 500px;
+          z-index: 1000;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .Modal-title {
+          font-size: 20px;
+          font-weight: 600;
+          margin-bottom: 20px;
+          color: #2d3436;
+        }
+
+        .btn-changePsw {
+          border: 1px solid rgba(76, 73, 166, 1);
+          color: rgba(76, 73, 166, 1);
+        }
+
+        .changePsw-form {
+          justify-content: space-between;
+        }
+
         .btn-primary:hover {
           background: #4c49a6;
         }
@@ -831,7 +876,13 @@ export default function Profile() {
                     />
                   </div>
 
-                  <div className="form-actions">
+                  <div className="form-actions changePsw-form">
+                    <button
+                      onClick={() => setShowChangePasswordModal(true)}
+                      className="btn btn-changePsw"
+                    >
+                      Change Password
+                    </button>
                     {editMode ? (
                       <button
                         className="btn btn-primary"
@@ -1049,6 +1100,54 @@ export default function Profile() {
           </div>
         </div>
       </div>
+
+      {showChangePasswordModal && (
+        <>
+          <div
+            className="Modal-overlay"
+           
+          ></div>
+          <div className="Modal">
+            <h2 className="Modal-title">Change Password</h2>
+            <div className="form-group">
+              <label className="form-label">Current Password</label>
+              <input
+                type="password"
+                className="form-input"
+                placeholder="Enter current password"
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">New Password</label>
+              <input
+                type="password"
+                className="form-input"
+                placeholder="Enter new password"
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Confirm New Password</label>
+              <input
+                type="password"
+                className="form-input"
+                placeholder="Confirm new password"
+              />
+            </div>
+
+            <div className="form-actions">
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowChangePasswordModal(false)}
+              >
+                Cancel
+              </button>
+              <button className="btn btn-primary">Save</button>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
