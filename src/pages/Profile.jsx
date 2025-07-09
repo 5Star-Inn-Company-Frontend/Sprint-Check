@@ -160,6 +160,62 @@ const handleSaveBusinessProfile = async () => {
   }
 };
 
+const handleSaveProfile = async () => {
+  try {
+    setLoading(true);
+
+    const response = await fetch(
+      "https://sprintcheck.megasprintlimited.com.ng/api/profile",
+      {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          name: profileForm.name,
+          phone_number: profileForm.phoneNo,
+        }),
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.status) {
+      const errorMsg =
+        result.message || result.error || "Profile update failed";
+      toast.error(errorMsg);
+    } else {
+      toast.success("Profile updated successfully");
+
+      const data = result.data;
+
+      // ✅ Save to localStorage
+      localStorage.setItem("profileData", JSON.stringify(data));
+
+      // ✅ Update UI state
+      setProfileForm({
+        name: data.name || "",
+        phoneNo: data.phone_number || "",
+        email: data.email || "", // Backend includes it in response
+        dob: profileForm.dob || "",
+        address: profileForm.address || "",
+        city: profileForm.city || "",
+        postalCode: profileForm.postalCode || "",
+        country: profileForm.country || "",
+      });
+
+      setEditMode(false);
+    }
+  } catch (error) {
+    toast.error("Network error while updating profile.");
+    console.error(error);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const openChangePasswordModal = () => {
     setPasswordForm({
@@ -1042,16 +1098,9 @@ const handleSaveBusinessProfile = async () => {
                     {editMode ? (
                       <button
                         className="btn btn-primary"
-                        onClick={() => {
-                          localStorage.setItem(
-                            "profileData",
-                            JSON.stringify(profileForm)
-                          );
-                          toast.success("Profile saved");
-                          setEditMode(false);
-                        }}
+                        onClick={handleSaveProfile}
                       >
-                        Save
+                        {loading ? "Saving..." : "Save"}
                       </button>
                     ) : (
                       <button
