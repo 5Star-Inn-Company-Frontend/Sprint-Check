@@ -23,13 +23,21 @@ export default function Profile() {
   const profChar = localStorage.getItem("avatarChar");
   const profAvatar = localStorage.getItem("avatar");
   const [editMode, setEditMode] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [bEditMode, setbEditMode] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
+  const [loadingBusinessProfile, setLoadingBusinessProfile] = useState(true);
+
+  const [passwordForm, setPasswordForm] = useState({
+    current_password: "",
+    new_password: "",
+    new_password_confirmation: "",
+  });
 
   const [profileForm, setProfileForm] = useState({
     name: "",
-    username: "",
+    phoneNo: "",
     email: "",
     dob: "1991-01-17", // ✅ fixed format
     address: "",
@@ -43,9 +51,9 @@ export default function Profile() {
     businessEmail: "",
     businessPhone: "",
     businessRegNo: "",
-    pAddress: "",
+    businessAddress: "",
     city: "",
-    postalCode: "",
+    businessDescription: "",
     country: "",
     tin: "",
     website: "",
@@ -67,13 +75,160 @@ export default function Profile() {
       setProfileForm(JSON.parse(storedProfileData));
     }
 
-    const storedBusinessData = localStorage.getItem("businessData");
-    if (storedBusinessData) {
-      setbusinessForm(JSON.parse(storedBusinessData));
-    }
-
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
+
+useEffect(() => {
+  const storedBusinessData = localStorage.getItem("businessData");
+  if (storedBusinessData) {
+    const data = JSON.parse(storedBusinessData);
+    setbusinessForm({
+      businessEmail: data.business_email || "",
+      businessPhone: data.business_phone_number || "",
+      businessRegNo: data.business_registration_number || "",
+      businessAddress: data.business_address || "",
+      city: data.city || "",
+      businessDescription: data.business_description || "",
+      country: data.country || "",
+      tin: data.tax_identification_number || "",
+      website: data.business_website || "",
+    });
+  }
+}, []);
+
+
+const handleSaveBusinessProfile = async () => {
+  try {
+    setLoading(true);
+
+    const res = await fetch(
+      "https://sprintcheck.megasprintlimited.com.ng/api/business",
+      {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          business_email: businessForm.businessEmail,
+          business_phone_number: businessForm.businessPhone,
+          business_registration_number: businessForm.businessRegNo,
+          business_address: businessForm.businessAddress,
+          city: businessForm.city,
+          business_description: businessForm.businessDescription,
+          country: businessForm.country,
+          tax_identification_number: businessForm.tin,
+          business_website: businessForm.website,
+        }),
+      }
+    );
+
+    const result = await res.json();
+
+    if (!res.ok || !result.status) {
+      const errorMsg = result.message || result.error || "Update failed";
+      toast.error(errorMsg);
+    } else {
+      toast.success("Business profile updated successfully");
+
+      const data = result.data;
+
+      // ✅ Save to localStorage
+      localStorage.setItem("businessData", JSON.stringify(data));
+
+      // ✅ Update UI state
+      setbusinessForm({
+        businessEmail: data.business_email || "",
+        businessPhone: data.business_phone_number || "",
+        businessRegNo: data.business_registration_number || "",
+        businessAddress: data.business_address || "",
+        city: data.city || "",
+        businessDescription: data.business_description || "",
+        country: data.country || "",
+        tin: data.tax_identification_number || "",
+        website: data.business_website || "",
+      });
+
+      setbEditMode(false);
+    }
+  } catch (error) {
+    toast.error("Network error while updating profile.");
+    console.error(error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+  const openChangePasswordModal = () => {
+    setPasswordForm({
+      current_password: "",
+      new_password: "",
+      new_password_confirmation: "",
+    });
+    setLoading(false); // reset button state too
+    setShowChangePasswordModal(true);
+  };
+
+  const handleChangePassword = async () => {
+    const { current_password, new_password, new_password_confirmation } =
+      passwordForm;
+
+    // ✅ Basic Validation
+    if (!current_password || !new_password || !new_password_confirmation) {
+      toast.error("All fields are required");
+      return;
+    }
+
+    if (new_password !== new_password_confirmation) {
+      toast.error("New passwords do not match");
+      return;
+    }
+
+    if (new_password === current_password) {
+      toast.error("New password must be different from current password");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await fetch(
+        "https://sprintcheck.megasprintlimited.com.ng/api/change-password",
+        {
+          method: "PUT",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify(passwordForm),
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        // ✅ Extract and show backend error message
+        const errorMsg =
+          result.message || result.error || "Password change failed";
+        toast.error(errorMsg);
+      } else {
+        toast.success("Password changed successfully");
+        setShowChangePasswordModal(false);
+        setPasswordForm({
+          current_password: "",
+          new_password: "",
+          new_password_confirmation: "",
+        });
+      }
+    } catch (error) {
+      toast.error("Network error. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="dashboard">
@@ -472,9 +627,9 @@ export default function Profile() {
           left: 50%;
           transform: translate(-50%, -50%);
           background: white;
-          display:flex;
-          flex-direction:column;
-          gap:1.2rem;
+          display: flex;
+          flex-direction: column;
+          gap: 1.2rem;
           border-radius: 12px;
           padding: 2rem;
           width: 90%;
@@ -750,15 +905,15 @@ export default function Profile() {
                   </div>
 
                   <div className="form-group">
-                    <label className="form-label">User Name</label>
+                    <label className="form-label">Phone Number</label>
                     <input
                       type="text"
                       className="form-input"
-                      value={profileForm.username}
+                      value={profileForm.phoneNo}
                       onChange={(e) =>
                         setProfileForm({
                           ...profileForm,
-                          username: e.target.value,
+                          phoneNo: e.target.value,
                         })
                       }
                       readOnly={!editMode}
@@ -878,11 +1033,12 @@ export default function Profile() {
 
                   <div className="form-actions changePsw-form">
                     <button
-                      onClick={() => setShowChangePasswordModal(true)}
                       className="btn btn-changePsw"
+                      onClick={openChangePasswordModal}
                     >
                       Change Password
                     </button>
+
                     {editMode ? (
                       <button
                         className="btn btn-primary"
@@ -974,15 +1130,15 @@ export default function Profile() {
                     />
                   </div>
                   <div className="form-group">
-                    <label className="form-label">Permanent Address</label>
+                    <label className="form-label">Business Address</label>
                     <input
                       type="text"
                       className="form-input"
-                      value={businessForm.pAddress}
+                      value={businessForm.businessAddress}
                       onChange={(e) =>
                         setbusinessForm({
                           ...businessForm,
-                          pAddress: e.target.value,
+                          businessAddress: e.target.value,
                         })
                       }
                       readOnly={!bEditMode}
@@ -1005,15 +1161,15 @@ export default function Profile() {
                     />
                   </div>
                   <div className="form-group">
-                    <label className="form-label">Postal Code</label>
+                    <label className="form-label">Business Description</label>
                     <input
                       type="text"
                       className="form-input"
-                      value={businessForm.postalCode}
+                      value={businessForm.businessDescription}
                       onChange={(e) =>
                         setbusinessForm({
                           ...businessForm,
-                          postalCode: e.target.value,
+                          businessDescription: e.target.value,
                         })
                       }
                       readOnly={!bEditMode}
@@ -1074,14 +1230,7 @@ export default function Profile() {
                     {bEditMode ? (
                       <button
                         className="btn btn-primary"
-                        onClick={() => {
-                          localStorage.setItem(
-                            "businessData",
-                            JSON.stringify(businessForm)
-                          );
-                          toast.success("Profile saved");
-                          setbEditMode(false);
-                        }}
+                        onClick={handleSaveBusinessProfile}
                       >
                         Save
                       </button>
@@ -1103,10 +1252,7 @@ export default function Profile() {
 
       {showChangePasswordModal && (
         <>
-          <div
-            className="Modal-overlay"
-           
-          ></div>
+          <div className="Modal-overlay"></div>
           <div className="Modal">
             <h2 className="Modal-title">Change Password</h2>
             <div className="form-group">
@@ -1115,6 +1261,13 @@ export default function Profile() {
                 type="password"
                 className="form-input"
                 placeholder="Enter current password"
+                value={passwordForm.current_password}
+                onChange={(e) =>
+                  setPasswordForm({
+                    ...passwordForm,
+                    current_password: e.target.value,
+                  })
+                }
               />
             </div>
 
@@ -1124,6 +1277,13 @@ export default function Profile() {
                 type="password"
                 className="form-input"
                 placeholder="Enter new password"
+                value={passwordForm.new_password}
+                onChange={(e) =>
+                  setPasswordForm({
+                    ...passwordForm,
+                    new_password: e.target.value,
+                  })
+                }
               />
             </div>
 
@@ -1133,6 +1293,13 @@ export default function Profile() {
                 type="password"
                 className="form-input"
                 placeholder="Confirm new password"
+                value={passwordForm.new_password_confirmation}
+                onChange={(e) =>
+                  setPasswordForm({
+                    ...passwordForm,
+                    new_password_confirmation: e.target.value,
+                  })
+                }
               />
             </div>
 
@@ -1143,7 +1310,12 @@ export default function Profile() {
               >
                 Cancel
               </button>
-              <button className="btn btn-primary">Save</button>
+              <button
+                className="btn btn-primary"
+                onClick={handleChangePassword}
+              >
+                {loading ? "Saving..." : "Save"}
+              </button>
             </div>
           </div>
         </>
