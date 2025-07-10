@@ -50,17 +50,7 @@ export default function ApiLogs() {
     setSearchResults([]);
   };
 
-  // function handleLogout() {
-  //   localStorage.removeItem("token");
-  //   localStorage.removeItem("dashBoardData");
-  //   localStorage.removeItem("activeTab");
-  //   localStorage.removeItem("apiLogsData");
-  //   localStorage.removeItem("avatar");
-  //   localStorage.removeItem("avatarChar");
-  //   localStorage.removeItem("billingData");
-  //   // clear state too
-  //   navigate("/");
-  // }
+ 
 
   function handleDashboard() {
     const token = localStorage.getItem("token");
@@ -89,8 +79,6 @@ export default function ApiLogs() {
     if (storedData) {
       const parsed = JSON.parse(storedData);
       setDashboardData(parsed);
-
-      handleDashboard();
       const dashboardInfo = extractDashboardInfo(parsed);
       const hasAccountNumber = dashboardInfo?.virtual_accounts?.length > 0;
 
@@ -270,18 +258,9 @@ export default function ApiLogs() {
   }
 
   // Usage example:
-  // const chartData = transformAPILogsToChartData(apiLogs);
+  const chartData = transformAPILogsToChartData(apiLogs);
 
-  const chartData = [
-    // { date: "14/05/2025", verified: 28, fail: 15 },
-    // { date: "15/05/2025", verified: 80, fail: 28 },
-    // { date: "16/05/2025", verified: 16, fail: 32 },
-    // { date: "17/05/2025", verified: 79, fail: 95 },
-    // { date: "18/05/2025", verified: 43, fail: 73 },
-    // { date: "19/05/2025", verified: 24, fail: 63 },
-    // { date: "20/05/2025", verified: 52, fail: 112 },
-    // { date: "21/05/2025", verified: 44, fail: 98 },
-  ];
+
 
   // const maxValue = Math.max(...chartData.flatMap((d) => [d.verified, d.fail]));
   const dashboardInfo = extractDashboardInfo(dashboardData);

@@ -27,7 +27,7 @@ export default function Profile() {
   const [bEditMode, setbEditMode] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
-  const [loadingBusinessProfile, setLoadingBusinessProfile] = useState(true);
+  const [loadingBusinessProfile, setLoadingBusinessProfile] = useState(false);
   const [countryList, setCountryList] = useState([]);
 
   const [passwordForm, setPasswordForm] = useState({

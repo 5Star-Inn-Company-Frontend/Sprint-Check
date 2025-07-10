@@ -57,7 +57,7 @@ export default function AuthSetPsw() {
       toast.success("Password Changed");
       localStorage.removeItem("resetEmail");
       localStorage.removeItem("resetCode");
-      navigate("/");
+      navigate("/login");
     } catch (err) {
       toast.error(err.message);
     } finally {
@@ -117,7 +117,7 @@ export default function AuthSetPsw() {
           <p className="login-signup">
             Remember login details?{" "}
             <strong
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/login")}
               style={{ cursor: "pointer", color: "blue" }}
             >
               Login

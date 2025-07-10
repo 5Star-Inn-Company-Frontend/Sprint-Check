@@ -1,12 +1,12 @@
 import { useState, useRef, useEffect } from "react";
-import mailIcon from "../assets/codicon_mail.png";
-import passwordIcon from "../assets/bx_bxs-lock-alt.png";
+// import mailIcon from "../assets/codicon_mail.png";
+// import passwordIcon from "../assets/bx_bxs-lock-alt.png";
 import { useNavigate } from "react-router-dom";
 import Logo from "../assets/logo.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { EyeClosed, EyeIcon } from "lucide-react";
-
+import { fetchAllAppData } from "../utils/fetchAllAppData";
 export default function AuthLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -48,34 +48,34 @@ export default function AuthLogin() {
     return Object.keys(newErrors).length === 0;
   };
 
-  function handleDashboard() {
-    const token = localStorage.getItem("token");
-    async function toDashboard(authCode) {
-      const res = await fetch(
-        "https://sprintcheck.megasprintlimited.com.ng/api/dashboard",
-        {
-          method: "GET",
-          headers: {
-            //  "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: `Bearer ${authCode}`,
-          },
-          // body: JSON.stringify(authCode),
-        }
-      );
+  // function handleDashboard() {
+  //   const token = localStorage.getItem("token");
+  //   async function toDashboard(authCode) {
+  //     const res = await fetch(
+  //       "https://sprintcheck.megasprintlimited.com.ng/api/dashboard",
+  //       {
+  //         method: "GET",
+  //         headers: {
+  //           //  "Content-Type": "application/json",
+  //           Accept: "application/json",
+  //           Authorization: `Bearer ${authCode}`,
+  //         },
+  //         // body: JSON.stringify(authCode),
+  //       }
+  //     );
 
-      const data = await res.json();
-      console.log(data);
-      localStorage.setItem("dashboardData", JSON.stringify(data));
+  //     const data = await res.json();
+  //     console.log(data);
+  //     localStorage.setItem("dashboardData", JSON.stringify(data));
 
-      if (!res.ok) {
-        throw new Error(data.message || "Failed to login");
-      } else {
-        navigate("/dashboard");
-      }
-    }
-    toDashboard(token);
-  }
+  //     if (!res.ok) {
+  //       throw new Error(data.message || "Failed to login");
+  //     } else {
+  //       navigate("/dashboard");
+  //     }
+  //   }
+  //   toDashboard(token);
+  // }
 
   async function loginUser(loginData) {
     const res = await fetch(
@@ -98,7 +98,37 @@ export default function AuthLogin() {
 
     localStorage.setItem("token", data.token);
   }
-
+ function transformApiLogs(apiResponse) {
+   return apiResponse.data.data.map((item) => {
+     let bvnData = null;
+     try {
+       if (item.bvn?.data) bvnData = JSON.parse(item.bvn.data);
+     } catch (e) {
+       console.error("Error parsing BVN data:", e);
+     }
+     const fullName = bvnData
+       ? `${bvnData.firstName || ""} ${bvnData.lastName || ""}`.trim()
+       : "Null";
+     return {
+       id: item.id,
+       endpoint: item.type,
+       name: fullName,
+       amount: 40.0,
+       source: item.source,
+       performedBy: "Samuel Odejirmi",
+       date: new Date(item.created_at).toLocaleString("en-US", {
+         month: "short",
+         day: "numeric",
+         year: "numeric",
+         hour: "numeric",
+         minute: "numeric",
+         hour12: true,
+       }),
+       status: item.status === 1 ? "SUCCESSFUL" : "FAILED",
+       userDetails: bvnData || null,
+     };
+   });
+ }
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -106,8 +136,23 @@ export default function AuthLogin() {
     setLoading(true);
     try {
       const response = await loginUser({ email, password });
-      toast.success("Login successful!");
-      handleDashboard();
+     toast.success("Login successful!");
+     const token = localStorage.getItem("token");
+
+     const [dashboardData, billingData, historyData] = await fetchAllAppData(
+       token
+     );
+
+     // Save all to localStorage
+     localStorage.setItem("dashboardData", JSON.stringify(dashboardData));
+     localStorage.setItem("billingData", JSON.stringify(billingData.data)); // .data needed
+     localStorage.setItem(
+       "apiLogsData",
+       JSON.stringify(transformApiLogs(historyData))
+     );
+
+     // Go to dashboard immediately
+     navigate("/dashboard");
     } catch (err) {
       toast.error(err.message);
     } finally {
@@ -117,7 +162,7 @@ export default function AuthLogin() {
 
   return (
     <div className="main">
-      <ToastContainer position="top-right" autoClose={3000} />
+      <ToastContainer position="top-right" autoClose={4000} />
       <img className="logo" src={Logo} alt="logo" />
       <div className="login">
         <form className="login-form" onSubmit={handleSubmit}>

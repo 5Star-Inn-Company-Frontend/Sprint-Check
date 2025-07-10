@@ -58,7 +58,7 @@ export default function AuthForgotPsw() {
   };
 
   const handleLogin = () => {
-    navigate("/");
+    navigate("/login");
   };
 
   return (

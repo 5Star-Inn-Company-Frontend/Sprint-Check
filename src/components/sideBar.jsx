@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from "react"; // ADD THIS
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/dashboardAssets/WhatsApp Image 2025-05-15 at 11.15.05_db0fe0fa 1.png";
@@ -21,105 +19,74 @@ export default function SideBar({ isMobile, sidebarOpen }) {
     localStorage.setItem("activeTab", activeItem);
   }, [activeItem]);
 
-  function handleDashboard() {
-    setActiveItem("dashboard"); // set active
-    const token = localStorage.getItem("token");
-    async function toDashboard(authCode) {
-      const res = await fetch(
-        "https://sprintcheck.megasprintlimited.com.ng/api/dashboard",
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${authCode}`,
-          },
-        }
-      );
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Failed to login");
-      navigate("/dashboard");
-    }
-    toDashboard(token);
-  }
+  // function handleDashboard() {
+  //   setActiveItem("dashboard"); // set active
+  //   const token = localStorage.getItem("token");
+  //   async function toDashboard(authCode) {
+  //     const res = await fetch(
+  //       "https://sprintcheck.megasprintlimited.com.ng/api/dashboard",
+  //       {
+  //         method: "GET",
+  //         headers: {
+  //           Accept: "application/json",
+  //           Authorization: `Bearer ${authCode}`,
+  //         },
+  //       }
+  //     );
+  //     const data = await res.json();
+  //     if (!res.ok) throw new Error(data.message || "Failed to login");
+  //     navigate("/dashboard");
+  //   }
+  //   toDashboard(token);
+  // }
 
-  function transformApiLogs(apiResponse) {
-    return apiResponse.data.data.map((item) => {
-      let bvnData = null;
-      try {
-        if (item.bvn?.data) bvnData = JSON.parse(item.bvn.data);
-      } catch (e) {
-        console.error("Error parsing BVN data:", e);
-      }
-      const fullName = bvnData
-        ? `${bvnData.firstName || ""} ${bvnData.lastName || ""}`.trim()
-        : "Null";
-      return {
-        id: item.id,
-        endpoint: item.type,
-        name: fullName,
-        amount: 40.0,
-        source: item.source,
-        performedBy: "Samuel Odejirmi",
-        date: new Date(item.created_at).toLocaleString("en-US", {
-          month: "short",
-          day: "numeric",
-          year: "numeric",
-          hour: "numeric",
-          minute: "numeric",
-          hour12: true,
-        }),
-        status: item.status === 1 ? "SUCCESSFUL" : "FAILED",
-        userDetails: bvnData || null,
-      };
-    });
-  }
+  // function transformApiLogs(apiResponse) {
+  //   return apiResponse.data.data.map((item) => {
+  //     let bvnData = null;
+  //     try {
+  //       if (item.bvn?.data) bvnData = JSON.parse(item.bvn.data);
+  //     } catch (e) {
+  //       console.error("Error parsing BVN data:", e);
+  //     }
+  //     const fullName = bvnData
+  //       ? `${bvnData.firstName || ""} ${bvnData.lastName || ""}`.trim()
+  //       : "Null";
+  //     return {
+  //       id: item.id,
+  //       endpoint: item.type,
+  //       name: fullName,
+  //       amount: 40.0,
+  //       source: item.source,
+  //       performedBy: "Samuel Odejirmi",
+  //       date: new Date(item.created_at).toLocaleString("en-US", {
+  //         month: "short",
+  //         day: "numeric",
+  //         year: "numeric",
+  //         hour: "numeric",
+  //         minute: "numeric",
+  //         hour12: true,
+  //       }),
+  //       status: item.status === 1 ? "SUCCESSFUL" : "FAILED",
+  //       userDetails: bvnData || null,
+  //     };
+  //   });
+  // }
 
-  function handleHistory() {
-    setActiveItem("history");
-    const token = localStorage.getItem("token");
-    async function toDashboard(authCode) {
-      const res = await fetch(
-        "https://sprintcheck.megasprintlimited.com.ng/api/history",
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${authCode}`,
-          },
-        }
-      );
-      const data = await res.json();
-      localStorage.setItem(
-        "apiLogsData",
-        JSON.stringify(transformApiLogs(data))
-      );
-      if (!res.ok) throw new Error(data.message || "You're not logged in");
-      navigate("/apilogs");
-    }
-    toDashboard(token);
-  }
+function handleHistory() {
+  setActiveItem("history");
+  navigate("/apilogs");
+}
+function handleDashboard() {
+  setActiveItem("dashboard");
+  navigate("/dashboard");
+}
 
-  function handleBilling() {
-    setActiveItem("billing");
-    const token = localStorage.getItem("token");
-    async function toDashboard(authCode) {
-      const res = await fetch(
-        "https://sprintcheck.megasprintlimited.com.ng/api/wallet-history",
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${authCode}`,
-          },
-        }
-      );
-      const data = await res.json();
-      localStorage.setItem("billingData", JSON.stringify(data.data));
-      if (!res.ok) throw new Error(data.message || "You're not logged in");
-      navigate("/billing");
-    }
-    toDashboard(token);
-  }
+
+function handleBilling() {
+  setActiveItem("billing");
+  navigate("/billing");
+}
+
 
   function handleDeveloper() {
     setActiveItem("developer");
@@ -130,18 +97,25 @@ export default function SideBar({ isMobile, sidebarOpen }) {
     setActiveItem("profile");
     navigate("/profile");
   }
-
   function handleLogout() {
-    setActiveItem(""); // Clear active
-    localStorage.removeItem("token");
-    localStorage.removeItem("dashBoardData");
-    localStorage.removeItem("activeTab");
-    localStorage.removeItem("apiLogsData");
-    localStorage.removeItem("avatar");
-    localStorage.removeItem("avatarChar");
-    localStorage.removeItem("billingData");
-    setActiveItem(""); // clear state too
-    navigate("/");
+    setActiveItem(""); // Clear local state (if applicable)
+
+    const keysToRemove = [
+      "token",
+      "dashboardData", // fixed case sensitivity
+      "activeTab",
+      "apiLogsData",
+      "avatar",
+      "avatarChar",
+      "billingData",
+      "business_Id",
+      "api_key",
+      "encryption_key",
+    ];
+
+    keysToRemove.forEach((key) => localStorage.removeItem(key));
+
+    navigate("/login");
   }
 
   return (

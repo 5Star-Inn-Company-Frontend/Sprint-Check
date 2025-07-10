@@ -73,7 +73,7 @@ export default function AuthSignUp() {
     try {
       await registerUser(userData);
       toast.success("Registration successful!");
-      setTimeout(() => navigate("/"), 1500);
+      setTimeout(() => navigate("/login"), 1500);
     } catch (err) {
       toast.error(err.message);
     } finally {
@@ -147,8 +147,8 @@ export default function AuthSignUp() {
           </div>
 
           <p className="privacy">
-            <input type="checkbox" /> &nbsp; By registering in Sprint Check, I agree
-            with the privacy policy
+            <input type="checkbox" /> &nbsp; By registering in Sprint Check, I
+            agree with the privacy policy
           </p>
 
           <button
