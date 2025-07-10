@@ -28,6 +28,7 @@ export default function Profile() {
   const [profileImage, setProfileImage] = useState(null);
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
   const [loadingBusinessProfile, setLoadingBusinessProfile] = useState(true);
+  const [countryList, setCountryList] = useState([]);
 
   const [passwordForm, setPasswordForm] = useState({
     current_password: "",
@@ -70,74 +71,29 @@ export default function Profile() {
     if (storedProfileImage) {
       setProfileImage(storedProfileImage);
     }
-    const storedProfileData = localStorage.getItem("profileData");
-    if (storedProfileData) {
-      setProfileForm(JSON.parse(storedProfileData));
-    }
+ const storedProfileData = localStorage.getItem("profileData");
+ if (storedProfileData) {
+   const data = JSON.parse(storedProfileData);
+   setProfileForm({
+     name: data.name || "",
+     phoneNo: data.phone_number || "", // ✅ map correctly
+     email: data.email || "",
+     dob: data.dob || "1991-01-17",
+     address: data.address || "",
+     city: data.city || "",
+     postalCode: data.postalCode || "",
+     country: data.country || "",
+   });
+ }
+
 
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
-useEffect(() => {
-  const storedBusinessData = localStorage.getItem("businessData");
-  if (storedBusinessData) {
-    const data = JSON.parse(storedBusinessData);
-    setbusinessForm({
-      businessEmail: data.business_email || "",
-      businessPhone: data.business_phone_number || "",
-      businessRegNo: data.business_registration_number || "",
-      businessAddress: data.business_address || "",
-      city: data.city || "",
-      businessDescription: data.business_description || "",
-      country: data.country || "",
-      tin: data.tax_identification_number || "",
-      website: data.business_website || "",
-    });
-  }
-}, []);
-
-
-const handleSaveBusinessProfile = async () => {
-  try {
-    setLoading(true);
-
-    const res = await fetch(
-      "https://sprintcheck.megasprintlimited.com.ng/api/business",
-      {
-        method: "PUT",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({
-          business_email: businessForm.businessEmail,
-          business_phone_number: businessForm.businessPhone,
-          business_registration_number: businessForm.businessRegNo,
-          business_address: businessForm.businessAddress,
-          city: businessForm.city,
-          business_description: businessForm.businessDescription,
-          country: businessForm.country,
-          tax_identification_number: businessForm.tin,
-          business_website: businessForm.website,
-        }),
-      }
-    );
-
-    const result = await res.json();
-
-    if (!res.ok || !result.status) {
-      const errorMsg = result.message || result.error || "Update failed";
-      toast.error(errorMsg);
-    } else {
-      toast.success("Business profile updated successfully");
-
-      const data = result.data;
-
-      // ✅ Save to localStorage
-      localStorage.setItem("businessData", JSON.stringify(data));
-
-      // ✅ Update UI state
+  useEffect(() => {
+    const storedBusinessData = localStorage.getItem("businessData");
+    if (storedBusinessData) {
+      const data = JSON.parse(storedBusinessData);
       setbusinessForm({
         businessEmail: data.business_email || "",
         businessPhone: data.business_phone_number || "",
@@ -149,73 +105,157 @@ const handleSaveBusinessProfile = async () => {
         tin: data.tax_identification_number || "",
         website: data.business_website || "",
       });
-
-      setbEditMode(false);
     }
-  } catch (error) {
-    toast.error("Network error while updating profile.");
-    console.error(error);
-  } finally {
-    setLoading(false);
-  }
-};
+  }, []);
 
-const handleSaveProfile = async () => {
-  try {
-    setLoading(true);
+  const handleSaveBusinessProfile = async () => {
+    try {
+      setLoadingBusinessProfile(true);
 
-    const response = await fetch(
-      "https://sprintcheck.megasprintlimited.com.ng/api/profile",
-      {
-        method: "PUT",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({
-          name: profileForm.name,
-          phone_number: profileForm.phoneNo,
-        }),
+      const res = await fetch(
+        "https://sprintcheck.megasprintlimited.com.ng/api/business",
+        {
+          method: "PUT",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({
+            business_email: businessForm.businessEmail,
+            business_phone_number: businessForm.businessPhone,
+            business_registration_number: businessForm.businessRegNo,
+            business_address: businessForm.businessAddress,
+            city: businessForm.city,
+            business_description: businessForm.businessDescription,
+            country: businessForm.country,
+            tax_identification_number: businessForm.tin,
+            business_website: businessForm.website,
+          }),
+        }
+      );
+
+      const result = await res.json();
+
+      if (!res.ok || !result.status) {
+        const errorMsg = result.message || result.error || "Update failed";
+        toast.error(errorMsg);
+      } else {
+        toast.success("Business profile updated successfully");
+
+        const data = result.data;
+
+        // ✅ Save to localStorage
+        localStorage.setItem("businessData", JSON.stringify(data));
+
+        // ✅ Update UI state
+        setbusinessForm({
+          businessEmail: data.business_email || "",
+          businessPhone: data.business_phone_number || "",
+          businessRegNo: data.business_registration_number || "",
+          businessAddress: data.business_address || "",
+          city: data.city || "",
+          businessDescription: data.business_description || "",
+          country: data.country || "",
+          tin: data.tax_identification_number || "",
+          website: data.business_website || "",
+        });
+
+        setbEditMode(false);
       }
-    );
-
-    const result = await response.json();
-
-    if (!response.ok || !result.status) {
-      const errorMsg =
-        result.message || result.error || "Profile update failed";
-      toast.error(errorMsg);
-    } else {
-      toast.success("Profile updated successfully");
-
-      const data = result.data;
-
-      // ✅ Save to localStorage
-      localStorage.setItem("profileData", JSON.stringify(data));
-
-      // ✅ Update UI state
-      setProfileForm({
-        name: data.name || "",
-        phoneNo: data.phone_number || "",
-        email: data.email || "", // Backend includes it in response
-        dob: profileForm.dob || "",
-        address: profileForm.address || "",
-        city: profileForm.city || "",
-        postalCode: profileForm.postalCode || "",
-        country: profileForm.country || "",
-      });
-
-      setEditMode(false);
+    } catch (error) {
+      toast.error("Network error while updating profile.");
+      console.error(error);
+    } finally {
+      setLoadingBusinessProfile(false);
     }
-  } catch (error) {
-    toast.error("Network error while updating profile.");
-    console.error(error);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
+  useEffect(() => {
+    const fetchCountries = async () => {
+      try {
+        const res = await fetch(
+          "https://sprintcheck.megasprintlimited.com.ng/api/countries",
+          {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+
+        const result = await res.json();
+
+        if (res.ok && result.status) {
+          setCountryList(result.data); // List of {code, name}
+        } else {
+          toast.error("Failed to load countries");
+        }
+      } catch (error) {
+        toast.error("Network error while loading countries");
+        console.error(error);
+      }
+    };
+
+    fetchCountries();
+  }, []);
+
+  const handleSaveProfile = async () => {
+    try {
+      setLoading(true);
+
+      const response = await fetch(
+        "https://sprintcheck.megasprintlimited.com.ng/api/profile",
+        {
+          method: "PUT",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({
+            name: profileForm.name,
+            phone_number: profileForm.phoneNo,
+          }),
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok || !result.status) {
+        const errorMsg =
+          result.message || result.error || "Profile update failed";
+        toast.error(errorMsg);
+      } else {
+        toast.success("Profile updated successfully");
+
+        const data = result.data;
+
+        // ✅ Save to localStorage
+        localStorage.setItem("profileData", JSON.stringify(data));
+
+        // ✅ Update UI state
+        setProfileForm({
+          name: data.name || "",
+          phoneNo: data.phone_number || "",
+          email: data.email || "", // Backend includes it in response
+          dob: profileForm.dob || "",
+          address: profileForm.address || "",
+          city: profileForm.city || "",
+          postalCode: profileForm.postalCode || "",
+          country: profileForm.country || "",
+        });
+
+        setEditMode(false);
+      }
+    } catch (error) {
+      toast.error("Network error while updating profile.");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const openChangePasswordModal = () => {
     setPasswordForm({
@@ -992,7 +1032,7 @@ const handleSaveProfile = async () => {
                     />
                   </div>
 
-                  <div className="form-group">
+                  {/* <div className="form-group">
                     <label className="form-label">Date of Birth</label>
                     {editMode ? (
                       <input
@@ -1072,9 +1112,12 @@ const handleSaveProfile = async () => {
                   </div>
 
                   <div className="form-group">
-                    <label className="form-label">Country</label>
-                    <input
-                      type="text"
+                    <label className="form-label" htmlFor="country">
+                      Country
+                    </label>
+                    <select
+                      id="country"
+                      name="country"
                       className="form-input"
                       value={profileForm.country}
                       onChange={(e) =>
@@ -1083,9 +1126,16 @@ const handleSaveProfile = async () => {
                           country: e.target.value,
                         })
                       }
-                      readOnly={!editMode}
-                    />
-                  </div>
+                      disabled={!editMode}
+                    >
+                      <option value="">-- Select Country --</option>
+                      {countryList.map((country) => (
+                        <option key={country.code} value={country.name}>
+                          {country.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div> */}
 
                   <div className="form-actions changePsw-form">
                     <button
@@ -1226,9 +1276,12 @@ const handleSaveProfile = async () => {
                   </div>
 
                   <div className="form-group">
-                    <label className="form-label">Country</label>
-                    <input
-                      type="text"
+                    <label className="form-label" htmlFor="country">
+                      Country
+                    </label>
+                    <select
+                      id="country"
+                      name="country"
                       className="form-input"
                       value={businessForm.country}
                       onChange={(e) =>
@@ -1237,8 +1290,15 @@ const handleSaveProfile = async () => {
                           country: e.target.value,
                         })
                       }
-                      readOnly={!bEditMode}
-                    />
+                      disabled={editMode}
+                    >
+                      <option value="">-- Select Country --</option>
+                      {countryList.map((country) => (
+                        <option key={country.code} value={country.name}>
+                          {country.name}
+                        </option>
+                      ))}
+                    </select>
                   </div>
 
                   <div className="form-group">
@@ -1281,7 +1341,7 @@ const handleSaveProfile = async () => {
                         className="btn btn-primary"
                         onClick={handleSaveBusinessProfile}
                       >
-                        Save
+                        {loadingBusinessProfile ? "Saving" : "Save"}
                       </button>
                     ) : (
                       <button

@@ -12,19 +12,21 @@ import Billing from "./pages/Billing";
 import Developer from "./pages/Developer";
 import ApiDoc from "./pages/ApiDoc";
 import Profile from "./pages/Profile";
+import LandingPage from "./pages/Landing";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
 
         {/* Protected Routes */}
 
-        <Route path="/verify-code" element={<VerificationCode /> } />
+        <Route path="/verify-code" element={<VerificationCode />} />
         <Route
           path="/dashboard"
           element={
