@@ -30,6 +30,7 @@ export default function Profile() {
   const [loadingBusinessProfile, setLoadingBusinessProfile] = useState(false);
   const [countryList, setCountryList] = useState([]);
 
+  const baseURL = import.meta.env.VITE_API_BASE_URL;
   const [passwordForm, setPasswordForm] = useState({
     current_password: "",
     new_password: "",
@@ -71,21 +72,20 @@ export default function Profile() {
     if (storedProfileImage) {
       setProfileImage(storedProfileImage);
     }
- const storedProfileData = localStorage.getItem("profileData");
- if (storedProfileData) {
-   const data = JSON.parse(storedProfileData);
-   setProfileForm({
-     name: data.name || "",
-     phoneNo: data.phone_number || "", // ✅ map correctly
-     email: data.email || "",
-     dob: data.dob || "1991-01-17",
-     address: data.address || "",
-     city: data.city || "",
-     postalCode: data.postalCode || "",
-     country: data.country || "",
-   });
- }
-
+    const storedProfileData = localStorage.getItem("profileData");
+    if (storedProfileData) {
+      const data = JSON.parse(storedProfileData);
+      setProfileForm({
+        name: data.name || "",
+        phoneNo: data.phone_number || "", // ✅ map correctly
+        email: data.email || "",
+        dob: data.dob || "1991-01-17",
+        address: data.address || "",
+        city: data.city || "",
+        postalCode: data.postalCode || "",
+        country: data.country || "",
+      });
+    }
 
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
@@ -112,28 +112,25 @@ export default function Profile() {
     try {
       setLoadingBusinessProfile(true);
 
-      const res = await fetch(
-        "https://sprintcheck.megasprintlimited.com.ng/api/business",
-        {
-          method: "PUT",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          body: JSON.stringify({
-            business_email: businessForm.businessEmail,
-            business_phone_number: businessForm.businessPhone,
-            business_registration_number: businessForm.businessRegNo,
-            business_address: businessForm.businessAddress,
-            city: businessForm.city,
-            business_description: businessForm.businessDescription,
-            country: businessForm.country,
-            tax_identification_number: businessForm.tin,
-            business_website: businessForm.website,
-          }),
-        }
-      );
+      const res = await fetch(`${baseURL}/business`, {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          business_email: businessForm.businessEmail,
+          business_phone_number: businessForm.businessPhone,
+          business_registration_number: businessForm.businessRegNo,
+          business_address: businessForm.businessAddress,
+          city: businessForm.city,
+          business_description: businessForm.businessDescription,
+          country: businessForm.country,
+          tax_identification_number: businessForm.tin,
+          business_website: businessForm.website,
+        }),
+      });
 
       const result = await res.json();
 
@@ -205,21 +202,18 @@ export default function Profile() {
     try {
       setLoading(true);
 
-      const response = await fetch(
-        "https://sprintcheck.megasprintlimited.com.ng/api/profile",
-        {
-          method: "PUT",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          body: JSON.stringify({
-            name: profileForm.name,
-            phone_number: profileForm.phoneNo,
-          }),
-        }
-      );
+      const response = await fetch(`${baseURL}/profile`, {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          name: profileForm.name,
+          phone_number: profileForm.phoneNo,
+        }),
+      });
 
       const result = await response.json();
 
@@ -290,18 +284,15 @@ export default function Profile() {
     setLoading(true);
 
     try {
-      const response = await fetch(
-        "https://sprintcheck.megasprintlimited.com.ng/api/change-password",
-        {
-          method: "PUT",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          body: JSON.stringify(passwordForm),
-        }
-      );
+      const response = await fetch(`${baseURL}/change-password`, {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(passwordForm),
+      });
 
       const result = await response.json();
 

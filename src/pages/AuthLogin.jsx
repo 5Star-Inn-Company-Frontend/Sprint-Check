@@ -19,8 +19,8 @@ export default function AuthLogin() {
   useEffect(() => {
     emailRef.current.focus();
   }, []);
-
-  const ApiKey = "scb1edcd88-64f7485186d9781ca624a903";
+  const ApiKey = import.meta.env.VITE_API_KEY;
+  const baseURL = import.meta.env.VITE_API_BASE_URL;
 
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -48,47 +48,15 @@ export default function AuthLogin() {
     return Object.keys(newErrors).length === 0;
   };
 
-  // function handleDashboard() {
-  //   const token = localStorage.getItem("token");
-  //   async function toDashboard(authCode) {
-  //     const res = await fetch(
-  //       "https://sprintcheck.megasprintlimited.com.ng/api/dashboard",
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           //  "Content-Type": "application/json",
-  //           Accept: "application/json",
-  //           Authorization: `Bearer ${authCode}`,
-  //         },
-  //         // body: JSON.stringify(authCode),
-  //       }
-  //     );
-
-  //     const data = await res.json();
-  //     console.log(data);
-  //     localStorage.setItem("dashboardData", JSON.stringify(data));
-
-  //     if (!res.ok) {
-  //       throw new Error(data.message || "Failed to login");
-  //     } else {
-  //       navigate("/dashboard");
-  //     }
-  //   }
-  //   toDashboard(token);
-  // }
-
   async function loginUser(loginData) {
-    const res = await fetch(
-      "https://sprintcheck.megasprintlimited.com.ng/api/auth/login",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `ApiKey ${ApiKey}`,
-        },
-        body: JSON.stringify(loginData),
-      }
-    );
+    const res = await fetch(`${baseURL}/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `ApiKey ${ApiKey}`,
+      },
+      body: JSON.stringify(loginData),
+    });
 
     const data = await res.json();
 
@@ -98,37 +66,37 @@ export default function AuthLogin() {
 
     localStorage.setItem("token", data.token);
   }
- function transformApiLogs(apiResponse) {
-   return apiResponse.data.data.map((item) => {
-     let bvnData = null;
-     try {
-       if (item.bvn?.data) bvnData = JSON.parse(item.bvn.data);
-     } catch (e) {
-       console.error("Error parsing BVN data:", e);
-     }
-     const fullName = bvnData
-       ? `${bvnData.firstName || ""} ${bvnData.lastName || ""}`.trim()
-       : "Null";
-     return {
-       id: item.id,
-       endpoint: item.type,
-       name: fullName,
-       amount: 40.0,
-       source: item.source,
-       performedBy: "Samuel Odejirmi",
-       date: new Date(item.created_at).toLocaleString("en-US", {
-         month: "short",
-         day: "numeric",
-         year: "numeric",
-         hour: "numeric",
-         minute: "numeric",
-         hour12: true,
-       }),
-       status: item.status === 1 ? "SUCCESSFUL" : "FAILED",
-       userDetails: bvnData || null,
-     };
-   });
- }
+  function transformApiLogs(apiResponse) {
+    return apiResponse.data.data.map((item) => {
+      let bvnData = null;
+      try {
+        if (item.bvn?.data) bvnData = JSON.parse(item.bvn.data);
+      } catch (e) {
+        console.error("Error parsing BVN data:", e);
+      }
+      const fullName = bvnData
+        ? `${bvnData.firstName || ""} ${bvnData.lastName || ""}`.trim()
+        : "Null";
+      return {
+        id: item.id,
+        endpoint: item.type,
+        name: fullName,
+        amount: 40.0,
+        source: item.source,
+        performedBy: "Samuel Odejirmi",
+        date: new Date(item.created_at).toLocaleString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+          hour: "numeric",
+          minute: "numeric",
+          hour12: true,
+        }),
+        status: item.status === 1 ? "SUCCESSFUL" : "FAILED",
+        userDetails: bvnData || null,
+      };
+    });
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -136,23 +104,23 @@ export default function AuthLogin() {
     setLoading(true);
     try {
       const response = await loginUser({ email, password });
-     toast.success("Login successful!");
-     const token = localStorage.getItem("token");
+      toast.success("Login successful!");
+      const token = localStorage.getItem("token");
 
-     const [dashboardData, billingData, historyData] = await fetchAllAppData(
-       token
-     );
+      const [dashboardData, billingData, historyData] = await fetchAllAppData(
+        token
+      );
 
-     // Save all to localStorage
-     localStorage.setItem("dashboardData", JSON.stringify(dashboardData));
-     localStorage.setItem("billingData", JSON.stringify(billingData.data)); // .data needed
-     localStorage.setItem(
-       "apiLogsData",
-       JSON.stringify(transformApiLogs(historyData))
-     );
+      // Save all to localStorage
+      localStorage.setItem("dashboardData", JSON.stringify(dashboardData));
+      localStorage.setItem("billingData", JSON.stringify(billingData.data)); // .data needed
+      localStorage.setItem(
+        "apiLogsData",
+        JSON.stringify(transformApiLogs(historyData))
+      );
 
-     // Go to dashboard immediately
-     navigate("/dashboard");
+      // Go to dashboard immediately
+      navigate("/dashboard");
     } catch (err) {
       toast.error(err.message);
     } finally {

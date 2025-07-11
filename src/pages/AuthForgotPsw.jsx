@@ -68,7 +68,7 @@ export default function AuthForgotPsw() {
       <div className="login signUp forgetPsw">
         <form className="login-form" onSubmit={handleSubmit}>
           <div className="login-header">
-            <h2>Forgot Passsword</h2>
+            <h2>Forgot Password</h2>
           </div>
 
           <div className="input-wrapper">

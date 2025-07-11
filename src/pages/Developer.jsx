@@ -22,6 +22,7 @@ import {
 export default function Developer() {
   const [isMobile, setIsMobile] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loadingWebHook, setLoadingWebHook] = useState(false);
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -34,6 +35,7 @@ export default function Developer() {
   const encryption_key = localStorage.getItem("encryption_key");
   const webhook_URL = localStorage.getItem("webhook");
 
+const baseURL = import.meta.env.VITE_API_BASE_URL;
   const IdRef = useRef(null);
   useEffect(() => {
     IdRef.current.focus();
@@ -64,7 +66,7 @@ export default function Developer() {
   async function regenerate() {
     const token = localStorage.getItem("token");
     const res = await fetch(
-      "https://sprintcheck.megasprintlimited.com.ng/api/regenerate-keys",
+      `${baseURL}/regenerate-keys`,
       {
         method: "PUT",
         headers: {
@@ -114,16 +116,15 @@ export default function Developer() {
     console.log(formData);
   };
 
-const validatewebHook = (url) => {
-  const urlRegex = /^(https?:\/\/)[^\s$.?#].[^\s]*$/i;
-  return urlRegex.test(url);
-};
-
+  const validatewebHook = (url) => {
+    const urlRegex = /^(https?:\/\/)[^\s$.?#].[^\s]*$/i;
+    return urlRegex.test(url);
+  };
 
   async function updateWebHook(webHook) {
     const token = localStorage.getItem("token");
     const res = await fetch(
-      "https://sprintcheck.megasprintlimited.com.ng/api/update-webhook",
+      `${baseURL}/update-webhook`,
       {
         method: "POST",
         headers: {
@@ -140,25 +141,24 @@ const validatewebHook = (url) => {
       throw new Error(data.message || "Failed to Update");
     }
 
-     return data;
+    return data;
   }
 
   const handleSave = async (e) => {
     e.preventDefault();
-   if (!validatewebHook(webHookUrl)) {
-     toast.error("Invalid webhook URL");
-     return;
-   }
+    if (!validatewebHook(webHookUrl)) {
+      toast.error("Invalid webhook URL");
+      return;
+    }
 
-
-    setLoading(true);
+    setLoadingWebHook(true);
     try {
       const response = await updateWebHook({ webhook_url: webHookUrl });
       toast.success("Update successful!");
     } catch (err) {
       toast.error(err.message);
     } finally {
-      setLoading(false);
+      setLoadingWebHook(false);
       localStorage.setItem("webhook", webHookUrl);
     }
   };
@@ -674,16 +674,6 @@ const validatewebHook = (url) => {
               ☰
             </button>
 
-            {/* <div className="search-bar">
-              <div className="search-icon">
-                <img src={searchIcon} alt="icon" />
-              </div>
-              <input
-                type="text"
-                className="search-input"
-                placeholder="Search here ..."
-              />
-            </div> */}
             <h1 className="page-bar">Billing</h1>
           </div>
 
@@ -814,7 +804,7 @@ const validatewebHook = (url) => {
                 className="primary-button"
                 onClick={(e) => handleSave(e)}
               >
-                Save
+                {loadingWebHook ? "Saving" : "Save"}
               </button>
             </div>
 

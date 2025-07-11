@@ -3,11 +3,11 @@ import { useNavigate, Link } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { EyeClosed, EyeIcon } from "lucide-react";
-import mailIcon from "../assets/codicon_mail.png";
-import passwordIcon from "../assets/bx_bxs-lock-alt.png";
-import userIcon from "../assets/mdi_user-outline.png";
+// import mailIcon from "../assets/codicon_mail.png";
+// import passwordIcon from "../assets/bx_bxs-lock-alt.png";
+// import userIcon from "../assets/mdi_user-outline.png";
 import Logo from "../assets/logo.png";
-import userPhone from "../assets/line-md_phone.png";
+// import userPhone from "../assets/line-md_phone.png";
 
 export default function AuthSignUp() {
   const [email, setEmail] = useState("");
@@ -16,27 +16,26 @@ export default function AuthSignUp() {
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [agreeToPrivacy, setAgreeToPrivacy] = useState(false);
 
   const nameRef = useRef(null);
   const navigate = useNavigate();
-  const ApiKey = "scb1edcd88-64f7485186d9781ca624a903";
+  const ApiKey = import.meta.env.VITE_API_KEY;
+  const baseURL = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     nameRef.current.focus();
   }, []);
 
   async function registerUser(userData) {
-    const res = await fetch(
-      "https://sprintcheck.megasprintlimited.com.ng/api/auth/signup",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `ApiKey ${ApiKey}`,
-        },
-        body: JSON.stringify(userData),
-      }
-    );
+    const res = await fetch(`${baseURL}/auth/signup`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `ApiKey ${ApiKey}`,
+      },
+      body: JSON.stringify(userData),
+    });
     const data = await res.json();
     if (!res.ok) throw new Error(data.message || "Failed to register");
     return data;
@@ -51,9 +50,20 @@ export default function AuthSignUp() {
       return;
     }
 
+    if (!agreeToPrivacy) {
+      toast.error("You must agree to the privacy policy.");
+      return;
+    }
+
     const emailRegex = /^\S+@\S+\.\S+$/;
     if (!emailRegex.test(email)) {
       toast.error("Invalid email address.");
+      return;
+    }
+
+    const phoneRegex = /^[0-9]{7,15}$/;
+    if (!phoneRegex.test(phone)) {
+      toast.error("Invalid phone number.");
       return;
     }
 
@@ -147,8 +157,17 @@ export default function AuthSignUp() {
           </div>
 
           <p className="privacy">
-            <input type="checkbox" /> &nbsp; By registering in Sprint Check, I
-            agree with the privacy policy
+            <input
+              type="checkbox"
+              checked={agreeToPrivacy}
+              onChange={(e) => setAgreeToPrivacy(e.target.checked)}
+              style={{
+                outline: !agreeToPrivacy ? "1px solid red" : "none",
+                marginRight: "6px",
+              }}
+            />
+            &nbsp; By registering in Sprint Check, I agree with the privacy
+            policy
           </p>
 
           <button
@@ -161,7 +180,7 @@ export default function AuthSignUp() {
 
           <p className="login-signup">
             Already have an account?{" "}
-            <Link to="/">
+            <Link to="/login">
               <strong style={{ cursor: "pointer" }}>Login</strong>
             </Link>
           </p>

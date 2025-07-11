@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Logo from "../assets/logo.png";
-const ApiKey = "scb1edcd88-64f7485186d9781ca624a903";
+const ApiKey = import.meta.env.VITE_API_KEY;
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 export default function AuthSetPsw() {
   const [newPsw, setnewPsw] = useState("");
   const [loading, setLoading] = useState(false);
@@ -24,17 +25,14 @@ export default function AuthSetPsw() {
   const validatePsw = newPsw === confPsw;
 
   async function setPsw(payLoad) {
-    const res = await fetch(
-      "https://sprintcheck.megasprintlimited.com.ng/api/auth/reset-password",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `ApiKey ${ApiKey}`,
-        },
-        body: JSON.stringify(payLoad),
-      }
-    );
+    const res = await fetch(`${baseURL}/auth/reset-password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `ApiKey ${ApiKey}`,
+      },
+      body: JSON.stringify(payLoad),
+    });
 
     const data = await res.json();
 

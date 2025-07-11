@@ -14,20 +14,18 @@ export default function AuthVerifyCode() {
     codeRef.current.focus();
   }, []);
 
-  const ApiKey = "scb1edcd88-64f7485186d9781ca624a903";
+  const ApiKey = import.meta.env.VITE_API_KEY;
+  const baseURL = import.meta.env.VITE_API_BASE_URL;
 
   async function verifyCode(payLoad) {
-    const res = await fetch(
-      "https://sprintcheck.megasprintlimited.com.ng/api/auth/verify-reset-code",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `ApiKey ${ApiKey}`,
-        },
-        body: JSON.stringify(payLoad),
-      }
-    );
+    const res = await fetch(`${baseURL}/auth/verify-reset-code`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `ApiKey ${ApiKey}`,
+      },
+      body: JSON.stringify(payLoad),
+    });
 
     const data = await res.json();
 
@@ -97,7 +95,10 @@ export default function AuthVerifyCode() {
 
           <p className="login-signup">
             Remember login details?{" "}
-            <strong onClick={() => navigate("/")} style={{ cursor: "pointer", color:"blue" }}>
+            <strong
+              onClick={() => navigate("/login")}
+              style={{ cursor: "pointer", color: "blue" }}
+            >
               Login
             </strong>
           </p>

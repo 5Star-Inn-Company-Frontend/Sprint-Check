@@ -35,7 +35,13 @@ const LandingPage = () => {
           <a href="#pricing">Pricing</a>
           <a href="#how-it-works">How it works</a>
           <a href="#contact">Contact</a>
-          <button className="contact-btn" style={{ marginTop: "1rem" }}>
+          <button
+            onClick={() =>
+              (window.location.href = "mailto:info@megasprintlimited.com.ng")
+            }
+            className="contact-btn"
+            style={{ marginTop: "1rem" }}
+          >
             Contact us
           </button>
         </nav>
@@ -71,7 +77,7 @@ const LandingPage = () => {
             Fast and reliable BVN & NIN verification with facial recognition
             technology for your applications.
           </p>
-          <button onClick={() => navigate("/login")} className="cta-button">
+          <button onClick={() => navigate("/signup")} className="cta-button">
             <span className="inner-content">
               Get Started Today <span>→</span>
             </span>
@@ -150,7 +156,9 @@ const LandingPage = () => {
               ₦60<span>/per verification</span>
             </div>
 
-            <button className="plan-button">Get Started</button>
+            <button onClick={() => navigate("/signup")} className="plan-button">
+              Get Started
+            </button>
           </div>
           <div className="plan-card">
             <h3>NIN Verification</h3>
@@ -166,7 +174,9 @@ const LandingPage = () => {
             <div className="plan-price">
               ₦65<span>/per verification</span>
             </div>
-            <button className="plan-button">Get Started</button>
+            <button onClick={() => navigate("/signup")} className="plan-button">
+              Get Started
+            </button>
           </div>
         </div>
       </section>

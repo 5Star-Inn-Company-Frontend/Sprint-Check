@@ -12,7 +12,7 @@ import export1Icon from "../assets/dashboardAssets/export1.png";
 import exportIcon from "../assets/dashboardAssets/export.png";
 import empty from "../assets/Empty.gif";
 import { ToastContainer, toast } from "react-toastify";
-import bankLogo from "../assets/dashboardAssets/bankLogo.png";
+import bankLogo from "../assets/dashboardAssets/banklogo.png";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import searchData from "../../src/utils/seacrhdata.js";
@@ -28,12 +28,13 @@ export default function ApiLogs() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const apiLogs = JSON.parse(localStorage.getItem("apiLogsData"));
-  // Usage:
+
+  const baseURL = import.meta.env.VITE_API_BASE_URL;
 
   const [bvn, setBvn] = useState("");
   function card() {
     setShowModal(true);
-    setModalStep(5); // show account info
+    setModalStep(5);
   }
 
   function closeCard() {
@@ -50,21 +51,16 @@ export default function ApiLogs() {
     setSearchResults([]);
   };
 
- 
-
   function handleDashboard() {
     const token = localStorage.getItem("token");
     async function toDashboard(authCode) {
-      const res = await fetch(
-        "https://sprintcheck.megasprintlimited.com.ng/api/dashboard",
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${authCode}`,
-          },
-        }
-      );
+      const res = await fetch(`${baseURL}/dashboard`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${authCode}`,
+        },
+      });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Failed to login");
       localStorage.setItem("dashboardData", JSON.stringify(data));
@@ -109,7 +105,7 @@ export default function ApiLogs() {
   async function getAcc(bvnData) {
     const token = localStorage.getItem("token");
     const res = await fetch(
-      "https://sprintcheck.megasprintlimited.com.ng/api/generate-account",
+      `${baseURL}/generate-account`,
       {
         method: "POST",
         headers: {
@@ -260,8 +256,6 @@ export default function ApiLogs() {
   // Usage example:
   const chartData = transformAPILogsToChartData(apiLogs);
 
-
-
   // const maxValue = Math.max(...chartData.flatMap((d) => [d.verified, d.fail]));
   const dashboardInfo = extractDashboardInfo(dashboardData);
   const avatarChar = dashboardInfo.businessName;
@@ -345,8 +339,8 @@ export default function ApiLogs() {
             </div>
           ) : (
             <div className="accCard">
-              <img src={bankLogo} alt="bank"></img>
-              {/* <button onClick={() => setShowModal(false)}>X</button> */}
+              <img src={bankLogo} alt="bank" />
+
               <p>
                 <strong>Account Number: </strong>
                 {account_number}
