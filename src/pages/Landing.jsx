@@ -195,7 +195,7 @@ const LandingPage = () => {
 
       {/* Footer */}
       <footer className="footer" id="contact">
-        <p>© 2025 SpiritCheck. All rights reserved.</p>
+        <p>© 2025 SprintCheck. All rights reserved.</p>
         <p>Email: info@megasprintlimited.com.ng</p>
       </footer>
     </div>
