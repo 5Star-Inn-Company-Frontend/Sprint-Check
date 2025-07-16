@@ -94,7 +94,13 @@ export default function AuthSignUp() {
   return (
     <div className="main">
       <ToastContainer position="top-right" autoClose={3000} />
-      <img className="logo" src={Logo} alt="logo" />
+      <img
+        style={{ cursor: "pointer" }}
+        onClick={() => navigate("/")}
+        className="logo"
+        src={Logo}
+        alt="logo"
+      />
       <div className="login signUp">
         <form className="login-form" onSubmit={handleSubmit}>
           <div className="login-header signupHeader">
@@ -161,10 +167,10 @@ export default function AuthSignUp() {
               type="checkbox"
               checked={agreeToPrivacy}
               onChange={(e) => setAgreeToPrivacy(e.target.checked)}
-              style={{
-                outline: !agreeToPrivacy ? "1px solid red" : "none",
-                marginRight: "6px",
-              }}
+              // style={{
+              //   outline: agreeToPrivacy ? "1px solid red" : "none",
+              //   marginRight: "6px",
+              // }}
             />
             &nbsp; By registering in Sprint Check, I agree with the privacy
             policy

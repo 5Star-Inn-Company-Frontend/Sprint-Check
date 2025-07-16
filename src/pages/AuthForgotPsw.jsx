@@ -64,7 +64,13 @@ export default function AuthForgotPsw() {
   return (
     <div className="main">
       <ToastContainer position="top-right" autoClose={3000} />
-      <img className="logo" src={Logo} alt="logo" />
+      <img
+        style={{ cursor: "pointer" }}
+        onClick={() => navigate("/")}
+        className="logo"
+        src={Logo}
+        alt="logo"
+      />
       <div className="login signUp forgetPsw">
         <form className="login-form" onSubmit={handleSubmit}>
           <div className="login-header">

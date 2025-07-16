@@ -31,7 +31,7 @@ const LandingPage = () => {
           ×
         </button>
         <nav className="menuBar-nav">
-          <a href="#features">Features</a>
+          <a href="#features">Services</a>
           <a href="#pricing">Pricing</a>
           <a href="#how-it-works">How it works</a>
           <a href="#contact">Contact</a>
@@ -49,7 +49,11 @@ const LandingPage = () => {
 
       {/* Header */}
       <header className="header">
-        <div className="logos">
+        <div
+          style={{ cursor: "pointer" }}
+          onClick={() => navigate("/")}
+          className="logos"
+        >
           <img src={logo} alt="logo" />
         </div>
         <nav className="nav-desktop">
@@ -94,7 +98,6 @@ const LandingPage = () => {
         <div className="services-grid">
           <div className="service-card">
             <div className="service-icon">
-              <img src={bvn_Icon} alt="bvn" />
               <img src={bvn_Icon} alt="bvn" />
             </div>
             <h3>BVN Verification</h3>

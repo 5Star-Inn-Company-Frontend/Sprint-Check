@@ -69,7 +69,13 @@ export default function AuthSetPsw() {
   return (
     <div className="main">
       <ToastContainer position="top-right" autoClose={3000} />
-      <img className="logo" src={Logo} alt="logo" />
+      <img
+        style={{ cursor: "pointer" }}
+        onClick={() => navigate("/")}
+        className="logo"
+        src={Logo}
+        alt="logo"
+      />
       <div className="login setPsw">
         <form onSubmit={handleSubmit} className="login-form">
           <div className="login-header">
